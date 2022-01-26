@@ -1,4 +1,7 @@
 # **Chytrá domácnost: učící se řízení vytápění** (IBT 2022)
+Prezentace ITT: https://vutbr-my.sharepoint.com/:p:/g/personal/xmilos02_vutbr_cz/Ed84ZmY7SilPmpHFyKVLyYcBZhtywX-_Ho-cplwBSBTktA?e=9HP8Xz
+
+---
 
 **Vedoucí**:
 Materna Zdeněk, Ing., Ph.D., UPGM FIT VUT
