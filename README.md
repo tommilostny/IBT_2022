@@ -46,6 +46,10 @@ Pracovat se bude s elektrickým přímotopem připojeným do zásuvky ovládané
 
 Program bude využívat příkaz [Shelly REST API](https://shelly-api-docs.shelly.cloud/gen1/#shelly1-shelly1pm), které lze posílat lokálně na IP adresu zařízení.
 
+Jednotlivá Shelly zařízení mají záznamy v databázi rozlišené dle IP adresy (device ID?).
+
+![diagram architektury](img/diagram1.jpg "diagram architektury")
+
 ---
 ## [ML.NET](https://dotnet.microsoft.com/en-us/apps/machinelearning-ai/ml-dotnet)
 Framework pro strojové učení pro .NET platformu nabízí mnoho nástrojů pro různé [ML úlohy](https://docs.microsoft.com/en-us/dotnet/machine-learning/resources/tasks?WT.mc_id=dotnet-35129-website).
