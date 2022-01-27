@@ -1,5 +1,4 @@
 # **Chytrá domácnost: učící se řízení vytápění** (IBT 2022)
-Prezentace ITT: https://vutbr-my.sharepoint.com/:p:/g/personal/xmilos02_vutbr_cz/Ed84ZmY7SilPmpHFyKVLyYcBZhtywX-_Ho-cplwBSBTktA?e=9HP8Xz
 
 ---
 
@@ -38,14 +37,14 @@ Byla zvolena platforma .NET, která poskytuje veškeré nástroje potřebné pro
 
 Aplikace je rozdělena na 2 hlavní části - klientskou (MAUI) a serverovou (systém běžící na centrálním zařízení, např. Raspberry Pi 4 Model B), která slouží jako hlavní hub pro ovládání relé Shelly pomocí strojového učení (ML.NET) a lokální ukládání dat do databáze.
 
-![diagram architektury](img/diagram.png "diagram architektury")
+![diagram architektury](img/diagram.jpg "diagram architektury")
 
 ---
 ## Shelly
 Ovládání a získávání dat (o teplotě a stavu topení) ze zařízení Shelly 1PM s teplotním senzorem.
 Pracovat se bude s elektrickým přímotopem připojeným do zásuvky ovládané tímto relé.
 
-Program bude využívat příkaz [Shelly Cloud API](https://shelly-api-docs.shelly.cloud/gen1/#shelly1-shelly1pm).
+Program bude využívat příkaz [Shelly REST API](https://shelly-api-docs.shelly.cloud/gen1/#shelly1-shelly1pm), které lze posílat lokálně na IP adresu zařízení.
 
 ---
 ## [ML.NET](https://dotnet.microsoft.com/en-us/apps/machinelearning-ai/ml-dotnet)
@@ -54,11 +53,10 @@ Pro tuto práci je zazímavá sekce **Forecasting** pro práci s daty v časové
 Zde je nabízen algoritmus [SSA](https://docs.microsoft.com/en-us/dotnet/api/microsoft.ml.timeseriescatalog.forecastbyssa). Více o forecasting v ML.NET např. [zde](https://docs.microsoft.com/en-us/dotnet/machine-learning/tutorials/time-series-demand-forecasting).
 
 ### Atributy modelu
-| Čas měření   | Naměřená teplota | **Stav topení**  |
-| :----------: | :--------------: | :--------------: |
-| ``DateTime`` | ``Temperature``  | ``HeaterStatus`` |
+| Čas měření   | Naměřená teplota | Venkovní referenční teplota | **Stav topení**  |
+| :----------: | :--------------: | :-------------------------: | :--------------: |
 
-Vstupem modelu je aktuální datum, čas a naměřená teplota. Na základě vztahu těchto dvou veličin ML model predikuje status topení (vypnuto/zapnuto). Při změně je poslán příkaz na změnu stavu relé přes nastavené Shelly Cloud API.
+Vstupem modelu je aktuální datum, čas a naměřená teplota. Na základě vztahu těchto dvou veličin ML model predikuje status topení (vypnuto/zapnuto). Při změně je poslán příkaz na změnu stavu relé přes nastavené Shelly REST API.
 
 Toto bude periodicky provádět konzolová aplikace a při změně bude kontaktovat webové API běžící v dalším procesu na localhost.
 
