@@ -19,6 +19,10 @@ Milostný Tomáš
 1. Vytvořte video prezentující vaši práci, její cíle a výsledky.
 
 ---
+
+Prezentace ITT: https://vutbr-my.sharepoint.com/:p:/g/personal/xmilos02_vutbr_cz/Ed84ZmY7SilPmpHFyKVLyYcBZhtywX-_Ho-cplwBSBTktA?e=9HP8Xz
+
+---
 ## Použité technologie
 * Hardware:
     * Shelly 1PM (ovládání topení)
@@ -55,6 +59,8 @@ Jednotlivá Shelly zařízení mají záznamy v databázi rozlišené dle IP adr
 Framework pro strojové učení pro .NET platformu nabízí mnoho nástrojů pro různé [ML úlohy](https://docs.microsoft.com/en-us/dotnet/machine-learning/resources/tasks?WT.mc_id=dotnet-35129-website).
 Pro tuto práci je zazímavá sekce **Forecasting** pro práci s daty v časové sérii.
 Zde je nabízen algoritmus [SSA](https://docs.microsoft.com/en-us/dotnet/api/microsoft.ml.timeseriescatalog.forecastbyssa). Více o forecasting v ML.NET např. [zde](https://docs.microsoft.com/en-us/dotnet/machine-learning/tutorials/time-series-demand-forecasting).
+
+![ML pipeline](img/diagram2.jpg "ML pipeline")
 
 ### Atributy modelu
 | Čas měření   | Naměřená teplota | Venkovní referenční teplota | **Stav topení**  |
