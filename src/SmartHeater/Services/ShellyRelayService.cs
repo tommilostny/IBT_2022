@@ -1,31 +1,57 @@
-﻿using SmartHeater.Services.Interfaces;
-using System.Net.Http.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace SmartHeater.Services;
 
 public class ShellyRelayService : IHeaterService
 {
-    private readonly HttpClient _httpClient;
-    private readonly string _ipAddress;
+    private readonly HttpClient _httpClient;  
+    
 
     public ShellyRelayService(HttpClient httpClient, string ipAddress)
     {
         _httpClient = httpClient;
-        _ipAddress = ipAddress;
+        IPAddress = ipAddress;
     }
 
-    public double ReadTemperature()
+    public string IPAddress { get; }
+
+    private string Relay0Url => $"http://{IPAddress}/relay/0";
+
+    public async Task<bool?> GetStatus()
+    {
+        var response = await _httpClient.GetFromJsonAsync<ShellyStatus>(Relay0Url);
+        return response?.IsTurnedOn;
+    }
+
+    public async Task<double> ReadTemperature()
     {
         throw new NotImplementedException();
     }
 
-    public void TurnOff()
+    public async Task TurnOff() => await SendTurnRequest("on");
+
+    public async Task TurnOn() => await SendTurnRequest("off");
+
+    private async Task SendTurnRequest(string state)
     {
-        throw new NotImplementedException();
+        var data = new[]
+        {
+            new KeyValuePair<string, string>("turn", state)
+        };
+        try
+        {
+            await _httpClient.PostAsync(Relay0Url, new FormUrlEncodedContent(data));
+        }
+        catch (Exception ex)
+        {
+            //TODO: logger?
+            Console.WriteLine(ex.Message);
+        }
     }
 
-    public void TurnOn()
+    private class ShellyStatus
     {
-        throw new NotImplementedException();
-    }
+        [JsonPropertyName("ison")]
+        public bool IsTurnedOn { get; set; }
+    };
 }

@@ -1,6 +1,5 @@
 ﻿using Coravel.Invocable;
 using SmartHeater.Factories;
-using SmartHeater.Services.Interfaces;
 
 namespace SmartHeater.Invocables;
 

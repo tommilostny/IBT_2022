@@ -2,7 +2,10 @@
 
 public interface IHeaterService
 {
-    void TurnOn();
-    void TurnOff();
-    double ReadTemperature();
+    string IPAddress { get; }
+
+    Task TurnOn();
+    Task TurnOff();
+    Task<double> ReadTemperature();
+    Task<bool?> GetStatus();
 }
