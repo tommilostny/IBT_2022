@@ -1,4 +1,4 @@
-﻿namespace SmartHeater.BL;
+﻿namespace SmartHeater.Services.Interfaces;
 
 public interface IHeaterService
 {

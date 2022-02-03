@@ -1,6 +1,6 @@
-﻿namespace SmartHeater.BL;
+﻿namespace SmartHeater.Services;
 
-public class OpenWeatherService
+public class OpenWeatherService : IWeatherService
 {
     private readonly HttpClient _httpClient;
 
@@ -9,7 +9,7 @@ public class OpenWeatherService
         _httpClient = httpClient;
     }
 
-    public double ReadTemperature()
+    public double ReadTemperatureC()
     {
         throw new NotImplementedException();
     }
