@@ -6,7 +6,7 @@ public interface IHeaterService
 
     Task TurnOn();
     Task TurnOff();
-    Task<double> ReadTemperature();
-    Task<double> ReadPower();
-    Task<bool?> GetStatus();
+    Task<double?> ReadTemperature(bool fromCache = false);
+    Task<double?> ReadPower(bool fromCache = false);
+    Task<bool?> GetStatus(bool fromCache = false);
 }

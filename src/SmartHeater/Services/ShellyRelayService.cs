@@ -5,8 +5,9 @@ namespace SmartHeater.Services;
 
 public class ShellyRelayService : IHeaterService
 {
-    private readonly HttpClient _httpClient;  
-    
+    private readonly HttpClient _httpClient;
+    private readonly ShellyRelayStatus _statusCache = new();
+
 
     public ShellyRelayService(HttpClient httpClient, string ipAddress)
     {
@@ -20,35 +21,49 @@ public class ShellyRelayService : IHeaterService
 
     private string StatusUrl => $"http://{IPAddress}/status";
 
-    public async Task<bool?> GetStatus()
+    public async Task<bool?> GetStatus(bool fromCache = false)
     {
+        if (fromCache)
+        {
+            return _statusCache.IsTurnedOn;
+        }
         var response = await _httpClient.GetFromJsonAsync<ShellyRelayStatus>(Relay0Url);
-        return response?.IsTurnedOn;
+        return _statusCache.IsTurnedOn = response?.IsTurnedOn;
     }
 
-    public async Task<double> ReadTemperature()
+    public async Task<double?> ReadTemperature(bool fromCache = false)
     {
+        if (fromCache)
+        {
+            return _statusCache.Temperature;
+        }
         var response = await _httpClient.GetFromJsonAsync<ShellyTemperatureStatus>(StatusUrl);
         try
-        {
-            return Convert.ToDouble(response?.Temperature?["0"]["tC"].ToString(), CultureInfo.InvariantCulture);
+        {   
+            _statusCache.Temperature = Convert.ToDouble(response?.ExtTemperature?["0"]["tC"].ToString(), CultureInfo.InvariantCulture);
+            return _statusCache.Temperature;
         }
         catch
         {
-            return double.NaN;
+            return null;
         }
     }
 
-    public async Task<double> ReadPower()
+    public async Task<double?> ReadPower(bool fromCache = false)
     {
+        if (fromCache)
+        {
+            return _statusCache.Power;
+        }
         var response = await _httpClient.GetFromJsonAsync<ShellyPowerStatus>(StatusUrl);
         try
         {
-            return Convert.ToDouble(response?.Meters?.First()["power"].ToString(), CultureInfo.InvariantCulture);
+            _statusCache.Power = Convert.ToDouble(response?.Meters?.First()["power"].ToString(), CultureInfo.InvariantCulture);
+            return _statusCache.Power;
         }
         catch
         {
-            return double.NaN;
+            return null;
         }
     }
 
@@ -76,13 +91,19 @@ public class ShellyRelayService : IHeaterService
     private class ShellyRelayStatus
     {
         [JsonPropertyName("ison")]
-        public bool IsTurnedOn { get; set; }
+        public bool? IsTurnedOn { get; set; }
+
+        [JsonIgnore]
+        public double? Temperature { get; set; }
+
+        [JsonIgnore]
+        public double? Power { get; set; }
     };
 
     private class ShellyTemperatureStatus
     {
         [JsonPropertyName("ext_temperature")]
-        public Dictionary<string, Dictionary<string, object>>? Temperature { get; set; }
+        public Dictionary<string, Dictionary<string, object>>? ExtTemperature { get; set; }
     };
 
     private class ShellyPowerStatus
