@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace SmartHeater.Services;
 
@@ -17,20 +18,43 @@ public class ShellyRelayService : IHeaterService
 
     private string Relay0Url => $"http://{IPAddress}/relay/0";
 
+    private string StatusUrl => $"http://{IPAddress}/status";
+
     public async Task<bool?> GetStatus()
     {
-        var response = await _httpClient.GetFromJsonAsync<ShellyStatus>(Relay0Url);
+        var response = await _httpClient.GetFromJsonAsync<ShellyRelayStatus>(Relay0Url);
         return response?.IsTurnedOn;
     }
 
     public async Task<double> ReadTemperature()
     {
-        throw new NotImplementedException();
+        var response = await _httpClient.GetFromJsonAsync<ShellyTemperatureStatus>(StatusUrl);
+        try
+        {
+            return Convert.ToDouble(response?.Temperature?["0"]["tC"].ToString(), CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return double.NaN;
+        }
     }
 
-    public async Task TurnOff() => await SendTurnRequest("on");
+    public async Task<double> ReadPower()
+    {
+        var response = await _httpClient.GetFromJsonAsync<ShellyPowerStatus>(StatusUrl);
+        try
+        {
+            return Convert.ToDouble(response?.Meters?.First()["power"].ToString(), CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return double.NaN;
+        }
+    }
 
-    public async Task TurnOn() => await SendTurnRequest("off");
+    public async Task TurnOn() => await SendTurnRequest("on");
+
+    public async Task TurnOff() => await SendTurnRequest("off");
 
     private async Task SendTurnRequest(string state)
     {
@@ -49,9 +73,21 @@ public class ShellyRelayService : IHeaterService
         }
     }
 
-    private class ShellyStatus
+    private class ShellyRelayStatus
     {
         [JsonPropertyName("ison")]
         public bool IsTurnedOn { get; set; }
+    };
+
+    private class ShellyTemperatureStatus
+    {
+        [JsonPropertyName("ext_temperature")]
+        public Dictionary<string, Dictionary<string, object>>? Temperature { get; set; }
+    };
+
+    private class ShellyPowerStatus
+    {
+        [JsonPropertyName("meters")]
+        public List<Dictionary<string, object>>? Meters { get; set; }
     };
 }
