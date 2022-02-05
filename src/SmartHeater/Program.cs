@@ -15,6 +15,7 @@ builder.Services.AddScheduler();
 
 builder.Services.AddSingleton<IDatabaseService, InfluxDbService>();
 builder.Services.AddSingleton<IWeatherService, OpenWeatherService>();
+builder.Services.AddSingleton<IpApiService>();
 
 builder.Services.AddSingleton<HttpClient>();
 builder.Services.AddSingleton<HeatersFactory>();
@@ -41,20 +42,22 @@ app.MapGet("/shelly/off", async () =>
 {
     await shelly.TurnOff();
     return "Shelly turned off.";
-})
-.WithName("Turn off");
+});
 
 app.MapGet("/shelly/on", async () =>
 {
     await shelly.TurnOn();
     return "Shelly turned on.";
-})
-.WithName("Turn on");
+});
 
 app.MapGet("/shelly/status", async () =>
 {
     return await shelly.GetStatus();
-})
-.WithName("Get status");
+});
+
+app.MapGet("/weather", async (IWeatherService weatherService) =>
+{
+    return await weatherService.ReadTemperatureC();
+});
 
 app.Run();

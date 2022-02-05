@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using System.Text.Json.Serialization;
-
-namespace SmartHeater.Services;
+﻿namespace SmartHeater.Services;
 
 public class ShellyRelayService : IHeaterService
 {
