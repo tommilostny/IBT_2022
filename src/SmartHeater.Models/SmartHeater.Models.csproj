@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SmartHeater.Models\SmartHeater.Models.csproj" />
-  </ItemGroup>
-
 </Project>

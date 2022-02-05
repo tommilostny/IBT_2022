@@ -53,24 +53,8 @@ app.MapGet("/shelly/on", async () =>
 
 app.MapGet("/shelly/status", async () =>
 {
-    var status = await shelly.GetStatus();
-    return $"Shelly status: {status}.";
+    return await shelly.GetStatus();
 })
 .WithName("Get status");
-
-app.MapGet("/shelly/temp", async () =>
-{
-    var temp = await shelly.ReadTemperature();
-    return $"Measured temperature: {temp}°C.";
-})
-.WithName("Get temperature");
-
-app.MapGet("/shelly/power", async () =>
-{
-    var power = await shelly.ReadPower();
-    return $"Measured power: {power}W.";
-})
-.WithName("Get power");
-
 
 app.Run();

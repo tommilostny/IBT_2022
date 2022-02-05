@@ -6,8 +6,6 @@ namespace SmartHeater.Services;
 public class ShellyRelayService : IHeaterService
 {
     private readonly HttpClient _httpClient;
-    private readonly ShellyRelayStatus _statusCache = new();
-
 
     public ShellyRelayService(HttpClient httpClient, string ipAddress)
     {
@@ -21,55 +19,57 @@ public class ShellyRelayService : IHeaterService
 
     private string StatusUrl => $"http://{IPAddress}/status";
 
-    public async Task<bool?> GetStatus(bool fromCache = false)
+    public async Task<HeaterStatus> GetStatus()
     {
-        if (fromCache)
+        var response = await _httpClient.GetFromJsonAsync<ShellyRelayStatus>(StatusUrl);
+        var status = new HeaterStatus(IPAddress, DateTime.Now)
         {
-            return _statusCache.IsTurnedOn;
-        }
-        var response = await _httpClient.GetFromJsonAsync<ShellyRelayStatus>(Relay0Url);
-        return _statusCache.IsTurnedOn = response?.IsTurnedOn;
-    }
-
-    public async Task<double?> ReadTemperature(bool fromCache = false)
-    {
-        if (fromCache)
-        {
-            return _statusCache.Temperature;
-        }
-        var response = await _httpClient.GetFromJsonAsync<ShellyTemperatureStatus>(StatusUrl);
-        try
-        {   
-            _statusCache.Temperature = Convert.ToDouble(response?.ExtTemperature?["0"]["tC"].ToString(), CultureInfo.InvariantCulture);
-            return _statusCache.Temperature;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    public async Task<double?> ReadPower(bool fromCache = false)
-    {
-        if (fromCache)
-        {
-            return _statusCache.Power;
-        }
-        var response = await _httpClient.GetFromJsonAsync<ShellyPowerStatus>(StatusUrl);
-        try
-        {
-            _statusCache.Power = Convert.ToDouble(response?.Meters?.First()["power"].ToString(), CultureInfo.InvariantCulture);
-            return _statusCache.Power;
-        }
-        catch
-        {
-            return null;
-        }
+            IsTurnedOn = ReadRelayState(response),
+            Temperature = ReadTemperature(response),
+            Power = ReadPower(response)
+        };
+        return status;
     }
 
     public async Task TurnOn() => await SendTurnRequest("on");
 
     public async Task TurnOff() => await SendTurnRequest("off");
+
+    private static bool? ReadRelayState(ShellyRelayStatus? relayStatus)
+    {
+        try
+        {
+            return Convert.ToBoolean(relayStatus?.Relays?.First()["ison"].ToString());
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static double? ReadTemperature(ShellyRelayStatus? relayStatus)
+    {
+        try
+        {   
+            return Convert.ToDouble(relayStatus?.ExtTemperature?.First().Value["tC"].ToString(), CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static double? ReadPower(ShellyRelayStatus? relayStatus)
+    {
+        try
+        {
+            return Convert.ToDouble(relayStatus?.Meters?.First()["power"].ToString(), CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            return null;
+        }
+    }
 
     private async Task SendTurnRequest(string state)
     {
@@ -90,24 +90,12 @@ public class ShellyRelayService : IHeaterService
 
     private class ShellyRelayStatus
     {
-        [JsonPropertyName("ison")]
-        public bool? IsTurnedOn { get; set; }
+        [JsonPropertyName("relays")]
+        public List<Dictionary<string, object>>? Relays { get; set; }
 
-        [JsonIgnore]
-        public double? Temperature { get; set; }
-
-        [JsonIgnore]
-        public double? Power { get; set; }
-    };
-
-    private class ShellyTemperatureStatus
-    {
         [JsonPropertyName("ext_temperature")]
         public Dictionary<string, Dictionary<string, object>>? ExtTemperature { get; set; }
-    };
 
-    private class ShellyPowerStatus
-    {
         [JsonPropertyName("meters")]
         public List<Dictionary<string, object>>? Meters { get; set; }
     };

@@ -1,7 +1,6 @@
-﻿namespace SmartHeater.ML
-{
-    public class Class1
-    {
+﻿namespace SmartHeater.ML;
 
-    }
+public class Class1
+{
+
 }
