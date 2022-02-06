@@ -1,4 +1,6 @@
-﻿namespace SmartHeater.Factories;
+﻿using SmartHeater.Services;
+
+namespace SmartHeater.Factories;
 
 public class HeatersFactory
 {
@@ -14,6 +16,9 @@ public class HeatersFactory
     public ICollection<IHeaterService> GetHeaters()
     {
         //Read list of IP addresses (strings) from InfluxDb, create ShellyRelayService objects.
-        throw new NotImplementedException();
+        return new List<IHeaterService>()
+        {
+            new ShellyRelayService(_httpClient, "192.168.1.253")
+        };
     }
 }

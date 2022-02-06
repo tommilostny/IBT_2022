@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<MeasurementInvocable>();
+builder.Services.AddTransient<StatsCollectorInvocable>();
 builder.Services.AddScheduler();
 
 builder.Services.AddSingleton<IDatabaseService, InfluxDbService>();
@@ -31,12 +32,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.Services.UseScheduler(scheduler =>
-//{
-//    scheduler.Schedule<MeasurementInvocable>().EveryMinute();
-//});
+app.Services.UseScheduler(scheduler =>
+{
+    //scheduler.Schedule<MeasurementInvocable>().EveryMinute();
+    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
+});
 
-var shelly = new ShellyRelayService(app.Services.GetService<HttpClient>()!, "192.168.1.253");
+var shelly = app.Services.GetService<HeatersFactory>()!.GetHeaters().First();
 
 app.MapGet("/shelly/off", async () =>
 {
