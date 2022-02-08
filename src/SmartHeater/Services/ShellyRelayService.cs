@@ -19,7 +19,7 @@ public class ShellyRelayService : IHeaterService
     public async Task<HeaterStatus> GetStatus()
     {
         var response = await _httpClient.GetFromJsonAsync<ShellyRelayStatus>(StatusUrl);
-        var status = new HeaterStatus(IPAddress, DateTime.Now)
+        var status = new HeaterStatus(IPAddress, DateTime.UtcNow)
         {
             IsTurnedOn = ReadRelayState(response),
             Temperature = ReadTemperature(response),

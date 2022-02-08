@@ -52,14 +52,8 @@ app.MapGet("/shelly/on", async () =>
     return "Shelly turned on.";
 });
 
-app.MapGet("/shelly/status", async () =>
-{
-    return await shelly.GetStatus();
-});
+app.MapGet("/shelly/status", async () => await shelly.GetStatus());
 
-app.MapGet("/weather", async (IWeatherService weatherService) =>
-{
-    return await weatherService.ReadTemperatureC();
-});
+app.MapGet("/weather", async (IWeatherService weatherService) => await weatherService.ReadTemperatureC());
 
 app.Run();

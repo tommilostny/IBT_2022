@@ -7,11 +7,13 @@ public class StatsCollectorInvocable : IInvocable
 {
     private readonly ICollection<IHeaterService> _heaters;
     private readonly IWeatherService _weatherService;
+    private readonly IDatabaseService _database;
 
-    public StatsCollectorInvocable(HeatersFactory heatersFactory, IWeatherService weatherService)
+    public StatsCollectorInvocable(HeatersFactory heatersFactory, IWeatherService weatherService, IDatabaseService database)
     {
         _heaters = heatersFactory.GetHeaters();
         _weatherService = weatherService;
+        _database = database;
     }
 
     public async Task Invoke()
@@ -21,10 +23,8 @@ public class StatsCollectorInvocable : IInvocable
             var heaterStats = await heater.GetStatus();
             var weather = await _weatherService.ReadTemperatureC();
 
-            var statusText = $"\"{heaterStats.MeasurementTime}\",\"{heaterStats.Temperature}\",\"{weather}\",\"{heaterStats.Power}\",\"{heaterStats.IsTurnedOn}\"\n";
-
-            Console.Write(statusText);
-            await File.AppendAllTextAsync($"stats_{heaterStats.IPAddress}.csv", statusText);
+            var writtenToDb = _database.WriteMeasurement(heaterStats, weather);
+            Console.WriteLine(writtenToDb);
         }
     }
 }
