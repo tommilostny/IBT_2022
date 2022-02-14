@@ -454,3 +454,4 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 *stats_*.csv
+/src/SmartHeater/heaters.json

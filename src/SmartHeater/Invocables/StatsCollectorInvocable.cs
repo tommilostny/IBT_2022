@@ -1,24 +1,24 @@
 ﻿using Coravel.Invocable;
-using SmartHeater.Factories;
+using SmartHeater.Providers;
 
 namespace SmartHeater.Invocables;
 
 public class StatsCollectorInvocable : IInvocable
 {
-    private readonly ICollection<IHeaterService> _heaters;
+    private readonly HeatersProvider _heatersProvider;
     private readonly IWeatherService _weatherService;
     private readonly IDatabaseService _database;
 
-    public StatsCollectorInvocable(HeatersFactory heatersFactory, IWeatherService weatherService, IDatabaseService database)
+    public StatsCollectorInvocable(HeatersProvider heatersProvider, IWeatherService weatherService, IDatabaseService database)
     {
-        _heaters = heatersFactory.GetHeaters();
+        _heatersProvider = heatersProvider;
         _weatherService = weatherService;
         _database = database;
     }
 
     public async Task Invoke()
     {
-        foreach (var heater in _heaters)
+        foreach (var heater in await _heatersProvider.GetHeaters())
         {
             var heaterStats = await heater.GetStatus();
             var weather = await _weatherService.ReadTemperatureC();

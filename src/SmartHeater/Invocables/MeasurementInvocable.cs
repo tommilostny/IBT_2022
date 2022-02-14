@@ -1,5 +1,5 @@
 ﻿using Coravel.Invocable;
-using SmartHeater.Factories;
+using SmartHeater.Providers;
 
 namespace SmartHeater.Invocables;
 
@@ -16,19 +16,19 @@ public class MeasurementInvocable : IInvocable
 {
     private readonly IDatabaseService _influxDbService;
     private readonly IWeatherService _openWeatherService;
-    private ICollection<IHeaterService> _heaters;
+    private readonly HeatersProvider _heatersProvider;
 
-    public MeasurementInvocable(IDatabaseService influxDbService, IWeatherService openWeatherService, HeatersFactory heatersFactory)
+    public MeasurementInvocable(IDatabaseService influxDbService, IWeatherService openWeatherService, HeatersProvider heatersProvider)
     {
         _influxDbService = influxDbService;
         _openWeatherService = openWeatherService;
-        _heaters = heatersFactory.GetHeaters();
+        _heatersProvider = heatersProvider;
     }
 
-    public Task Invoke()
+    public async Task Invoke()
     {
         //TODO: 1
-        foreach (var heater in _heaters)
+        foreach (var heater in await _heatersProvider.GetHeaters())
         {
             //TODO: 2-5
         }

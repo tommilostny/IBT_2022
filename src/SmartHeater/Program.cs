@@ -1,12 +1,10 @@
 using Coravel;
-using SmartHeater.Factories;
+using SmartHeater.Providers;
 using SmartHeater.Invocables;
 using SmartHeater.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -19,11 +17,10 @@ builder.Services.AddSingleton<IWeatherService, OpenWeatherService>();
 builder.Services.AddSingleton<IpApiService>();
 
 builder.Services.AddSingleton<HttpClient>();
-builder.Services.AddSingleton<HeatersFactory>();
+builder.Services.AddSingleton<HeatersProvider>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -32,13 +29,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.Services.UseScheduler(scheduler =>
-{
-    //scheduler.Schedule<MeasurementInvocable>().EveryMinute();
-    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
-});
+//app.Services.UseScheduler(scheduler =>
+//{
+//    //scheduler.Schedule<MeasurementInvocable>().EveryMinute();
+//    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
+//});
 
-var shelly = app.Services.GetService<HeatersFactory>()!.GetHeaters().First();
+var shelly = new ShellyRelayService(new(), "192.168.1.253");
 
 app.MapGet("/shelly/off", async () =>
 {
@@ -55,5 +52,9 @@ app.MapGet("/shelly/on", async () =>
 app.MapGet("/shelly/status", async () => await shelly.GetStatus());
 
 app.MapGet("/weather", async (IWeatherService weatherService) => await weatherService.ReadTemperatureC());
+
+app.MapGet("/heaters", async (HeatersProvider hp) => await hp.GetHeaters());
+app.MapGet("/heaters/add/{ipAddress}", async (HeatersProvider hp, string ipAddress) => await hp.Register(ipAddress));
+app.MapGet("/heaters/remove/{ipAddress}", async (HeatersProvider hp, string ipAddress) => await hp.Remove(ipAddress));
 
 app.Run();
