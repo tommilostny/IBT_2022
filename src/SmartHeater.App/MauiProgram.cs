@@ -1,4 +1,6 @@
-﻿namespace SmartHeater.App;
+﻿using SmartHeater.App.Pages;
+
+namespace SmartHeater.App;
 
 public static class MauiProgram
 {

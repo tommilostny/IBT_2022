@@ -1,4 +1,4 @@
-﻿namespace SmartHeater.App;
+﻿namespace SmartHeater.App.Pages;
 
 public partial class MainPage : ContentPage
 {
