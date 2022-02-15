@@ -1,12 +1,10 @@
-﻿namespace SmartHeater.App
-{
-    public partial class App : Application
-    {
-        public App()
-        {
-            InitializeComponent();
+﻿namespace SmartHeater.App;
 
-            MainPage = new MainPage();
-        }
+public partial class App : Application
+{
+    public App(MainPage mainPage)
+    {
+        InitializeComponent();
+        MainPage = mainPage;
     }
 }
