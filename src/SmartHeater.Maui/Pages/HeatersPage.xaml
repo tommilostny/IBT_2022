@@ -6,11 +6,11 @@
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
              x:DataType="viewmodels:HeatersViewModel">
     <StackLayout>
-        <ListView ItemsSource="{Binding Heaters}"
+        <CollectionView ItemsSource="{Binding Heaters}"
                   VerticalOptions="FillAndExpand" 
                   HorizontalOptions="FillAndExpand"
                   Margin="15">
-        </ListView>
+        </CollectionView>
 
         <StackLayout Orientation="Horizontal"
                      VerticalOptions="End"

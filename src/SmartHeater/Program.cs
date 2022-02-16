@@ -63,7 +63,7 @@ app.MapGet("/heaters", async (HeatersProvider hp) =>
     }
     return heaters;
 });
-app.MapGet("/heaters/add/{ipAddress}", async (HeatersProvider hp, string ipAddress) => await hp.Register(ipAddress));
+app.MapGet("/heaters/add/{ipAddress}", async (HeatersProvider hp, string ipAddress) => await hp.Add(ipAddress));
 app.MapGet("/heaters/remove/{ipAddress}", async (HeatersProvider hp, string ipAddress) => await hp.Remove(ipAddress));
 
 app.Run();

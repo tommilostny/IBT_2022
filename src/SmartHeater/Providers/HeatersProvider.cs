@@ -22,7 +22,7 @@ public class HeatersProvider
         return heaters;
     }
 
-    public async Task Register(string ipAddress)
+    public async Task Add(string ipAddress)
     {
         var ipAddresses = await ReadHeatersFromJson();
         ipAddresses.Add(ipAddress);

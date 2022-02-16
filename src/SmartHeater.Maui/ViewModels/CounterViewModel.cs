@@ -17,7 +17,7 @@ public class CounterViewModel : BindableObject
         set
         {
             _count = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(Count));
         }
     }
 }

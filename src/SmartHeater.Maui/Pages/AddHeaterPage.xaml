@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartHeater.Maui.AddHeaterPage"
+             Title="Add heater"
+             xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             x:DataType="viewmodels:AddHeaterViewModel">
+    <StackLayout Margin="20">
+        <Label Text="IP address:" />
+        <Entry Text="{Binding IpAddress}" />
+
+        <Label IsVisible="{Binding ShowError}"
+               Text="{Binding ErrorMessage}"
+               TextColor="Red" />
+
+        <Button Text="Add"
+                Margin="0, 20, 0, 0"
+                HorizontalOptions="Start"
+                Command="{Binding AddHeaterCommand}" />
+    </StackLayout>
+</ContentPage>

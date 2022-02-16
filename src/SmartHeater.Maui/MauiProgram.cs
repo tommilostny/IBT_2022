@@ -16,9 +16,11 @@ public static class MauiProgram
         builder.Services.AddSingleton<HeatersPage>();
         builder.Services.AddSingleton<WeatherPage>();
         builder.Services.AddSingleton<SettingsPage>();
+        builder.Services.AddTransient<AddHeaterPage>();
 
         builder.Services.AddSingleton<CounterViewModel>();
         builder.Services.AddSingleton<HeatersViewModel>();
+        builder.Services.AddTransient<AddHeaterViewModel>();
 
         builder.Services.AddSingleton(sp => new HttpClient
         {
