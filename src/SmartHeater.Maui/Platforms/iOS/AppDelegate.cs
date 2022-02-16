@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace SmartHeater.App
+namespace SmartHeater.Maui
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

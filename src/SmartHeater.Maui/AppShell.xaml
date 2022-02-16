@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       x:Class="SmartHeater.Maui.AppShell"
+       Title="AppShell"
+       BackgroundColor="{DynamicResource PrimaryColor}"
+       xmlns:pages="clr-namespace:SmartHeater.Maui.Pages">
+       <!--BackgroundColor="{AppThemeBinding Dark={DynamicResource PrimaryColor}, Light={DynamicResource SecondaryColor}}"-->
+    <TabBar>
+        <Tab Title="Heaters">
+            <ShellContent ContentTemplate="{DataTemplate pages:HeatersPage}" />
+        </Tab>
+        <Tab Title="Weather">
+            <ShellContent ContentTemplate="{DataTemplate pages:WeatherPage}" />
+        </Tab>
+        <Tab Title="Settings">
+            <ShellContent ContentTemplate="{DataTemplate pages:SettingsPage}" />
+        </Tab>
+    </TabBar>
+</Shell>
+    

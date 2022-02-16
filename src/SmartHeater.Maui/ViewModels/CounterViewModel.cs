@@ -1,4 +1,4 @@
-﻿namespace SmartHeater.App.ViewModels;
+﻿namespace SmartHeater.Maui.ViewModels;
 
 public class CounterViewModel : BindableObject
 {

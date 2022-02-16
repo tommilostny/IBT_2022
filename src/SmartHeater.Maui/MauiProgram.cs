@@ -1,6 +1,4 @@
-﻿using SmartHeater.App.Pages;
-
-namespace SmartHeater.App;
+﻿namespace SmartHeater.Maui;
 
 public static class MauiProgram
 {
@@ -14,8 +12,14 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             });
 
+        builder.Services.AddSingleton<AppShell>();
+        builder.Services.AddSingleton<HeatersPage>();
+        builder.Services.AddSingleton<WeatherPage>();
+        builder.Services.AddSingleton<SettingsPage>();
+
         builder.Services.AddSingleton<CounterViewModel>();
-        builder.Services.AddSingleton<MainPage>();
+
+        builder.Services.AddSingleton<HttpClient>();
 
         return builder.Build();
     }

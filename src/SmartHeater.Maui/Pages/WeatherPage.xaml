@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartHeater.Maui.Pages.WeatherPage"
+             Title="Weather"
+             xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             x:DataType="viewmodels:CounterViewModel">
+    <StackLayout
+        VerticalOptions="CenterAndExpand">
+        <Label Text="{Binding Count}"
+                VerticalOptions="Center" 
+                HorizontalOptions="CenterAndExpand"
+                Margin="0, 0, 0, 42"
+                FontSize="23"/>
+        <Button Command="{Binding ClickedCommand}"
+                Text="Count"
+                HorizontalOptions="Center" />
+    </StackLayout>
+</ContentPage>

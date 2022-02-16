@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace SmartHeater.App
+namespace SmartHeater.Maui
 {
     public class Program
     {
