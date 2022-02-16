@@ -53,7 +53,16 @@ app.MapGet("/shelly/status", async () => await shelly.GetStatus());
 
 app.MapGet("/weather", async (IWeatherService weatherService) => await weatherService.ReadTemperatureC());
 
-app.MapGet("/heaters", async (HeatersProvider hp) => await hp.GetHeaters());
+app.MapGet("/heaters", async (HeatersProvider hp) =>
+{
+    var heaterServices = await hp.GetHeaters();
+    var heaters = new List<string>();
+    foreach (var item in heaterServices)
+    {
+        heaters.Add(item.IPAddress);
+    }
+    return heaters;
+});
 app.MapGet("/heaters/add/{ipAddress}", async (HeatersProvider hp, string ipAddress) => await hp.Register(ipAddress));
 app.MapGet("/heaters/remove/{ipAddress}", async (HeatersProvider hp, string ipAddress) => await hp.Remove(ipAddress));
 

@@ -18,9 +18,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<SettingsPage>();
 
         builder.Services.AddSingleton<CounterViewModel>();
+        builder.Services.AddSingleton<HeatersViewModel>();
 
-        builder.Services.AddSingleton<HttpClient>();
-
+        builder.Services.AddSingleton(sp => new HttpClient
+        {
+            //TODO: Autodiscover the device on local network
+            BaseAddress = new Uri("https://localhost:7232")
+        });
         return builder.Build();
     }
 }
