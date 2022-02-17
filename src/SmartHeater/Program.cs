@@ -16,7 +16,10 @@ builder.Services.AddSingleton<IDatabaseService, InfluxDbService>();
 builder.Services.AddSingleton<IWeatherService, OpenWeatherService>();
 builder.Services.AddSingleton<IpApiService>();
 
-builder.Services.AddSingleton<HttpClient>();
+builder.Services.AddSingleton(sp => new HttpClient
+{
+    Timeout = TimeSpan.FromSeconds(3)
+});
 builder.Services.AddSingleton<HeatersProvider>();
 
 var app = builder.Build();
@@ -29,13 +32,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.Services.UseScheduler(scheduler =>
-//{
-//    //scheduler.Schedule<MeasurementInvocable>().EveryMinute();
-//    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
-//});
+app.Services.UseScheduler(scheduler =>
+{
+    //scheduler.Schedule<MeasurementInvocable>().EveryMinute();
+    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
+});
 
-var shelly = new ShellyRelayService(new(), "192.168.1.253");
+var shelly = new ShellyRelayService(app.Services.GetService<HttpClient>()!, "192.168.1.253");
 
 app.MapGet("/shelly/off", async () =>
 {

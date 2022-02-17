@@ -31,6 +31,7 @@ public class InfluxDbService : IDatabaseService
         using var client = InfluxDBClientFactory.Create("http://localhost:8086", _token);
         using var writeApi = client.GetWriteApi();
         writeApi.WritePoint(_bucket, _organization, point);
+        Console.WriteLine($"Weather is nan: {double.IsNaN(weather)}");
 
         return point.ToLineProtocol();
     }

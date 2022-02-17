@@ -16,11 +16,21 @@ public class OpenWeatherService : IWeatherService
     public async Task<double> ReadTemperatureC()
     {
         (var lat, var lon) = await _ipApiService.GetLatitudeLongitude();
-
+        if (lat is null || lon is null)
+        {
+            return double.NaN;
+        }
         var requestUri = $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={_apiKey}&units=metric";
-        var weatherModel = await _httpClient.GetFromJsonAsync<OpenWeatherModel>(requestUri);
-
-        return Convert.ToDouble(weatherModel?.Data?["temp"].ToString(), CultureInfo.InvariantCulture);
+        try
+        {
+            var weatherModel = await _httpClient.GetFromJsonAsync<OpenWeatherModel>(requestUri);
+            return Convert.ToDouble(weatherModel?.Data?["temp"].ToString(), CultureInfo.InvariantCulture);
+        }
+        catch
+        {
+            Console.Error.WriteLine("Error while getting weather.");
+            return double.NaN;
+        }
     }
 
     private class OpenWeatherModel
