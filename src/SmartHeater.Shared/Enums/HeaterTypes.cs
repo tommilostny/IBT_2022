@@ -1,6 +1,9 @@
-﻿namespace SmartHeater.Shared.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SmartHeater.Shared.Enums;
 
 public enum HeaterTypes
 {
-    Shelly1PM,
+    [Display(Name = "Shelly 1PM")]
+    Shelly1PM, 
 }

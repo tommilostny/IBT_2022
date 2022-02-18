@@ -16,8 +16,20 @@ public class HeatersViewModel : BindableObject
     private ICommand _loadCommand;
     public ICommand LoadCommand => _loadCommand ??= new Command(Load);
 
-    //TODO: move from strings to HeaterListModel.
-    public ObservableCollection<string> Heaters { get; } = new();
+    public ObservableCollection<HeaterListModel> Heaters { get; } = new();
+
+    private bool _loadError = false;
+    public bool LoadError
+    {
+        get => _loadError;
+        set
+        {
+            _loadError = value;
+            OnPropertyChanged(nameof(LoadError));
+        }
+    }
+
+    public string LoadErrorMessage => "Unable to load heaters...";
 
     private async void Add()
     {
@@ -26,18 +38,17 @@ public class HeatersViewModel : BindableObject
 
     private void Load()
     {
+        LoadError = false;
         Heaters.Clear();
         try
         {
-            var heaters = _httpClient.GetFromJsonAsync<List<string>>("heaters").Result;
+            var heaters = _httpClient.GetFromJsonAsync<List<HeaterListModel>>("heaters").Result;
             foreach (var heater in heaters)
                 Heaters.Add(heater);
         }
         catch
         {
-            var rand = new Random();
-            for (int i = 0; i < 5; i++)
-                Heaters.Add($"Placeholder {rand.Next()}");
+            LoadError = true;
         }
     }
 }

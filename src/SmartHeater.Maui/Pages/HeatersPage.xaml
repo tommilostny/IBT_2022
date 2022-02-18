@@ -4,12 +4,35 @@
              x:Class="SmartHeater.Maui.Pages.HeatersPage"
              Title="Heaters"
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             xmlns:models="clr-namespace:SmartHeater.Shared.Models;assembly=SmartHeater.Shared"
              x:DataType="viewmodels:HeatersViewModel">
     <StackLayout>
+
+        <Label IsVisible="{Binding LoadError}"
+               Text="{Binding LoadErrorMessage}"
+               TextColor="Red"
+               Margin="15" />
+
         <CollectionView ItemsSource="{Binding Heaters}"
-                  VerticalOptions="FillAndExpand" 
-                  HorizontalOptions="FillAndExpand"
-                  Margin="15">
+                        VerticalOptions="FillAndExpand" 
+                        HorizontalOptions="FillAndExpand">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:HeaterListModel">
+                    
+                    <StackLayout Padding="15, 7">
+                        <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding HeaterType}" FontSize="12" />
+                            <Label Text="(" Margin="4, 0, 0, 0" FontSize="11" />
+                            <Label Text="{Binding IpAddress}" FontSize="11" />
+                            <Label Text=")" FontSize="11" />
+                        </StackLayout>
+                    </StackLayout>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
         </CollectionView>
 
         <StackLayout Orientation="Horizontal"

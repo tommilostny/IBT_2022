@@ -2,7 +2,6 @@
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        x:Class="SmartHeater.Maui.AppShell"
-       Title="AppShell"
        BackgroundColor="{DynamicResource PrimaryColor}"
        xmlns:pages="clr-namespace:SmartHeater.Maui.Pages">
        <!--BackgroundColor="{AppThemeBinding Dark={DynamicResource PrimaryColor}, Light={DynamicResource SecondaryColor}}"-->
@@ -18,4 +17,3 @@
         </Tab>
     </TabBar>
 </Shell>
-    

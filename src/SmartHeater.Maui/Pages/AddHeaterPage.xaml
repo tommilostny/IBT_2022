@@ -9,6 +9,12 @@
         <Label Text="IP address:" />
         <Entry Text="{Binding IpAddress}" />
 
+        <Label Text="Name:" Margin="0, 10, 0, 0" />
+        <Entry Text="{Binding Name}" />
+
+        <Label Text="Heater type:" Margin="0, 10, 0, 0" />
+        <Picker ItemsSource="{Binding HeaterTypesList}" SelectedItem="{Binding HeaterType}" />
+
         <Label IsVisible="{Binding ShowError}"
                Text="{Binding ErrorMessage}"
                TextColor="Red" />
