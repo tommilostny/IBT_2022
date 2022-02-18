@@ -17,7 +17,7 @@ public class InfluxDbService : IDatabaseService
         _organization = configuration["InfluxDB:Organization"];
     }
 
-    public string WriteMeasurement(HeaterStatus heater, double? weather)
+    public string WriteMeasurement(HeaterStatusModel heater, double? weather)
     {
         var point = PointData
             .Measurement("heater_status")
@@ -28,9 +28,9 @@ public class InfluxDbService : IDatabaseService
             .Field("turned_on", heater.IsTurnedOn ?? false)
             .Timestamp(heater.MeasurementTime, WritePrecision.Ns);
 
-        using var client = InfluxDBClientFactory.Create("http://localhost:8086", _token);
-        using var writeApi = client.GetWriteApi();
-        writeApi.WritePoint(_bucket, _organization, point);
+        //using var client = InfluxDBClientFactory.Create("http://localhost:8086", _token);
+        //using var writeApi = client.GetWriteApi();
+        //writeApi.WritePoint(_bucket, _organization, point);
 
         return point.ToLineProtocol();
     }

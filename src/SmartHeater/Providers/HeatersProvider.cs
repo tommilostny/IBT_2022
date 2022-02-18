@@ -12,37 +12,53 @@ public class HeatersProvider
         _httpClient = httpClient;
     }
 
-    public async Task<ICollection<IHeaterService>> GetHeaters()
+    public async Task<ICollection<IHeaterService>> GetHeaterServices()
     {
         var heaters = new List<IHeaterService>();
-        foreach (var ipAddress in await ReadHeatersFromJson())
+        foreach (var heater in await ReadHeaters())
         {
-            heaters.Add(new ShellyRelayService(_httpClient, ipAddress));
+            var heaterService = heater.HeaterType switch
+            {
+                HeaterTypes.Shelly1PM => new ShellyRelayService(_httpClient, heater.IpAddress),
+                _ => throw new InvalidOperationException()
+            };
+            heaters.Add(heaterService);
         }
         return heaters;
     }
 
-    public async Task Add(string ipAddress)
+    public async Task InsertUpdate(HeaterListModel heater)
     {
-        var ipAddresses = await ReadHeatersFromJson();
-        ipAddresses.Add(ipAddress);
-        await WriteHeatersToJson(ipAddresses);
+        var heaters = await ReadHeaters();
+        var existingHeater = heaters.FirstOrDefault(h => h.IpAddress == heater.IpAddress);
+
+        if (existingHeater is not null)
+        {
+            heaters.Remove(existingHeater);
+        }
+        heaters.Add(heater);
+        await WriteHeaters(heaters);
     }
 
-    public async Task Remove(string ipAddress)
+    public async Task Delete(string ipAddress)
     {
-        var ipAddresses = await ReadHeatersFromJson();
-        ipAddresses.Remove(ipAddress);
-        await WriteHeatersToJson(ipAddresses);
+        var heaters = await ReadHeaters();
+        var heaterToRemove = heaters.FirstOrDefault(h => h.IpAddress == ipAddress);
+
+        if (heaterToRemove is not null)
+        {
+            heaters.Remove(heaterToRemove);
+            await WriteHeaters(heaters);
+        }
     }
 
-    private static async Task<ICollection<string>> ReadHeatersFromJson()
+    public async Task<ICollection<HeaterListModel>> ReadHeaters()
     {
         var jsonStr = File.Exists(_heatersJsonFile) ? await File.ReadAllTextAsync(_heatersJsonFile) : null;
-        return JsonSerializer.Deserialize<List<string>>(jsonStr ?? "[]") ?? new();
+        return JsonSerializer.Deserialize<List<HeaterListModel>>(jsonStr ?? "[]") ?? new();
     }
 
-    private static async Task WriteHeatersToJson(ICollection<string> heaters)
+    private static async Task WriteHeaters(ICollection<HeaterListModel> heaters)
     {
         var jsonStr = JsonSerializer.Serialize(heaters);
         await File.WriteAllTextAsync(_heatersJsonFile, jsonStr);

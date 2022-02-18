@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SmartHeater.ML\SmartHeater.ML.csproj" />
-    <ProjectReference Include="..\SmartHeater.Models\SmartHeater.Models.csproj" />
+    <ProjectReference Include="..\SmartHeater.Shared\SmartHeater.Shared.csproj" />
   </ItemGroup>
 
 </Project>

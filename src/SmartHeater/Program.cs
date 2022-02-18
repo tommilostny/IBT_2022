@@ -52,21 +52,19 @@ app.MapGet("/shelly/on", async () =>
     return "Shelly turned on.";
 });
 
-app.MapGet("/shelly/status", async () => await shelly.GetStatus());
+app.MapGet("/shelly/status",
+    async () => await shelly.GetStatus());
 
-app.MapGet("/weather", async (IWeatherService weatherService) => await weatherService.ReadTemperatureC());
+app.MapGet("/weather",
+    async (IWeatherService ws) => await ws.ReadTemperatureC());
 
-app.MapGet("/heaters", async (HeatersProvider hp) =>
-{
-    var heaterServices = await hp.GetHeaters();
-    var heaters = new List<string>();
-    foreach (var item in heaterServices)
-    {
-        heaters.Add(item.IPAddress);
-    }
-    return heaters;
-});
-app.MapGet("/heaters/add/{ipAddress}", async (HeatersProvider hp, string ipAddress) => await hp.Add(ipAddress));
-app.MapGet("/heaters/remove/{ipAddress}", async (HeatersProvider hp, string ipAddress) => await hp.Remove(ipAddress));
+app.MapGet("/heaters",
+    async (HeatersProvider hp) => await hp.ReadHeaters());
+
+app.MapPost("/heaters/insert-update",
+    async (HeatersProvider hp, HeaterListModel heater) => await hp.InsertUpdate(heater));
+
+app.MapDelete("/heaters/delete/{ipAddress}",
+    async (HeatersProvider hp, string ipAddress) => await hp.Delete(ipAddress));
 
 app.Run();

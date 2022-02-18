@@ -6,5 +6,5 @@ public interface IHeaterService
 
     Task TurnOn();
     Task TurnOff();
-    Task<HeaterStatus> GetStatus();
+    Task<HeaterStatusModel> GetStatus();
 }

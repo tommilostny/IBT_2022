@@ -18,7 +18,7 @@ public class StatsCollectorInvocable : IInvocable
 
     public async Task Invoke()
     {
-        foreach (var heater in await _heatersProvider.GetHeaters())
+        foreach (var heater in await _heatersProvider.GetHeaterServices())
         {
             var heaterStats = await heater.GetStatus();
             var weather = await _weatherService.ReadTemperatureC();
