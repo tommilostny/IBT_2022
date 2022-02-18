@@ -28,9 +28,9 @@ public class InfluxDbService : IDatabaseService
             .Field("turned_on", heater.IsTurnedOn ?? false)
             .Timestamp(heater.MeasurementTime, WritePrecision.Ns);
 
-        //using var client = InfluxDBClientFactory.Create("http://localhost:8086", _token);
-        //using var writeApi = client.GetWriteApi();
-        //writeApi.WritePoint(_bucket, _organization, point);
+        using var client = InfluxDBClientFactory.Create("http://localhost:8086", _token);
+        using var writeApi = client.GetWriteApi();
+        writeApi.WritePoint(_bucket, _organization, point);
 
         return point.ToLineProtocol();
     }
