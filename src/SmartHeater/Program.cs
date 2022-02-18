@@ -14,7 +14,7 @@ builder.Services.AddScheduler();
 
 builder.Services.AddSingleton<IDatabaseService, InfluxDbService>();
 builder.Services.AddSingleton<IWeatherService, OpenWeatherService>();
-builder.Services.AddSingleton<IpApiService>();
+builder.Services.AddSingleton<ICoordinatesService, IpApiService>();
 
 builder.Services.AddSingleton(sp => new HttpClient
 {

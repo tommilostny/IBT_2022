@@ -7,8 +7,8 @@ namespace SmartHeater.Services;
 public class InfluxDbService : IDatabaseService
 {
     private readonly string _token;
-    private readonly string _organization;
     private readonly string _bucket;
+    private readonly string _organization;
 
     public InfluxDbService(IConfiguration configuration)
     {
@@ -17,13 +17,13 @@ public class InfluxDbService : IDatabaseService
         _organization = configuration["InfluxDB:Organization"];
     }
 
-    public string WriteMeasurement(HeaterStatus heater, double weather)
+    public string WriteMeasurement(HeaterStatus heater, double? weather)
     {
         var point = PointData
             .Measurement("heater_status")
             .Tag("heater", heater.IPAddress)
             .Field("temperature", heater.Temperature ?? double.NaN)
-            .Field("weather", weather)
+            .Field("weather", weather ?? double.NaN)
             .Field("power", heater.Power ?? double.NaN)
             .Field("turned_on", heater.IsTurnedOn ?? false)
             .Timestamp(heater.MeasurementTime, WritePrecision.Ns);
@@ -31,7 +31,6 @@ public class InfluxDbService : IDatabaseService
         using var client = InfluxDBClientFactory.Create("http://localhost:8086", _token);
         using var writeApi = client.GetWriteApi();
         writeApi.WritePoint(_bucket, _organization, point);
-        Console.WriteLine($"Weather is nan: {double.IsNaN(weather)}");
 
         return point.ToLineProtocol();
     }

@@ -3,22 +3,22 @@
 public class OpenWeatherService : IWeatherService
 {
     private readonly HttpClient _httpClient;
-    private readonly IpApiService _ipApiService;
+    private readonly ICoordinatesService _coordsService;
     private readonly string _apiKey;
 
-    public OpenWeatherService(HttpClient httpClient, IConfiguration configuration, IpApiService ipApiService)
+    public OpenWeatherService(HttpClient httpClient, IConfiguration configuration, ICoordinatesService ipApiService)
     {
         _httpClient = httpClient;
-        _ipApiService = ipApiService;
+        _coordsService = ipApiService;
         _apiKey = configuration["OpenWeather:ApiKey"];
     }
 
-    public async Task<double> ReadTemperatureC()
+    public async Task<double?> ReadTemperatureC()
     {
-        (var lat, var lon) = await _ipApiService.GetLatitudeLongitude();
+        (var lat, var lon) = await _coordsService.GetLatitudeLongitude();
         if (lat is null || lon is null)
         {
-            return double.NaN;
+            return null;
         }
         var requestUri = $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={_apiKey}&units=metric";
         try
@@ -29,7 +29,7 @@ public class OpenWeatherService : IWeatherService
         catch
         {
             Console.Error.WriteLine("Error while getting weather.");
-            return double.NaN;
+            return null;
         }
     }
 

@@ -1,10 +1,10 @@
 ﻿namespace SmartHeater.Services;
 
-public class IpApiService
+public class IpApiService : ICoordinatesService
 {
     private readonly HttpClient _httpClient;
 
-    //Cache public IP addres and coordinatest (Hub won't be moving).
+    //Cache public IP addres and coordinates to reduce traffic (Hub won't be moving).
     private string? _ipAddress;
     private double[]? _latLon;
 
@@ -17,17 +17,16 @@ public class IpApiService
     {
         if (string.IsNullOrWhiteSpace(_ipAddress))
         {
-            _ipAddress = await GetPublicIpAddress();
             _latLon = null;
-        }
-        if (_ipAddress is null)
-        {
-            return (null, null);
+            if ((_ipAddress = await GetPublicIpAddress()) is null)
+            {
+                return (null, null);
+            }
         }
         if (_latLon is null || _latLon.Length != 2)
         {
-            var latLonStrings = await GetLatLonStrings(_ipAddress);
-            if (latLonStrings is null)
+            var latLonStrings = await GetCoordStrings(_ipAddress);
+            if (latLonStrings is null || latLonStrings.Length != 2)
             {
                 return (null, null);
             }
@@ -54,7 +53,7 @@ public class IpApiService
         }
     }
 
-    private async Task<string[]?> GetLatLonStrings(string ipAddress)
+    private async Task<string[]?> GetCoordStrings(string ipAddress)
     {
         try
         {
