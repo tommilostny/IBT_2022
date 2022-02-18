@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32120.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater", "SmartHeater\SmartHeater.csproj", "{2758AE01-CA02-4D40-AE5A-CD750BD84648}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.Hub", "SmartHeater.Hub\SmartHeater.Hub.csproj", "{2758AE01-CA02-4D40-AE5A-CD750BD84648}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.ML", "SmartHeater.ML\SmartHeater.ML.csproj", "{A261BB8F-DD6F-4970-B644-DC611D02DD3E}"
 EndProject

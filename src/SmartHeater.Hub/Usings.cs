@@ -1,4 +1,4 @@
-﻿global using SmartHeater.Services.Interfaces;
+﻿global using SmartHeater.Hub.Services.Interfaces;
 global using SmartHeater.Shared.Models;
 global using SmartHeater.Shared.Enums;
 global using System.Globalization;

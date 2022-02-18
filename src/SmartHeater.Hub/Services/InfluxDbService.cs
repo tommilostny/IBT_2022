@@ -2,7 +2,7 @@
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
 
-namespace SmartHeater.Services;
+namespace SmartHeater.Hub.Services;
 
 public class InfluxDbService : IDatabaseService
 {

@@ -1,4 +1,4 @@
-﻿namespace SmartHeater.Services.Interfaces;
+﻿namespace SmartHeater.Hub.Services.Interfaces;
 
 public interface IDatabaseService
 {

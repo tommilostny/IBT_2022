@@ -1,4 +1,4 @@
-﻿namespace SmartHeater.Services;
+﻿namespace SmartHeater.Hub.Services;
 
 public class OpenWeatherService : IWeatherService
 {

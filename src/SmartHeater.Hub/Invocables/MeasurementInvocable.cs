@@ -1,7 +1,7 @@
 ﻿using Coravel.Invocable;
-using SmartHeater.Providers;
+using SmartHeater.Hub.Providers;
 
-namespace SmartHeater.Invocables;
+namespace SmartHeater.Hub.Invocables;
 
 /// <summary>
 /// Invocable task<br/>

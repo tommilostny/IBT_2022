@@ -1,4 +1,4 @@
-﻿namespace SmartHeater.Services.Interfaces;
+﻿namespace SmartHeater.Hub.Services.Interfaces;
 
 /// <summary>
 /// <b>Warning!</b> At least one of methods (ReadTemperatureC or ReadTemperatureF) needs to be implemented.

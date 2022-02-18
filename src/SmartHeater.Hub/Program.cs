@@ -1,7 +1,7 @@
 using Coravel;
-using SmartHeater.Providers;
-using SmartHeater.Invocables;
-using SmartHeater.Services;
+using SmartHeater.Hub.Services;
+using SmartHeater.Hub.Invocables;
+using SmartHeater.Hub.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 

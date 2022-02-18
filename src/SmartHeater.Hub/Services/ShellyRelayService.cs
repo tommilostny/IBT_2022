@@ -1,4 +1,4 @@
-﻿namespace SmartHeater.Services;
+﻿namespace SmartHeater.Hub.Services;
 
 public class ShellyRelayService : IHeaterService
 {
@@ -47,7 +47,7 @@ public class ShellyRelayService : IHeaterService
     private static double? ReadTemperature(ShellyRelayStatus? relayStatus)
     {
         try
-        {   
+        {
             return Convert.ToDouble(relayStatus?.ExtTemperature?.First().Value["tC"].ToString(), CultureInfo.InvariantCulture);
         }
         catch

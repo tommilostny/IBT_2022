@@ -1,6 +1,6 @@
-﻿using SmartHeater.Services;
+﻿using SmartHeater.Hub.Services;
 
-namespace SmartHeater.Providers;
+namespace SmartHeater.Hub.Providers;
 
 public class HeatersProvider
 {

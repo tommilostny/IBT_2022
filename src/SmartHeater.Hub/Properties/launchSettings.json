@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "SmartHeater.API": {
+    "SmartHeater.Hub": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
