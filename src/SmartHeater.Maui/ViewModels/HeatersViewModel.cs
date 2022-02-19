@@ -3,10 +3,12 @@
 public class HeatersViewModel : BindableObject
 {
     private readonly HttpClient _httpClient;
+    private readonly SettingsProvider _settingsProvider;
 
-    public HeatersViewModel(HttpClient httpClient)
+    public HeatersViewModel(HttpClient httpClient, SettingsProvider settingsProvider)
     {
         _httpClient = httpClient;
+        _settingsProvider = settingsProvider;
         Load();
     }
 
@@ -29,7 +31,7 @@ public class HeatersViewModel : BindableObject
         }
     }
 
-    public string LoadErrorMessage => "Unable to load heaters...";
+    public string LoadErrorMessage => "Unable to load heaters. Check the Hub IP address set in settings.";
 
     private async void Add()
     {
@@ -42,7 +44,7 @@ public class HeatersViewModel : BindableObject
         Heaters.Clear();
         try
         {
-            var heaters = _httpClient.GetFromJsonAsync<List<HeaterListModel>>("heaters").Result;
+            var heaters = _httpClient.GetFromJsonAsync<List<HeaterListModel>>($"{_settingsProvider.HubUri}/heaters").Result;
             foreach (var heater in heaters)
                 Heaters.Add(heater);
         }

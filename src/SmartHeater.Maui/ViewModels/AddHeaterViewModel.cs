@@ -4,13 +4,15 @@ public class AddHeaterViewModel : BindableObject
 {
     private readonly HttpClient _httpClient;
     private readonly HeatersViewModel _heatersViewModel;
+    private readonly SettingsProvider _settingsProvider;
 
     public List<HeaterTypes> HeaterTypesList { get; } = new();
 
-    public AddHeaterViewModel(HttpClient httpClient, HeatersViewModel heatersViewModel)
+    public AddHeaterViewModel(HttpClient httpClient, HeatersViewModel heatersViewModel, SettingsProvider settingsProvider)
     {
         _httpClient = httpClient;
         _heatersViewModel = heatersViewModel;
+        _settingsProvider = settingsProvider;
         foreach (var item in Enum.GetValues(typeof(HeaterTypes)))
         {
             HeaterTypesList.Add((HeaterTypes)item);
@@ -84,7 +86,7 @@ public class AddHeaterViewModel : BindableObject
 
             //Register heater with valid IP address.
             var heater = new HeaterListModel(_ipAddress, _name, _type);
-            var response = await _httpClient.PostAsJsonAsync("heaters/insert-update", heater);
+            var response = await _httpClient.PostAsJsonAsync($"{_settingsProvider.HubUri}/heaters/insert-update", heater);
             if (!response.IsSuccessStatusCode)
             {
                 ErrorMessage = $"Unable to add heater.";

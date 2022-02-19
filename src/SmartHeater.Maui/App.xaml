@@ -3,7 +3,8 @@
              xmlns:windows="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;assembly=Microsoft.Maui.Controls"
              xmlns:local="clr-namespace:SmartHeater.Maui"
              x:Class="SmartHeater.Maui.App"
-             windows:Application.ImageDirectory="Assets">
+             windows:Application.ImageDirectory="Assets"
+             xmlns:converters="clr-namespace:SmartHeater.Maui.Converters">
     <Application.Resources>
         <ResourceDictionary>
 
@@ -22,6 +23,8 @@
                 <Setter Property="Padding" Value="14,10" />
             </Style>
 
+            <converters:SettingsConnectColorConverter x:Key="ConnectColorConverter" />
+            <converters:SettingsConnectTextConverter x:Key="ConnectTextConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

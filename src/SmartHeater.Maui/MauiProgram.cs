@@ -20,13 +20,12 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<CounterViewModel>();
         builder.Services.AddSingleton<HeatersViewModel>();
+        builder.Services.AddSingleton<SettingsViewModel>();
         builder.Services.AddTransient<AddHeaterViewModel>();
 
-        builder.Services.AddSingleton(sp => new HttpClient
-        {
-            //TODO: Autodiscover the device on local network
-            BaseAddress = new Uri("https://localhost:7232")
-        });
+        builder.Services.AddSingleton(sp => SettingsProvider.LoadFromJson());
+        builder.Services.AddSingleton<HttpClient>();
+
         return builder.Build();
     }
 }

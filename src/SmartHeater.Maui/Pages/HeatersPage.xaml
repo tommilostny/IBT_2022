@@ -20,7 +20,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:HeaterListModel">
                     
-                    <StackLayout Padding="15, 7">
+                    <StackLayout Padding="15, 10">
                         <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
                         <StackLayout Orientation="Horizontal">
                             <Label Text="{Binding HeaterType}" FontSize="12" />
