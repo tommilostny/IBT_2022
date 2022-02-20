@@ -86,7 +86,7 @@ public class AddHeaterViewModel : BindableObject
 
             //Register heater with valid IP address.
             var heater = new HeaterListModel(_ipAddress, _name, _type);
-            var response = await _httpClient.PostAsJsonAsync($"{_settingsProvider.HubUri}/heaters/insert-update", heater);
+            var response = await _httpClient.PostAsJsonAsync($"{_settingsProvider.HubUri}/heaters", heater);
             if (!response.IsSuccessStatusCode)
             {
                 ErrorMessage = $"Unable to add heater.";

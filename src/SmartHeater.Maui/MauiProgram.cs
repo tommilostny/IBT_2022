@@ -17,11 +17,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<WeatherPage>();
         builder.Services.AddSingleton<SettingsPage>();
         builder.Services.AddTransient<AddHeaterPage>();
+        builder.Services.AddTransient<HeaterDetailPage>();
 
         builder.Services.AddSingleton<CounterViewModel>();
         builder.Services.AddSingleton<HeatersViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
         builder.Services.AddTransient<AddHeaterViewModel>();
+        builder.Services.AddTransient<HeaterDetailViewModel>();
 
         builder.Services.AddSingleton(sp => SettingsProvider.LoadFromJson());
         builder.Services.AddSingleton<HttpClient>();

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartHeater.Maui.Pages.HeaterDetailPage"
+             xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             x:DataType="viewmodels:HeaterDetailViewModel"
+             Title="{Binding HeaterDetail.Name}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding DeleteCommand}"
+                     Text="Delete" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout Margin="20">
+        <Label Text="IP address:"
+               FontSize="12" />
+        <Label Text="{Binding HeaterDetail.IpAddress}"
+               FontSize="13"
+               FontAttributes="Bold"
+               Margin="0, 0, 0, 15" />
+
+        <Label Text="Heater type:"
+               FontSize="12" />
+        <Label Text="{Binding HeaterDetail.HeaterType}"
+               FontSize="13"
+               FontAttributes="Bold"
+               Margin="0, 0, 0, 15" />
+    </StackLayout>
+</ContentPage>

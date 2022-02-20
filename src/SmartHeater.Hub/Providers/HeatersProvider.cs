@@ -58,6 +58,20 @@ public class HeatersProvider
         return JsonSerializer.Deserialize<List<HeaterListModel>>(jsonStr ?? "[]") ?? new();
     }
 
+    public async Task<HeaterDetailModel?> GetHeaterDetail(string ipAddress)
+    {
+        try
+        {
+            var listModel = (await ReadHeaters()).First(h => h.IpAddress == ipAddress);
+            //TODO: use a mapper
+            return new HeaterDetailModel(listModel.IpAddress, listModel.Name, listModel.HeaterType);
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+    }
+
     private static async Task WriteHeaters(ICollection<HeaterListModel> heaters)
     {
         var jsonStr = JsonSerializer.Serialize(heaters);

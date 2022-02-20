@@ -60,6 +60,9 @@
 	  <MauiXaml Update="Pages\AddHeaterPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\HeaterDetailPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\HeatersPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

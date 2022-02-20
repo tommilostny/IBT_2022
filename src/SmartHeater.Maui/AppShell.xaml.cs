@@ -6,5 +6,6 @@ public partial class AppShell
 	{
 		InitializeComponent();
 		Routing.RegisterRoute(nameof(AddHeaterPage), typeof(AddHeaterPage));
+		Routing.RegisterRoute(nameof(HeaterDetailPage), typeof(HeaterDetailPage));
 	}
 }
