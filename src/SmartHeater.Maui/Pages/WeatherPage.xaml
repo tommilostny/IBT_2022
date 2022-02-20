@@ -4,16 +4,26 @@
              x:Class="SmartHeater.Maui.Pages.WeatherPage"
              Title="Weather"
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
-             x:DataType="viewmodels:CounterViewModel">
-    <StackLayout
-        VerticalOptions="CenterAndExpand">
-        <Label Text="{Binding Count}"
-                VerticalOptions="Center" 
-                HorizontalOptions="CenterAndExpand"
-                Margin="0, 0, 0, 42"
-                FontSize="23"/>
-        <Button Command="{Binding ClickedCommand}"
-                Text="Count"
-                HorizontalOptions="Center" />
+             x:DataType="viewmodels:WeatherViewModel">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding ReloadCommand}"
+                     Text="Reload" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout>
+        <Label IsVisible="{Binding LoadError}"
+               Text="Unable to load weather."
+               TextColor="Red"
+               Margin="15" />
+
+        <StackLayout Orientation="Horizontal"
+                     Padding="20"
+                     IsVisible="{Binding TemperatureIsValid}">
+            <Label Text="{Binding TemperatureC}"
+                   FontSize="42"/>
+            <Label Text="°C"
+                   FontSize="30"/>
+        </StackLayout>
     </StackLayout>
 </ContentPage>

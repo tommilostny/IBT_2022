@@ -2,9 +2,9 @@ namespace SmartHeater.Maui.Pages;
 
 public partial class WeatherPage
 {
-	public WeatherPage(CounterViewModel counterViewModel)
+	public WeatherPage(WeatherViewModel weatherViewModel)
 	{
 		InitializeComponent();
-		BindingContext = counterViewModel;
+		BindingContext = weatherViewModel;
 	}
 }
