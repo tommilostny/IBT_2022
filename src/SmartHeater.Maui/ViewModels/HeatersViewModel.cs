@@ -36,6 +36,17 @@ public class HeatersViewModel : BindableObject
         }
     }
 
+    private bool _isLoading = true;
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set
+        {
+            _isLoading = value;
+            OnPropertyChanged(nameof(IsLoading));
+        }
+    }
+
     public string LoadErrorMessage => string.IsNullOrWhiteSpace(_settingsProvider.HubIpAddress)
         ? "To load heaters, please, set up the Hub IP address in settings."
         : "Unable to load heaters.";
@@ -45,20 +56,25 @@ public class HeatersViewModel : BindableObject
         await Shell.Current.GoToAsync(nameof(AddHeaterPage));
     }
 
-    private void Load()
+    private async void Load()
     {
+        IsLoading = true;
         LoadError = false;
         Heaters.Clear();
         try
         {
             var uri = $"{_settingsProvider.HubUri}/heaters";
-            var heaters = _httpClient.GetFromJsonAsync<List<HeaterListModel>>(uri).Result;
+            var heaters = await _httpClient.GetFromJsonAsync<List<HeaterListModel>>(uri);
             foreach (var heater in heaters)
                 Heaters.Add(heater);
         }
         catch
         {
             LoadError = true;
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 

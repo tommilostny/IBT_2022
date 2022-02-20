@@ -17,11 +17,7 @@ public class HeatersProvider
         var heaters = new List<IHeaterService>();
         foreach (var heater in await ReadHeaters())
         {
-            var heaterService = heater.HeaterType switch
-            {
-                HeaterTypes.Shelly1PM => new ShellyRelayService(_httpClient, heater.IpAddress),
-                _ => throw new InvalidOperationException()
-            };
+            var heaterService = GetHeaterService(heater);
             heaters.Add(heaterService);
         }
         return heaters;
@@ -63,8 +59,10 @@ public class HeatersProvider
         try
         {
             var listModel = (await ReadHeaters()).First(h => h.IpAddress == ipAddress);
-            //TODO: use a mapper
-            return new HeaterDetailModel(listModel.IpAddress, listModel.Name, listModel.HeaterType);
+            return new HeaterDetailModel(listModel.IpAddress, listModel.Name, listModel.HeaterType)
+            {
+                LastMeasurement = await GetHeaterService(listModel).GetStatus()
+            };
         }
         catch (InvalidOperationException)
         {
@@ -76,5 +74,14 @@ public class HeatersProvider
     {
         var jsonStr = JsonSerializer.Serialize(heaters);
         await File.WriteAllTextAsync(_heatersJsonFile, jsonStr);
+    }
+
+    private IHeaterService GetHeaterService(HeaterListModel heater)
+    {
+        return heater.HeaterType switch
+        {
+            HeaterTypes.Shelly1PM => new ShellyRelayService(_httpClient, heater.IpAddress),
+            _ => throw new InvalidOperationException()
+        };
     }
 }

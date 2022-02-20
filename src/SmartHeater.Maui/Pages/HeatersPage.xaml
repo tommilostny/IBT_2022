@@ -12,12 +12,17 @@
         <ToolbarItem Text="Reload"
                     Command="{Binding LoadCommand}" />
     </ContentPage.ToolbarItems>
-    
+
     <StackLayout>
         <Label IsVisible="{Binding LoadError}"
                Text="{Binding LoadErrorMessage}"
                TextColor="Red"
-               Margin="15" />
+               Margin="10" />
+
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           Color="{DynamicResource PrimaryColor}"
+                           Margin="20" />
 
         <CollectionView ItemsSource="{Binding Heaters}"
                         VerticalOptions="FillAndExpand" 

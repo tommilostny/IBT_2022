@@ -48,19 +48,35 @@ public class WeatherViewModel : BindableObject
         }
     }
 
-    private void Load()
+    private bool _isLoading = true;
+    public bool IsLoading
     {
+        get => _isLoading;
+        set
+        {
+            _isLoading = value;
+            OnPropertyChanged(nameof(IsLoading));
+        }
+    }
+
+    private async void Load()
+    {
+        IsLoading = true;
         LoadError = false;
         TemperatureIsValid = false;
         try
         {
             var uri = $"{_settingsProvider.HubUri}/weather";
-            TemperatureC = _httpClient.GetFromJsonAsync<double>(uri).Result;
+            TemperatureC = await _httpClient.GetFromJsonAsync<double>(uri);
             TemperatureIsValid = true;
         }
         catch
         {
             LoadError = true;
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 }

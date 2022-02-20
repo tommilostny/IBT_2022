@@ -2,7 +2,7 @@
 
 namespace SmartHeater.Shared.Models;
 
-public record HeaterDetailModel(string IpAddress, string Name, HeaterTypes HeaterType)
+public record HeaterDetailModel(string IpAddress, string Name, HeaterTypes? HeaterType)
 {
-
+    public HeaterStatusModel? LastMeasurement { get; set; }
 }

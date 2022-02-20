@@ -15,7 +15,12 @@
         <Label IsVisible="{Binding LoadError}"
                Text="Unable to load weather."
                TextColor="Red"
-               Margin="15" />
+               Margin="10" />
+
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           Color="{DynamicResource PrimaryColor}"
+                           Margin="20" />
 
         <StackLayout Orientation="Horizontal"
                      Padding="20"

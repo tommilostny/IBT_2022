@@ -25,6 +25,8 @@
 
             <converters:SettingsConnectColorConverter x:Key="ConnectColorConverter" />
             <converters:SettingsConnectTextConverter x:Key="ConnectTextConverter" />
+            <converters:MeasurementStatusConverter x:Key="MeasurementStatusConverter" />
+            <converters:UtcToLocalConverter x:Key="UtcToLocalConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
