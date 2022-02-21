@@ -14,6 +14,9 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
     private ICommand _reloadCommand;
     public ICommand ReloadCommand => _reloadCommand ??= new Command(ReLoad);
 
+    private ICommand _editCommand;
+    public ICommand EditCommand => _editCommand ??= new Command(GoToEditPage);
+
     public HeaterDetailViewModel(HttpClient httpClient, SettingsProvider settingsProvider, HeatersViewModel heatersViewModel)
     {
         _httpClient = httpClient;
@@ -125,5 +128,14 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
             _heatersViewModel.DeleteHeaterFromCollectionView(heaterToRemove);
             await Shell.Current.GoToAsync("..");
         }
+    }
+
+    private async void GoToEditPage()
+    {
+        var uri = $"{nameof(AddHeaterPage)}?IpAddress={HeaterDetail.IpAddress}";
+        uri += $"&Name={HeaterDetail.Name}";
+        uri += $"&HeaterType={(int)HeaterDetail.HeaterType}";
+        uri += $"&ReferenceTemperature={HeaterDetail.ReferenceTemperature}";
+        await Shell.Current.GoToAsync(uri);
     }
 }

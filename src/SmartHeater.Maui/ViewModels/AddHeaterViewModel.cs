@@ -1,6 +1,8 @@
-﻿namespace SmartHeater.Maui.ViewModels;
+﻿using System.Web;
 
-public class AddHeaterViewModel : BindableObject
+namespace SmartHeater.Maui.ViewModels;
+
+public class AddHeaterViewModel : BindableObject, IQueryAttributable
 {
     private readonly HttpClient _httpClient;
     private readonly HeatersViewModel _heatersViewModel;
@@ -30,6 +32,7 @@ public class AddHeaterViewModel : BindableObject
         {
             _ipAddress = value;
             ShowError = false;
+            OnPropertyChanged(nameof(IpAddress));
         }
     }
 
@@ -41,6 +44,7 @@ public class AddHeaterViewModel : BindableObject
         {
             _name = value;
             ShowError = false;
+            OnPropertyChanged(nameof(Name));
         }
     }
 
@@ -52,6 +56,7 @@ public class AddHeaterViewModel : BindableObject
         {
             _type = value;
             ShowError = false;
+            OnPropertyChanged(nameof(HeaterType));
         }
     }
 
@@ -88,6 +93,28 @@ public class AddHeaterViewModel : BindableObject
         }
     }
 
+    private string _title = "Add heater";
+    public string Title
+    {
+        get => _title;
+        set
+        {
+            _title = value;
+            OnPropertyChanged(nameof(Title));
+        }
+    }
+
+    private string _buttonText = "Add";
+    public string ButtonText
+    {
+        get => _buttonText;
+        set
+        {
+            _buttonText = value;
+            OnPropertyChanged(nameof(ButtonText));
+        }
+    }
+
     private async void AddHeater()
     {
         try
@@ -118,6 +145,19 @@ public class AddHeaterViewModel : BindableObject
         {
             ErrorMessage = "An error has occured while contacting the SmartHeater Hub.";
             ShowError = true;
+        }
+    }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.Keys.Count > 0)
+        {
+            Title = "Edit heater";
+            ButtonText = "Save";
+            IpAddress = HttpUtility.UrlDecode(query["IpAddress"].ToString());
+            Name = HttpUtility.UrlDecode(query["Name"].ToString());
+            HeaterType = (HeaterTypes)Convert.ToInt32(query["HeaterType"].ToString());
+            ReferenceTemperature = Convert.ToDouble(query["ReferenceTemperature"].ToString());
         }
     }
 }

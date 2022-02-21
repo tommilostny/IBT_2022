@@ -9,6 +9,8 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding ReloadCommand}"
                      Text="Reload" />
+        <ToolbarItem Command="{Binding EditCommand}"
+                     Text="Edit" />
         <ToolbarItem Command="{Binding DeleteCommand}"
                      Text="Delete" />
     </ContentPage.ToolbarItems>
