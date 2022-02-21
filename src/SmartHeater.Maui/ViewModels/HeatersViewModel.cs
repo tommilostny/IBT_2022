@@ -13,7 +13,7 @@ public class HeatersViewModel : BindableObject
     }
 
     private ICommand _addCommand;
-    public ICommand AddCommand => _addCommand ??= new Command(Add);
+    public ICommand AddCommand => _addCommand ??= new Command(AddButtonClick);
 
     private ICommand _loadCommand;
     public ICommand LoadCommand => _loadCommand ??= new Command(Load);
@@ -47,17 +47,46 @@ public class HeatersViewModel : BindableObject
         }
     }
 
+    private bool _heatersEmpty = false;
+    public bool HeatersCollectionEmpty
+    {
+        get => _heatersEmpty;
+        set
+        {
+            _heatersEmpty = value;
+            OnPropertyChanged(nameof(HeatersCollectionEmpty));
+        }
+    }
+
     public string LoadErrorMessage => string.IsNullOrWhiteSpace(_settingsProvider.HubIpAddress)
         ? "To load heaters, please, set up the Hub IP address in settings."
         : "Unable to load heaters.";
 
-    private async void Add()
+    public void DeleteHeaterFromCollectionView(HeaterListModel heater)
+    {
+        Heaters.Remove(heater);
+        HeatersCollectionEmpty = Heaters.Count == 0;
+    }
+
+    public void AddHeaterToCollectionView(HeaterListModel heater)
+    {
+        var heaterInCollView = Heaters.FirstOrDefault(h => h.IpAddress == heater.IpAddress);
+        if (heaterInCollView is not null)
+        {
+            Heaters.Remove(heaterInCollView);
+        }
+        Heaters.Add(heater);
+        HeatersCollectionEmpty = false;
+    }
+
+    private async void AddButtonClick()
     {
         await Shell.Current.GoToAsync(nameof(AddHeaterPage));
     }
 
     private async void Load()
     {
+        HeatersCollectionEmpty = false;
         IsLoading = true;
         LoadError = false;
         Heaters.Clear();
@@ -75,6 +104,7 @@ public class HeatersViewModel : BindableObject
         finally
         {
             IsLoading = false;
+            HeatersCollectionEmpty = !LoadError && Heaters.Count == 0;
         }
     }
 

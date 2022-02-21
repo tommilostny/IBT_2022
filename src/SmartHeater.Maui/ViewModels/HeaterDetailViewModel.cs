@@ -21,7 +21,7 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
         _heatersViewModel = heatersViewModel;
     }
 
-    private HeaterDetailModel _heaterDetailModel = new("", "Loading...", null);
+    private HeaterDetailModel _heaterDetailModel = new(string.Empty, "Loading...");
     public HeaterDetailModel HeaterDetail
     {
         get => _heaterDetailModel;
@@ -117,7 +117,7 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
         if (response.IsSuccessStatusCode)
         {
             var heaterToRemove = _heatersViewModel.Heaters.FirstOrDefault(h => h.IpAddress == HeaterDetail.IpAddress);
-            _heatersViewModel.Heaters.Remove(heaterToRemove);
+            _heatersViewModel.DeleteHeaterFromCollectionView(heaterToRemove);
             await Shell.Current.GoToAsync("..");
         }
     }

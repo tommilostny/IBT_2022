@@ -63,12 +63,12 @@ Zde je nabízen algoritmus [SSA](https://docs.microsoft.com/en-us/dotnet/api/mic
 ![ML pipeline](img/diagram2.jpg "ML pipeline")
 
 ### Atributy modelu
-| Čas měření   | Naměřená teplota | Venkovní referenční teplota | **Stav topení**  |
+| Čas měření   | Rozdíl od nastavené referenční teploty v místnosti | Venkovní referenční teplota | **Stav topení**  |
 | :----------: | :--------------: | :-------------------------: | :--------------: |
 
 Vstupem modelu je aktuální datum, čas a naměřená teplota. Na základě vztahu těchto dvou veličin ML model predikuje status topení (vypnuto/zapnuto). Při změně je poslán příkaz na změnu stavu relé přes nastavené Shelly REST API.
 
-Toto bude periodicky provádět konzolová aplikace a při změně bude kontaktovat webové API běžící v dalším procesu na localhost.
+Toto bude periodicky provádět **scheduler Coravel** běžící pod webovým API.
 
 ---
 ## [MAUI](https://docs.microsoft.com/en-us/dotnet/maui/what-is-maui)

@@ -14,6 +14,10 @@
     </ContentPage.ToolbarItems>
 
     <StackLayout>
+        <Label IsVisible="{Binding HeatersCollectionEmpty}"
+               Text="Setup your first heater by pressing the Add button."
+               Margin="10" />
+        
         <Label IsVisible="{Binding LoadError}"
                Text="{Binding LoadErrorMessage}"
                TextColor="Red"

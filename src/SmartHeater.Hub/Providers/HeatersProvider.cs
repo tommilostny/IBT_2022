@@ -14,13 +14,25 @@ public class HeatersProvider
 
     public async Task<ICollection<IHeaterService>> GetHeaterServices()
     {
-        var heaters = new List<IHeaterService>();
+        var services = new List<IHeaterService>();
         foreach (var heater in await ReadHeaters())
         {
             var heaterService = GetHeaterService(heater);
-            heaters.Add(heaterService);
+            if (heaterService is not null)
+            {
+                services.Add(heaterService);
+            }
         }
-        return heaters;
+        return services;
+    }
+
+    public IHeaterService? GetHeaterService(HeaterListModel heater)
+    {
+        return heater.HeaterType switch
+        {
+            HeaterTypes.Shelly1PM => new ShellyRelayService(_httpClient, heater.IpAddress),
+            _ => null
+        };
     }
 
     public async Task InsertUpdate(HeaterListModel heater)
@@ -48,20 +60,18 @@ public class HeatersProvider
         }
     }
 
-    public async Task<ICollection<HeaterListModel>> ReadHeaters()
-    {
-        var jsonStr = File.Exists(_heatersJsonFile) ? await File.ReadAllTextAsync(_heatersJsonFile) : null;
-        return JsonSerializer.Deserialize<List<HeaterListModel>>(jsonStr ?? "[]") ?? new();
-    }
-
     public async Task<HeaterDetailModel?> GetHeaterDetail(string ipAddress)
     {
         try
         {
-            var listModel = (await ReadHeaters()).First(h => h.IpAddress == ipAddress);
-            return new HeaterDetailModel(listModel.IpAddress, listModel.Name, listModel.HeaterType)
+            var heaterListModel = await GetHeaterListModel(ipAddress);
+            var heaterService = GetHeaterService(heaterListModel);
+
+            return new HeaterDetailModel(heaterListModel.IpAddress, heaterListModel.Name)
             {
-                LastMeasurement = await GetHeaterService(listModel).GetStatus()
+                HeaterType = heaterListModel.HeaterType,
+                ReferenceTemperature = heaterListModel.ReferenceTemperature,
+                LastMeasurement = heaterService is not null ? await heaterService.GetStatus() : null
             };
         }
         catch (InvalidOperationException)
@@ -70,18 +80,25 @@ public class HeatersProvider
         }
     }
 
+    public async Task<IHeaterService?> GetHeaterService(string ipAddress)
+    {
+        return GetHeaterService(await GetHeaterListModel(ipAddress));
+    }
+
+    private async Task<HeaterListModel> GetHeaterListModel(string ipAddress)
+    {
+        return (await ReadHeaters()).First(h => h.IpAddress == ipAddress);
+    }
+
+    public async Task<ICollection<HeaterListModel>> ReadHeaters()
+    {
+        var jsonStr = File.Exists(_heatersJsonFile) ? await File.ReadAllTextAsync(_heatersJsonFile) : null;
+        return JsonSerializer.Deserialize<List<HeaterListModel>>(jsonStr ?? "[]") ?? new();
+    }
+
     private static async Task WriteHeaters(ICollection<HeaterListModel> heaters)
     {
         var jsonStr = JsonSerializer.Serialize(heaters);
         await File.WriteAllTextAsync(_heatersJsonFile, jsonStr);
-    }
-
-    private IHeaterService GetHeaterService(HeaterListModel heater)
-    {
-        return heater.HeaterType switch
-        {
-            HeaterTypes.Shelly1PM => new ShellyRelayService(_httpClient, heater.IpAddress),
-            _ => throw new InvalidOperationException()
-        };
     }
 }

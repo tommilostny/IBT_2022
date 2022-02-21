@@ -33,6 +33,14 @@
                    FontAttributes="Bold"
                    Margin="0, 0, 0, 15" />
 
+            <Label Text="Reference temperature:" />
+            <StackLayout Orientation="Horizontal"
+                         Margin="0, 0, 0, 15">
+                <Label Text="{Binding HeaterDetail.ReferenceTemperature}"
+                       FontAttributes="Bold" />
+                <Label Text="°C" />
+            </StackLayout>
+
             <StackLayout IsVisible="{Binding ShowLastMeasurement}">
                 <Label Text="Measurement time:" />
                 <Label Text="{Binding HeaterDetail.LastMeasurement.MeasurementTime, Converter={StaticResource UtcToLocalConverter}}"

@@ -21,10 +21,14 @@ public class StatsCollectorInvocable : IInvocable
         foreach (var heater in await _heatersProvider.GetHeaterServices())
         {
             var heaterStats = await heater.GetStatus();
-            var weather = await _weatherService.ReadTemperatureC();
-
-            var writtenToDb = _database.WriteMeasurement(heaterStats, weather);
-            Console.WriteLine(writtenToDb);
+            if (heaterStats is not null)
+            {
+                var weather = await _weatherService.ReadTemperatureC();
+                var writtenToDb = _database.WriteMeasurement(heaterStats, weather);
+                Console.WriteLine(writtenToDb);
+                return;
+            }
+            Console.Error.WriteLine($"Could not get data from heater '{heater.IPAddress}'");
         }
     }
 }

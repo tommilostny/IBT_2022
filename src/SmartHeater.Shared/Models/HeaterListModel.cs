@@ -2,4 +2,7 @@
 
 namespace SmartHeater.Shared.Models;
 
-public record HeaterListModel(string IpAddress, string Name, HeaterTypes HeaterType);
+public record HeaterListModel(string IpAddress,
+                              string Name,
+                              HeaterTypes HeaterType,
+                              double ReferenceTemperature);

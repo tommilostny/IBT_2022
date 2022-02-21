@@ -53,7 +53,18 @@ public class AddHeaterViewModel : BindableObject
             _type = value;
             ShowError = false;
         }
-    } 
+    }
+
+    private double _refTemp = 23;
+    public double ReferenceTemperature
+    {
+        get => _refTemp;
+        set
+        {
+            _refTemp = value;
+            OnPropertyChanged(nameof(ReferenceTemperature));
+        }
+    }
 
     private bool _showError = false;
     public bool ShowError
@@ -85,7 +96,7 @@ public class AddHeaterViewModel : BindableObject
             System.Net.IPAddress.Parse(_ipAddress);
 
             //Register heater with valid IP address.
-            var heater = new HeaterListModel(_ipAddress, _name, _type);
+            var heater = new HeaterListModel(_ipAddress, _name, _type, _refTemp);
             var response = await _httpClient.PostAsJsonAsync($"{_settingsProvider.HubUri}/heaters", heater);
             if (!response.IsSuccessStatusCode)
             {
@@ -93,12 +104,7 @@ public class AddHeaterViewModel : BindableObject
                 ShowError = true;
                 return;
             }
-            var heaterInCollView = _heatersViewModel.Heaters.FirstOrDefault(h => h.IpAddress == _ipAddress);
-            if (heaterInCollView is not null)
-            {
-                _heatersViewModel.Heaters.Remove(heaterInCollView);
-            }
-            _heatersViewModel.Heaters.Add(heater);
+            _heatersViewModel.AddHeaterToCollectionView(heater);
 
             //HttpClient did not throw an exception, heater added successfully, go back.
             await Shell.Current.GoToAsync("..");

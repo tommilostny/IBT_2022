@@ -38,25 +38,27 @@ app.Services.UseScheduler(scheduler =>
     scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
 });
 
-var shelly = new ShellyRelayService(app.Services.GetService<HttpClient>()!, "192.168.1.253");
+app.MapGet("/heaters/{ipAddress}/off",
+    async (HeatersProvider hp, string ipAddress) =>
+    {
+        var service = await hp.GetHeaterService(ipAddress);
+        if (service is not null)
+        {
+            await service.TurnOff();
+        }
+    }
+);
 
-app.MapGet("/shelly/off", async () =>
-{
-    await shelly.TurnOff();
-    return "Shelly turned off.";
-});
-
-app.MapGet("/shelly/on", async () =>
-{
-    await shelly.TurnOn();
-    return "Shelly turned on.";
-});
-
-app.MapGet("/shelly/status",
-    async () => await shelly.GetStatus());
-
-app.MapGet("/weather",
-    async (IWeatherService ws) => await ws.ReadTemperatureC());
+app.MapGet("/heaters/{ipAddress}/on",
+    async (HeatersProvider hp, string ipAddress) =>
+    {
+        var service = await hp.GetHeaterService(ipAddress);
+        if (service is not null)
+        {
+            await service.TurnOn();
+        }
+    }
+);
 
 app.MapGet("/heaters",
     async (HeatersProvider hp) => await hp.ReadHeaters());
@@ -69,5 +71,8 @@ app.MapPost("/heaters",
 
 app.MapDelete("/heaters/{ipAddress}",
     async (HeatersProvider hp, string ipAddress) => await hp.Delete(ipAddress));
+
+app.MapGet("/weather",
+    async (IWeatherService ws) => await ws.ReadTemperatureC());
 
 app.Run();
