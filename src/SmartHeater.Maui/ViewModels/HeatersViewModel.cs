@@ -60,7 +60,7 @@ public class HeatersViewModel : BindableObject
 
     public string LoadErrorMessage => string.IsNullOrWhiteSpace(_settingsProvider.HubIpAddress)
         ? "To load heaters, please, set up the Hub IP address in settings."
-        : "Unable to load heaters.";
+        : "Unable to load heater data.";
 
     public void DeleteHeaterFromCollectionView(HeaterListModel heater)
     {

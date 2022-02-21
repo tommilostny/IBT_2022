@@ -81,6 +81,11 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
     {
         var ipAddress = HttpUtility.UrlDecode(query["ipAddress"].ToString());
         await GetHeaterInfo(ipAddress);
+        if (LoadingError)
+        {
+            _heatersViewModel.LoadError = true;
+            await Shell.Current.GoToAsync("..");
+        }
     }
 
     private async void ReLoad()
