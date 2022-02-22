@@ -1,10 +1,9 @@
-﻿global using SmartHeater.Maui.Pages;
+﻿global using Newtonsoft.Json;
+global using SmartHeater.Maui.Pages;
 global using SmartHeater.Maui.Providers;
 global using SmartHeater.Maui.ViewModels;
 global using SmartHeater.Shared.Enums;
 global using SmartHeater.Shared.Models;
 global using System.Collections.ObjectModel;
 global using System.Net.Http.Json;
-global using System.Text.Json;
-global using System.Text.Json.Serialization;
 global using System.Windows.Input;

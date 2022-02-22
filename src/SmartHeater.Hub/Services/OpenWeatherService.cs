@@ -35,7 +35,7 @@ public class OpenWeatherService : IWeatherService
 
     private class OpenWeatherModel
     {
-        [JsonPropertyName("main")]
+        [JsonProperty("main")]
         public Dictionary<string, object>? Data { get; set; }
     }
 }

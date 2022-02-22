@@ -10,6 +10,9 @@ public class HeatersViewModel : BindableObject
         _httpClient = httpClient;
         _settingsProvider = settingsProvider;
         Load();
+        //TODO
+        //MessagingCenter.Subscribe<HeaterListModel>(this, "deleteHeater", AddHeaterToCollectionView);
+        //MessagingCenter.Subscribe<HeaterListModel>(this, "addHeater", DeleteHeaterFromCollectionView);
     }
 
     private ICommand _addCommand;
@@ -62,21 +65,17 @@ public class HeatersViewModel : BindableObject
         ? "To load heaters, please, set up the Hub IP address in settings."
         : "Unable to load heater data.";
 
-    public void DeleteHeaterFromCollectionView(HeaterListModel heater)
+    public async Task UpdateHeatersFromHttp(HttpResponseMessage response)
     {
-        Heaters.Remove(heater);
-        HeatersCollectionEmpty = Heaters.Count == 0;
-    }
+        var jsonStr = await response.Content.ReadAsStringAsync();
+        var updatedHeaters = JsonConvert.DeserializeObject<List<HeaterListModel>>(jsonStr);
 
-    public void AddHeaterToCollectionView(HeaterListModel heater)
-    {
-        var heaterInCollView = Heaters.FirstOrDefault(h => h.IpAddress == heater.IpAddress);
-        if (heaterInCollView is not null)
+        Heaters.Clear();
+        foreach (var heater in updatedHeaters)
         {
-            Heaters.Remove(heaterInCollView);
+            Heaters.Add(heater);
         }
-        Heaters.Add(heater);
-        HeatersCollectionEmpty = false;
+        HeatersCollectionEmpty = Heaters.Count == 0;
     }
 
     private async void AddButtonClick()

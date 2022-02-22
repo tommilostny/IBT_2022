@@ -61,18 +61,33 @@ app.MapGet("/heaters/{ipAddress}/on",
 );
 
 app.MapGet("/heaters",
-    async (HeatersProvider hp) => await hp.ReadHeaters());
+    async (HeatersProvider hp)
+        => await hp.ReadHeaters()
+);
 
 app.MapGet("/heaters/{ipAddress}",
-    async (HeatersProvider hp, string ipAddress) => await hp.GetHeaterDetail(ipAddress));
+    async (HeatersProvider hp, string ipAddress)
+        => await hp.GetHeaterDetail(ipAddress)
+);
 
 app.MapPost("/heaters",
-    async (HeatersProvider hp, HeaterListModel heater) => await hp.InsertUpdate(heater));
+    async (HeatersProvider hp, HeaterListModel heater)
+        => await hp.Insert(heater)
+);
+
+app.MapPut("/heaters/{ipAddress}",
+    async (HeatersProvider hp, string ipAddress, HeaterListModel heater)
+        => await hp.Update(ipAddress, heater)
+);
 
 app.MapDelete("/heaters/{ipAddress}",
-    async (HeatersProvider hp, string ipAddress) => await hp.Delete(ipAddress));
+    async (HeatersProvider hp, string ipAddress)
+        => await hp.Delete(ipAddress)
+);
 
 app.MapGet("/weather",
-    async (IWeatherService ws) => await ws.ReadTemperatureC());
+    async (IWeatherService ws)
+        => await ws.ReadTemperatureC()
+);
 
 app.Run();

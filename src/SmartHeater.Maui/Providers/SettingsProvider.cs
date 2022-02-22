@@ -27,14 +27,14 @@ public class SettingsProvider
         if (File.Exists(filePath))
         {
             var jsonStr = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<SettingsProvider>(jsonStr);
+            return JsonConvert.DeserializeObject<SettingsProvider>(jsonStr);
         }
         return new();
     }
 
     private void SaveToJson()
     {
-        var jsonStr = JsonSerializer.Serialize(this);
+        var jsonStr = JsonConvert.SerializeObject(this);
         File.WriteAllText(SettingsJsonFilePath(), jsonStr);
     }
 

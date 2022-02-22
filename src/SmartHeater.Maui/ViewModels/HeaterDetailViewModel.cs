@@ -124,8 +124,7 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
         var response = await _httpClient.DeleteAsync(uri);
         if (response.IsSuccessStatusCode)
         {
-            var heaterToRemove = _heatersViewModel.Heaters.FirstOrDefault(h => h.IpAddress == HeaterDetail.IpAddress);
-            _heatersViewModel.DeleteHeaterFromCollectionView(heaterToRemove);
+            await _heatersViewModel.UpdateHeatersFromHttp(response);
             await Shell.Current.GoToAsync("..");
         }
     }

@@ -94,13 +94,13 @@ public class ShellyRelayService : IHeaterService
 
     private class ShellyRelayStatus
     {
-        [JsonPropertyName("relays")]
+        [JsonProperty("relays")]
         public List<Dictionary<string, object>>? Relays { get; set; }
 
-        [JsonPropertyName("ext_temperature")]
+        [JsonProperty("ext_temperature")]
         public Dictionary<string, Dictionary<string, object>>? ExtTemperature { get; set; }
 
-        [JsonPropertyName("meters")]
+        [JsonProperty("meters")]
         public List<Dictionary<string, object>>? Meters { get; set; }
     };
 }

@@ -22,7 +22,7 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
     }
 
     private ICommand _addHeaterCommand;
-    public ICommand AddHeaterCommand => _addHeaterCommand ??= new Command(AddHeater);
+    public ICommand AddHeaterCommand => _addHeaterCommand ??= new Command(AddUpdateHeater);
 
     private string _ipAddress = string.Empty;
     public string IpAddress
@@ -115,7 +115,24 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
         }
     }
 
-    private async void AddHeater()
+    private string _originalIpAddress = null;
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.Keys.Count > 0)
+        {
+            IpAddress = HttpUtility.UrlDecode(query["IpAddress"].ToString());
+            Name = HttpUtility.UrlDecode(query["Name"].ToString());
+            HeaterType = (HeaterTypes)Convert.ToInt32(query["HeaterType"].ToString());
+            ReferenceTemperature = Convert.ToDouble(query["ReferenceTemperature"].ToString());
+
+            Title = "Edit heater";
+            ButtonText = "Save";
+            _originalIpAddress = IpAddress;
+        }
+    }
+
+    private async void AddUpdateHeater()
     {
         try
         {
@@ -124,17 +141,29 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
 
             //Register heater with valid IP address.
             var heater = new HeaterListModel(_ipAddress, _name, _type, _refTemp);
-            var response = await _httpClient.PostAsJsonAsync($"{_settingsProvider.HubUri}/heaters", heater);
+            var uri = $"{_settingsProvider.HubUri}/heaters";
+            var editingMode = !string.IsNullOrWhiteSpace(_originalIpAddress);
+
+            //POST if adding new heater, PUT if editing a heater with set original IP address.
+            var response = editingMode
+                ? await _httpClient.PutAsJsonAsync($"{uri}/{_originalIpAddress}", heater)
+                : await _httpClient.PostAsJsonAsync(uri, heater);
+
             if (!response.IsSuccessStatusCode)
             {
-                ErrorMessage = $"Unable to add heater.";
+                ErrorMessage = $"Unable to {(editingMode ? "edit" : "add")} heater.";
                 ShowError = true;
                 return;
             }
-            _heatersViewModel.AddHeaterToCollectionView(heater);
+            //HttpClient did not throw an exception and status code was 200 OK.
+            await _heatersViewModel.UpdateHeatersFromHttp(response);
 
-            //HttpClient did not throw an exception, heater added successfully, go back.
-            await Shell.Current.GoToAsync("..");
+            //Heater added successfully, go back.
+            //Pass possibly updated IP address if in editing mode.
+            if (editingMode)
+                await Shell.Current.GoToAsync($"..?ipAddress={_ipAddress}");
+            else
+                await Shell.Current.GoToAsync("..");
         }
         catch (FormatException)
         {
@@ -145,19 +174,6 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
         {
             ErrorMessage = "An error has occured while contacting the SmartHeater Hub.";
             ShowError = true;
-        }
-    }
-
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        if (query.Keys.Count > 0)
-        {
-            Title = "Edit heater";
-            ButtonText = "Save";
-            IpAddress = HttpUtility.UrlDecode(query["IpAddress"].ToString());
-            Name = HttpUtility.UrlDecode(query["Name"].ToString());
-            HeaterType = (HeaterTypes)Convert.ToInt32(query["HeaterType"].ToString());
-            ReferenceTemperature = Convert.ToDouble(query["ReferenceTemperature"].ToString());
         }
     }
 }
