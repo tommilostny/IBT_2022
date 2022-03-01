@@ -6,7 +6,7 @@
     "Version": 1,
     "FilePath": "C:\\Users\\tommi\\source\\repos\\tommilostny\\IBT_2022\\src\\SmartHeater.ML.Simulator\\bin\\Debug\\net6.0\\training.csv",
     "Delimiter": ";",
-    "DecimalMarker": ",",
+    "DecimalMarker": ".",
     "HasHeader": true,
     "ColumnProperties": [
       {
@@ -18,7 +18,7 @@
         "Version": 1
       },
       {
-        "ColumnName": "temperature",
+        "ColumnName": "temp_diff",
         "ColumnPurpose": "Feature",
         "ColumnDataFormat": "Single",
         "IsCategorical": false,
@@ -47,50 +47,78 @@
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.7745966692414834,
-        "RuntimeInSeconds": 1.6660000085830688
+        "Score": 0.70710829847472179,
+        "RuntimeInSeconds": 0.31999999284744263
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.7745966692414834,
-        "RuntimeInSeconds": 0.078000001609325409
+        "Score": 0.70710829847472179,
+        "RuntimeInSeconds": 0.18600000441074371
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.38043211472031396,
-        "RuntimeInSeconds": 180.33500671386719
+        "Score": 0.70710829847472179,
+        "RuntimeInSeconds": 0.19099999964237213
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.7745966692414834,
-        "RuntimeInSeconds": 0.075000002980232239
+        "Score": 0.70710829847472179,
+        "RuntimeInSeconds": 0.17499999701976776
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.39533121141337,
-        "RuntimeInSeconds": 212.95100402832031
+        "Score": 0.70710829847472179,
+        "RuntimeInSeconds": 0.1080000028014183
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.31757807247407682,
-        "RuntimeInSeconds": 172.95100402832031
+        "Score": 0.654238643513514,
+        "RuntimeInSeconds": 232.5050048828125
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "ForecastBySsa",
+        "Score": 0.70710829847472179,
+        "RuntimeInSeconds": 0.10400000214576721
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "ForecastBySsa",
+        "Score": 0.39968578941805732,
+        "RuntimeInSeconds": 80.877998352050781
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "ForecastBySsa",
+        "Score": 0.70710829847472179,
+        "RuntimeInSeconds": 0.14399999380111694
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "ForecastBySsa",
+        "Score": 0.30192154511535052,
+        "RuntimeInSeconds": 2.7079999446868896
       }
     ],
     "Pipeline": {
       "parameter": {
         "0": {
-          "WindowSize": 186,
-          "SeriesLength": 674,
+          "WindowSize": 25,
+          "SeriesLength": 1856,
           "TrainSize": 527040,
           "Horizon": 10,
           "OutputColumnName": "turned_on",
@@ -114,7 +142,7 @@
     "Seed": 0,
     "OptimizeMetric": "RMSE",
     "Horizon": 10,
-    "TimeColumn": "date_time",
+    "TimeColumn": "temp_diff",
     "LabelColumn": "turned_on",
     "UseDefaultIndex": false
   }
