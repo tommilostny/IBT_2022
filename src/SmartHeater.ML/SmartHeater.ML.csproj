@@ -1,9 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML.TimeSeries" Version="1.7.0" />
+  </ItemGroup>
+  <ItemGroup Label="SmartHeaterModel">
+    <None Include="SmartHeaterModel.consumption.cs">
+      <DependentUpon>SmartHeaterModel.mbconfig</DependentUpon>
+    </None>
+    <None Include="SmartHeaterModel.training.cs">
+      <DependentUpon>SmartHeaterModel.mbconfig</DependentUpon>
+    </None>
+    <None Include="SmartHeaterModel.zip">
+      <DependentUpon>SmartHeaterModel.mbconfig</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
