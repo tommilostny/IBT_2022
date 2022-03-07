@@ -156,7 +156,7 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
                 return;
             }
             //HttpClient did not throw an exception and status code was 200 OK.
-            await _heatersViewModel.UpdateHeatersFromHttp(response);
+            await _heatersViewModel.UpdateHeatersFromHttpAsync(response);
 
             //Heater added successfully, go back.
             //Pass possibly updated IP address if in editing mode.

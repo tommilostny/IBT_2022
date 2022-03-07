@@ -26,7 +26,7 @@ namespace SmartHeater.ML
         public static IEstimator<ITransformer> BuildPipeline(MLContext mlContext)
         {
             // Data process configuration with pipeline data transformations
-            var pipeline = mlContext.Forecasting.ForecastBySsa(windowSize:25,seriesLength:1856,trainSize:527040,horizon:10,outputColumnName:@"turned_on",inputColumnName:@"turned_on",confidenceLowerBoundColumn:@"turned_on_LB",confidenceUpperBoundColumn:@"turned_on_UB");
+            var pipeline = mlContext.Forecasting.ForecastBySsa(windowSize:2,seriesLength:10,trainSize:527040,horizon:60,outputColumnName:@"turned_on",inputColumnName:@"turned_on",confidenceLowerBoundColumn:@"turned_on_LB",confidenceUpperBoundColumn:@"turned_on_UB");
 
             return pipeline;
         }

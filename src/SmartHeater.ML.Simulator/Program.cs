@@ -14,7 +14,7 @@ var time = new DateTime(startYear, 1, 1);
 var random = new Random();
 
 //Load weather data.
-using var weatherFile = await GetWeatherDataStreamReader(@"C:\Users\tommi\Downloads\B2MBUD01_T_N.csv\B2MBUD01_T_N.csv");
+using var weatherFile = await GetWeatherFileReaderAsync(@"C:\Users\tommi\Downloads\B2MBUD01_T_N.csv\B2MBUD01_T_N.csv");
 
 //Create generated file and write csv file headers.
 using var generatedFile = new StreamWriter("training.csv");
@@ -31,7 +31,7 @@ while (time.Year <= endYear)
     if (lastDayNumber != time.Day)
     {
         lastDayNumber = time.Day;
-        thisDayTemp = await LoadNextWeatherTemperature();
+        thisDayTemp = await LoadNextWeatherAsync();
     }
 
     //Write heater status to the csv.
@@ -77,7 +77,7 @@ double ReferenceTemperature() => (time.Hour >= 23 && time.Minute >= 30) || time.
     : 23.1;//day
 
 //Loads weather data file and moves pointer to the start of the required year.
-async Task<StreamReader> GetWeatherDataStreamReader(string path)
+async Task<StreamReader> GetWeatherFileReaderAsync(string path)
 {
     var sr = new StreamReader(path);
     string? line;
@@ -90,7 +90,7 @@ async Task<StreamReader> GetWeatherDataStreamReader(string path)
 }
 
 //Moves weather file by one line and returns the temperature value from that line.
-async Task<double> LoadNextWeatherTemperature()
+async Task<double> LoadNextWeatherAsync()
 {
     int day;
     string[]? line; //year;month;day;temperature;

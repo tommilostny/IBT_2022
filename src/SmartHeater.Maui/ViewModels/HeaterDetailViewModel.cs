@@ -83,7 +83,7 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         var ipAddress = HttpUtility.UrlDecode(query["ipAddress"].ToString());
-        await GetHeaterInfo(ipAddress);
+        await GetHeaterInfoAsync(ipAddress);
         if (LoadingError)
         {
             _heatersViewModel.LoadError = true;
@@ -93,10 +93,10 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
 
     private async void ReLoad()
     {
-        await GetHeaterInfo(HeaterDetail.IpAddress);
+        await GetHeaterInfoAsync(HeaterDetail.IpAddress);
     }
 
-    private async Task GetHeaterInfo(string ipAddress)
+    private async Task GetHeaterInfoAsync(string ipAddress)
     {
         IsLoading = true;
         IsLoaded = false;
@@ -124,7 +124,7 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
         var response = await _httpClient.DeleteAsync(uri);
         if (response.IsSuccessStatusCode)
         {
-            await _heatersViewModel.UpdateHeatersFromHttp(response);
+            await _heatersViewModel.UpdateHeatersFromHttpAsync(response);
             await Shell.Current.GoToAsync("..");
         }
     }

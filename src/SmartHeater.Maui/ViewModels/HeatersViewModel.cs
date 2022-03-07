@@ -65,7 +65,7 @@ public class HeatersViewModel : BindableObject
         ? "To load heaters, please, set up the Hub IP address in settings."
         : "Unable to load heater data.";
 
-    public async Task UpdateHeatersFromHttp(HttpResponseMessage response)
+    public async Task UpdateHeatersFromHttpAsync(HttpResponseMessage response)
     {
         var jsonStr = await response.Content.ReadAsStringAsync();
         var updatedHeaters = JsonConvert.DeserializeObject<List<HeaterListModel>>(jsonStr);

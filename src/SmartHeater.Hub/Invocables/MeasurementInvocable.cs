@@ -28,7 +28,7 @@ public class MeasurementInvocable : IInvocable
     public async Task Invoke()
     {
         //TODO: 1
-        foreach (var heaterService in await _heatersProvider.GetHeaterServices())
+        foreach (var heaterService in await _heatersProvider.GetHeaterServicesAsync())
         {
             //TODO: 2-4
         }

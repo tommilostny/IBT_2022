@@ -41,10 +41,10 @@ app.Services.UseScheduler(scheduler =>
 app.MapGet("/heaters/{ipAddress}/off",
     async (HeatersProvider hp, string ipAddress) =>
     {
-        var service = await hp.GetHeaterService(ipAddress);
+        var service = await hp.GetHeaterServiceAsync(ipAddress);
         if (service is not null)
         {
-            await service.TurnOff();
+            await service.TurnOffAsync();
         }
     }
 );
@@ -52,42 +52,42 @@ app.MapGet("/heaters/{ipAddress}/off",
 app.MapGet("/heaters/{ipAddress}/on",
     async (HeatersProvider hp, string ipAddress) =>
     {
-        var service = await hp.GetHeaterService(ipAddress);
+        var service = await hp.GetHeaterServiceAsync(ipAddress);
         if (service is not null)
         {
-            await service.TurnOn();
+            await service.TurnOnAsync();
         }
     }
 );
 
 app.MapGet("/heaters",
     async (HeatersProvider hp)
-        => await hp.ReadHeaters()
+        => await hp.ReadHeatersAsync()
 );
 
 app.MapGet("/heaters/{ipAddress}",
     async (HeatersProvider hp, string ipAddress)
-        => await hp.GetHeaterDetail(ipAddress)
+        => await hp.GetHeaterDetailAsync(ipAddress)
 );
 
 app.MapPost("/heaters",
     async (HeatersProvider hp, HeaterListModel heater)
-        => await hp.Insert(heater)
+        => await hp.InsertAsync(heater)
 );
 
 app.MapPut("/heaters/{ipAddress}",
     async (HeatersProvider hp, string ipAddress, HeaterListModel heater)
-        => await hp.Update(ipAddress, heater)
+        => await hp.UpdateAsync(ipAddress, heater)
 );
 
 app.MapDelete("/heaters/{ipAddress}",
     async (HeatersProvider hp, string ipAddress)
-        => await hp.Delete(ipAddress)
+        => await hp.DeleteAsync(ipAddress)
 );
 
 app.MapGet("/weather",
     async (IWeatherService ws)
-        => await ws.ReadTemperatureC()
+        => await ws.ReadCelsiusAsync()
 );
 
 app.Run();

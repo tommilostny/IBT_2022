@@ -13,9 +13,9 @@ public class OpenWeatherService : IWeatherService
         _apiKey = configuration["OpenWeather:ApiKey"];
     }
 
-    public async Task<double?> ReadTemperatureC()
+    public async Task<double?> ReadCelsiusAsync()
     {
-        (var lat, var lon) = await _coordsService.GetLatitudeLongitude();
+        (var lat, var lon) = await _coordsService.GetLatitudeLongitudeAsync();
         if (lat is null || lon is null)
         {
             return null;

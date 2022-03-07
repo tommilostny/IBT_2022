@@ -16,7 +16,7 @@ public class ShellyRelayService : IHeaterService
 
     private string StatusUrl => $"http://{IPAddress}/status";
 
-    public async Task<HeaterStatusModel?> GetStatus()
+    public async Task<HeaterStatusModel?> GetStatusAsync()
     {
         try
         {
@@ -35,9 +35,9 @@ public class ShellyRelayService : IHeaterService
         }
     }
 
-    public async Task TurnOn() => await SendTurnRequest("on");
+    public async Task TurnOnAsync() => await SendTurnRequestAsync("on");
 
-    public async Task TurnOff() => await SendTurnRequest("off");
+    public async Task TurnOffAsync() => await SendTurnRequestAsync("off");
 
     private static bool? ReadRelayState(ShellyRelayStatus? relayStatus)
     {
@@ -75,7 +75,7 @@ public class ShellyRelayService : IHeaterService
         }
     }
 
-    private async Task SendTurnRequest(string state)
+    private async Task SendTurnRequestAsync(string state)
     {
         var data = new[]
         {

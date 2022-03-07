@@ -4,7 +4,7 @@ public interface IHeaterService
 {
     string IPAddress { get; }
 
-    Task TurnOn();
-    Task TurnOff();
-    Task<HeaterStatusModel?> GetStatus();
+    Task TurnOnAsync();
+    Task TurnOffAsync();
+    Task<HeaterStatusModel?> GetStatusAsync();
 }

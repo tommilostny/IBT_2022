@@ -13,19 +13,19 @@ public class IpApiService : ICoordinatesService
         _httpClient = httpClient;
     }
 
-    public async Task<(double?, double?)> GetLatitudeLongitude()
+    public async Task<(double?, double?)> GetLatitudeLongitudeAsync()
     {
         if (string.IsNullOrWhiteSpace(_ipAddress))
         {
             _latLon = null;
-            if ((_ipAddress = await GetPublicIpAddress()) is null)
+            if ((_ipAddress = await GetPublicIpAddressAsync()) is null)
             {
                 return (null, null);
             }
         }
         if (_latLon is null || _latLon.Length != 2)
         {
-            var latLonStrings = await GetCoordStrings(_ipAddress);
+            var latLonStrings = await GetCoordStringsAsync(_ipAddress);
             if (latLonStrings is null || latLonStrings.Length != 2)
             {
                 return (null, null);
@@ -39,7 +39,7 @@ public class IpApiService : ICoordinatesService
         return (_latLon[0], _latLon[1]);
     }
 
-    private async Task<string?> GetPublicIpAddress()
+    private async Task<string?> GetPublicIpAddressAsync()
     {
         try
         {
@@ -53,7 +53,7 @@ public class IpApiService : ICoordinatesService
         }
     }
 
-    private async Task<string[]?> GetCoordStrings(string ipAddress)
+    private async Task<string[]?> GetCoordStringsAsync(string ipAddress)
     {
         try
         {

@@ -19,15 +19,15 @@ public class StatsCollectorInvocable : IInvocable
     public async Task Invoke()
     {
         double? weather = null;
-        foreach (var heater in await _heatersProvider.GetHeaterServices())
+        foreach (var heater in await _heatersProvider.GetHeaterServicesAsync())
         {
-            var heaterStatus = await heater.GetStatus();
+            var heaterStatus = await heater.GetStatusAsync();
             if (heaterStatus is null)
             {
                 Console.Error.WriteLine($"Could not get data from heater '{heater.IPAddress}'");
                 continue;
             }
-            weather ??= await _weatherService.ReadTemperatureC();
+            weather ??= await _weatherService.ReadCelsiusAsync();
             var writtenToDb = _database.WriteMeasurement(heaterStatus, weather);
             Console.WriteLine(writtenToDb);
         }

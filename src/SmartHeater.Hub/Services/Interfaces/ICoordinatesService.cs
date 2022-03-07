@@ -2,5 +2,5 @@
 
 public interface ICoordinatesService
 {
-    Task<(double?, double?)> GetLatitudeLongitude();
+    Task<(double?, double?)> GetLatitudeLongitudeAsync();
 }
