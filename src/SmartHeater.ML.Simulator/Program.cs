@@ -1,4 +1,4 @@
-﻿const int startYear = 2019;
+﻿const int startYear = 2018;
 const int endYear = 2020;
 
 //Heater parameters with preset values.
@@ -18,7 +18,7 @@ using var weatherFile = await GetWeatherFileReaderAsync(@"C:\Users\tommi\Downloa
 
 //Create generated file and write csv file headers.
 using var generatedFile = new StreamWriter("training.csv");
-await generatedFile.WriteLineAsync("date_time;temperature;weather;turned_on");
+await generatedFile.WriteLineAsync("dateTime;temperatureDiff;weather;turnedOn");
 
 //Start the main loop until full end year.
 while (time.Year <= endYear)
@@ -35,7 +35,7 @@ while (time.Year <= endYear)
     }
 
     //Write heater status to the csv.
-    await generatedFile.WriteLineAsync($"{time};{roomTemp};{thisDayTemp};{shouldBeOn}");
+    await generatedFile.WriteLineAsync($"{time};{roomTemp - refTemp};{thisDayTemp};{shouldBeOn}");
 
     //Update heater power status and room temperature.
     var oldPowerState = powerState;
@@ -48,7 +48,7 @@ while (time.Year <= endYear)
     {
         roomTemp += (random.Next(0, 100) / 10000.0) * (time.Minute % 2 == 0 && roomTemp >= refTemp ? -1 : 1);
     }
-    else if (oldPowerState != powerState)
+    else if (oldPowerState == powerState)
     {
         roomTemp += (powerState ? random.Next(1, 35) : random.Next(-10, -1)) / 100.0;
     }

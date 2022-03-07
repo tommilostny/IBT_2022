@@ -18,8 +18,8 @@ namespace SmartHeater.ML
         #region model input class
         public class ModelInput
         {
-            [ColumnName(@"turned_on")]
-            public float Turned_on { get; set; }
+            [ColumnName(@"temperatureDiff")]
+            public float TemperatureDiff { get; set; }
 
         }
 
@@ -31,14 +31,14 @@ namespace SmartHeater.ML
         #region model output class
         public class ModelOutput
         {
-            [ColumnName(@"turned_on")]
-            public float[] Turned_on { get; set; }
+            [ColumnName(@"temperatureDiff")]
+            public float[] TemperatureDiff { get; set; }
 
-            [ColumnName(@"turned_on_LB")]
-            public float[] Turned_on_LB { get; set; }
+            [ColumnName(@"temperatureDiff_LB")]
+            public float[] TemperatureDiff_LB { get; set; }
 
-            [ColumnName(@"turned_on_UB")]
-            public float[] Turned_on_UB { get; set; }
+            [ColumnName(@"temperatureDiff_UB")]
+            public float[] TemperatureDiff_UB { get; set; }
 
         }
 

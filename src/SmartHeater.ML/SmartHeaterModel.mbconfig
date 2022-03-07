@@ -1,16 +1,16 @@
 ﻿{
-  "TrainingTime": 600,
+  "TrainingTime": 1000,
   "Scenario": "Forecasting",
   "DataSource": {
     "Type": "TabularFile",
     "Version": 1,
     "FilePath": "C:\\Users\\tommi\\source\\repos\\tommilostny\\IBT_2022\\src\\SmartHeater.ML.Simulator\\bin\\Debug\\net6.0\\training.csv",
     "Delimiter": ";",
-    "DecimalMarker": ".",
+    "DecimalMarker": ",",
     "HasHeader": true,
     "ColumnProperties": [
       {
-        "ColumnName": "date_time",
+        "ColumnName": "dateTime",
         "ColumnPurpose": "Feature",
         "ColumnDataFormat": "String",
         "IsCategorical": false,
@@ -18,15 +18,23 @@
         "Version": 1
       },
       {
-        "ColumnName": "temp_diff",
-        "ColumnPurpose": "Feature",
+        "ColumnName": "temperatureDiff",
+        "ColumnPurpose": "Label",
         "ColumnDataFormat": "Single",
         "IsCategorical": false,
         "Type": "Column",
         "Version": 1
       },
       {
-        "ColumnName": "turned_on",
+        "ColumnName": "weather",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 1
+      },
+      {
+        "ColumnName": "turnedOn",
         "ColumnPurpose": "Feature",
         "ColumnDataFormat": "Single",
         "IsCategorical": true,
@@ -47,546 +55,168 @@
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.3449999988079071
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.40900000929832458
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.14699999988079071
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.15299999713897705
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.54170959617014958,
-        "RuntimeInSeconds": 61.422000885009766
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.15299999713897705
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.13199999928474426
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.15600000321865082
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.12200000137090683
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.16599999368190765
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.13899999856948853
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.17399999499320984
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.12300000339746475
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.19099999964237213
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.12399999797344208
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.15299999713897705
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 3.5348316206328083,
-        "RuntimeInSeconds": 0.26800000667572021
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.17200000584125519
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.70971137516907334,
-        "RuntimeInSeconds": 1.3589999675750732
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.17900000512599945
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.086999997496604919
+        "Score": 0.49098878344606339,
+        "RuntimeInSeconds": 2.1919999122619629
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.73957302117161949,
-        "RuntimeInSeconds": 0.32199999690055847
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.15700000524520874
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.70337269171724026,
-        "RuntimeInSeconds": 0.722000002861023
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.15600000321865082
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.0989999994635582
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.16300000250339508
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.0820000022649765
+        "Score": 0.39355509165942792,
+        "RuntimeInSeconds": 0.37999999523162842
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.12600000202655792
+        "Score": 0.069924426124057512,
+        "RuntimeInSeconds": 0.328000009059906
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.506391999214837,
-        "RuntimeInSeconds": 0.30799999833106995
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.1550000011920929
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.0949999988079071
+        "Score": 0.47120815042875414,
+        "RuntimeInSeconds": 0.62099999189376831
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.52339669903798658,
-        "RuntimeInSeconds": 0.42599999904632568
+        "Score": 0.39355509165942792,
+        "RuntimeInSeconds": 0.32899999618530273
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.18500000238418579
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.14000000059604645
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.10899999737739563
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.19699999690055847
       },
       {
         "Version": 0,
         "Type": "Trial",
         "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.125
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.12800000607967377
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.22200000286102295
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.58493781313730286,
-        "RuntimeInSeconds": 319.04400634765625
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.15099999308586121
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.71516865099637683,
-        "RuntimeInSeconds": 0.925000011920929
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.057999998331069946
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.081000000238418579
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.68859219705660946,
-        "RuntimeInSeconds": 4.6570000648498535
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.093999996781349182
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.1379999965429306
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.15199999511241913
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.097999997437000275
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.092000000178813934
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.074000000953674316
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.51141914846965553,
-        "RuntimeInSeconds": 0.13199999928474426
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.13699999451637268
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.51141914846965553,
-        "RuntimeInSeconds": 0.164000004529953
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.089000001549720764
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.67700153112415828,
-        "RuntimeInSeconds": 4.7589998245239258
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.075999997556209564
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.081000000238418579
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.10499999672174454
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.0989999994635582
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.0989999994635582
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.13899999856948853
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.12300000339746475
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.506391999214837,
-        "RuntimeInSeconds": 0.36800000071525574
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.21600000560283661
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.52339669903798658,
-        "RuntimeInSeconds": 0.3919999897480011
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.73957302117161949,
-        "RuntimeInSeconds": 0.92400002479553223
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.27300000190734863
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.25900000333786011
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.51141914846965553,
-        "RuntimeInSeconds": 0.19599999487400055
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.52339669903798658,
-        "RuntimeInSeconds": 0.093000002205371857
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.089000001549720764
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.25400000810623169
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.20100000500679016
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.12200000137090683
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.0949999988079071
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.732078189173426,
-        "RuntimeInSeconds": 39.5260009765625
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.0729999989271164
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.66295244680844767,
-        "RuntimeInSeconds": 2.0299999713897705
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.14100000262260437
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.16699999570846558
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.14699999988079071
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.076999999582767487
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.093999996781349182
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.13699999451637268
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.51141914846965553,
-        "RuntimeInSeconds": 0.31000000238418579
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.52339669903798658,
-        "RuntimeInSeconds": 0.21799999475479126
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.23100000619888306
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.28299999237060547
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.47871567242017959,
-        "RuntimeInSeconds": 0.19799999892711639
-      },
-      {
-        "Version": 0,
-        "Type": "Trial",
-        "TrainerName": "ForecastBySsa",
-        "Score": 0.73957302117161949,
-        "RuntimeInSeconds": 0.64200001955032349
+        "Score": 0.35763186136037584,
+        "RuntimeInSeconds": 0.13500000536441803
       }
     ],
     "Pipeline": {
       "parameter": {
         "0": {
-          "WindowSize": 2,
-          "SeriesLength": 10,
-          "TrainSize": 527040,
-          "Horizon": 60,
-          "OutputColumnName": "turned_on",
-          "InputColumnName": "turned_on",
-          "ConfidenceLowerBoundColumn": "turned_on_LB",
-          "ConfidenceUpperBoundColumn": "turned_on_UB"
+          "WindowSize": 4,
+          "SeriesLength": 12,
+          "TrainSize": 1578240,
+          "Horizon": 10,
+          "OutputColumnName": "temperatureDiff",
+          "InputColumnName": "temperatureDiff",
+          "ConfidenceLowerBoundColumn": "temperatureDiff_LB",
+          "ConfidenceUpperBoundColumn": "temperatureDiff_UB"
         }
       },
       "estimators": [
@@ -603,8 +233,8 @@
     "UseCrossValidation": false,
     "Seed": 0,
     "OptimizeMetric": "RMSE",
-    "Horizon": 60,
-    "LabelColumn": "turned_on",
+    "Horizon": 10,
+    "LabelColumn": "temperatureDiff",
     "UseDefaultIndex": true
   }
 }
