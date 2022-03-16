@@ -1,4 +1,6 @@
-﻿namespace SmartHeater.Hub.Services;
+﻿using System.Text.Json.Serialization;
+
+namespace SmartHeater.Hub.Services;
 
 public class ShellyRelayService : IHeaterService
 {
@@ -94,13 +96,13 @@ public class ShellyRelayService : IHeaterService
 
     private class ShellyRelayStatus
     {
-        [JsonProperty("relays")]
+        [JsonPropertyName("relays")]
         public List<Dictionary<string, object>>? Relays { get; set; }
 
-        [JsonProperty("ext_temperature")]
+        [JsonPropertyName("ext_temperature")]
         public Dictionary<string, Dictionary<string, object>>? ExtTemperature { get; set; }
 
-        [JsonProperty("meters")]
+        [JsonPropertyName("meters")]
         public List<Dictionary<string, object>>? Meters { get; set; }
     };
 }

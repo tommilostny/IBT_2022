@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Coravel" Version="4.1.0" />
     <PackageReference Include="InfluxDB.Client" Version="3.2.0" />
+    <PackageReference Include="Microsoft.Extensions.ML" Version="1.7.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 

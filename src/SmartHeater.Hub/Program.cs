@@ -1,15 +1,19 @@
 using Coravel;
+using Microsoft.Extensions.ML;
 using SmartHeater.Hub.Services;
 using SmartHeater.Hub.Invocables;
 using SmartHeater.Hub.Providers;
+using SmartHeater.ML;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddPredictionEnginePool<SmartHeaterModel.ModelInput, SmartHeaterModel.ModelOutput>()
+    .FromFile(Path.Combine("..", "SmartHeater.ML", "SmartHeaterModel.zip"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<MeasurementInvocable>();
-builder.Services.AddTransient<StatsCollectorInvocable>();
+builder.Services.AddTransient<SmartHeatersInvocable>();
 builder.Services.AddScheduler();
 
 builder.Services.AddSingleton<IDatabaseService, InfluxDbService>();
@@ -30,12 +34,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.Services.UseScheduler(scheduler =>
 {
-    //scheduler.Schedule<MeasurementInvocable>().EveryMinute();
-    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
+    scheduler.Schedule<SmartHeatersInvocable>().EveryTenSeconds();
 });
 
 app.MapGet("/heaters/{ipAddress}/off",
@@ -89,5 +92,13 @@ app.MapGet("/weather",
     async (IWeatherService ws)
         => await ws.ReadCelsiusAsync()
 );
+
+app.MapGet("/temp-history",
+    async (IDatabaseService ds)
+        => await ds.ReadTemperatureHistoryAsync());
+
+app.MapPost("/predict",
+    async (PredictionEnginePool<SmartHeaterModel.ModelInput, SmartHeaterModel.ModelOutput> predictionEnginePool, SmartHeaterModel.ModelInput input) =>
+        await Task.FromResult(predictionEnginePool.Predict(input)));
 
 app.Run();

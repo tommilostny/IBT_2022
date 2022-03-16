@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.Maui", "SmartHe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.Shared", "SmartHeater.Shared\SmartHeater.Shared.csproj", "{846577C5-754B-4E34-8EA7-2D0BF2D37470}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHeater.ML.Simulator", "SmartHeater.ML.Simulator\SmartHeater.ML.Simulator.csproj", "{9C349537-6A82-4F65-B31B-99B8D351477B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.ML.Simulator", "SmartHeater.ML.Simulator\SmartHeater.ML.Simulator.csproj", "{9C349537-6A82-4F65-B31B-99B8D351477B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

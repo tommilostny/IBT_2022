@@ -28,10 +28,36 @@ public class InfluxDbService : IDatabaseService
             .Field("turned_on", heater.IsTurnedOn ?? false)
             .Timestamp(heater.MeasurementTime, WritePrecision.Ns);
 
-        using var client = InfluxDBClientFactory.Create("http://localhost:8086", _token);
+        using var client = CreateDbClient();
         using var writeApi = client.GetWriteApi();
         writeApi.WritePoint(_bucket, _organization, point);
 
         return point.ToLineProtocol();
     }
+
+    public async Task<ICollection<double>> ReadTemperatureHistoryAsync()
+    {
+        var query = "from(bucket: \"WithoutML\")"
+          //+ "|> range(start: v.timeRangeStart, stop: v.timeRangeStop)"
+          + " |> range(start: -12h)"
+          + " |> filter(fn: (r) => r[\"_measurement\"] == \"heater_status\")"
+          + " |> filter(fn: (r) => r[\"_field\"] == \"temperature\")"
+          //+ "|> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)"
+          //+ "|> yield(name: \"mean\")"
+        ;
+        using var client = CreateDbClient();
+        var tables = await client.GetQueryApi().QueryAsync(query, _organization);
+
+        foreach (var record in tables.SelectMany(table => table.Records))
+        {
+            Console.WriteLine($"{record}");
+        }
+        return new List<double>();
+    }
+
+    private InfluxDBClient CreateDbClient()
+    {
+        return InfluxDBClientFactory.Create("http://localhost:8086", _token);
+    }
+
 }
