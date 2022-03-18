@@ -39,12 +39,11 @@ public class InfluxDbService : IDatabaseService
 
     public async Task<IDataView> ReadTemperatureHistoryAsync(HeaterListModel heater)
     {
-        var query = "from(bucket: \"WithoutML\")"
+        var query = $"from(bucket: \"{_bucket}\")"
                   +  " |> range(start: -12m)"
                   +  " |> filter(fn: (r) => r[\"_measurement\"] == \"heater_status\")"
                   +  " |> filter(fn: (r) => r[\"_field\"] == \"temperature\")"
-                  + $" |> filter(fn: (r) => r[\"heater\"] == \"{heater.IpAddress}\")"
-                  +  " |> yield(name: \"mean\")";
+                  + $" |> filter(fn: (r) => r[\"heater\"] == \"{heater.IpAddress}\")";
 
         using var client = CreateDbClient();
         var tables = await client.GetQueryApi().QueryAsync(query, _organization);
@@ -54,7 +53,7 @@ public class InfluxDbService : IDatabaseService
         {
             temperatures.Add(new()
             {
-                TemperatureDiff = Convert.ToSingle(record.GetValue().ToString())
+                TemperatureDiff = Convert.ToSingle(record.GetValue()) - (float)heater.ReferenceTemperature
             });
         }
         return _mlContext.Data.LoadFromEnumerable(temperatures);
@@ -64,5 +63,4 @@ public class InfluxDbService : IDatabaseService
     {
         return InfluxDBClientFactory.Create("http://localhost:8086", _token);
     }
-
 }
