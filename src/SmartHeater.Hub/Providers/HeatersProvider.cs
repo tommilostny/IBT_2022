@@ -101,7 +101,7 @@ public class HeatersProvider
         return GetHeaterService(await GetHeaterListModelAsync(ipAddress));
     }
 
-    private async Task<HeaterListModel> GetHeaterListModelAsync(string ipAddress)
+    public async Task<HeaterListModel> GetHeaterListModelAsync(string ipAddress)
     {
         return (await ReadHeatersAsync()).First(h => h.IpAddress == ipAddress);
     }

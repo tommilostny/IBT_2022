@@ -9,12 +9,14 @@ public class InfluxDbService : IDatabaseService
     private readonly string _token;
     private readonly string _bucket;
     private readonly string _organization;
+    private readonly MLContext _mlContext;
 
-    public InfluxDbService(IConfiguration configuration)
+    public InfluxDbService(IConfiguration configuration, MLContext mLContext)
     {
         _token = configuration["InfluxDB:Token"];
         _bucket = configuration["InfluxDB:Bucket"];
         _organization = configuration["InfluxDB:Organization"];
+        _mlContext = mLContext;
     }
 
     public string WriteMeasurement(HeaterStatusModel heater, double? weather)
@@ -35,24 +37,27 @@ public class InfluxDbService : IDatabaseService
         return point.ToLineProtocol();
     }
 
-    public async Task<ICollection<double>> ReadTemperatureHistoryAsync()
+    public async Task<IDataView> ReadTemperatureHistoryAsync(HeaterListModel heater)
     {
         var query = "from(bucket: \"WithoutML\")"
-          //+ "|> range(start: v.timeRangeStart, stop: v.timeRangeStop)"
-          + " |> range(start: -12h)"
-          + " |> filter(fn: (r) => r[\"_measurement\"] == \"heater_status\")"
-          + " |> filter(fn: (r) => r[\"_field\"] == \"temperature\")"
-          //+ "|> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)"
-          //+ "|> yield(name: \"mean\")"
-        ;
+                  +  " |> range(start: -12m)"
+                  +  " |> filter(fn: (r) => r[\"_measurement\"] == \"heater_status\")"
+                  +  " |> filter(fn: (r) => r[\"_field\"] == \"temperature\")"
+                  + $" |> filter(fn: (r) => r[\"heater\"] == \"{heater.IpAddress}\")"
+                  +  " |> yield(name: \"mean\")";
+
         using var client = CreateDbClient();
         var tables = await client.GetQueryApi().QueryAsync(query, _organization);
+        var temperatures = new List<SmartHeaterModel.ModelInput>();
 
         foreach (var record in tables.SelectMany(table => table.Records))
         {
-            Console.WriteLine($"{record}");
+            temperatures.Add(new()
+            {
+                TemperatureDiff = Convert.ToSingle(record.GetValue().ToString())
+            });
         }
-        return new List<double>();
+        return _mlContext.Data.LoadFromEnumerable(temperatures);
     }
 
     private InfluxDBClient CreateDbClient()

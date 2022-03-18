@@ -3,7 +3,6 @@ using Microsoft.Extensions.ML;
 using SmartHeater.Hub.Services;
 using SmartHeater.Hub.Invocables;
 using SmartHeater.Hub.Providers;
-using SmartHeater.ML;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +24,7 @@ builder.Services.AddSingleton(sp => new HttpClient
     Timeout = TimeSpan.FromSeconds(3)
 });
 builder.Services.AddSingleton<HeatersProvider>();
+builder.Services.AddSingleton<MLContext>();
 
 var app = builder.Build();
 
@@ -93,12 +93,12 @@ app.MapGet("/weather",
         => await ws.ReadCelsiusAsync()
 );
 
-app.MapGet("/temp-history",
-    async (IDatabaseService ds)
-        => await ds.ReadTemperatureHistoryAsync());
+app.MapGet("/heaters/{ipAddress}/temp-history",
+    async (IDatabaseService ds, HeatersProvider hp, string ipAddress)
+        => (await ds.ReadTemperatureHistoryAsync(await hp.GetHeaterListModelAsync(ipAddress)))).ToString();
 
 app.MapPost("/predict",
-    async (PredictionEnginePool<SmartHeaterModel.ModelInput, SmartHeaterModel.ModelOutput> predictionEnginePool, SmartHeaterModel.ModelInput input) =>
-        await Task.FromResult(predictionEnginePool.Predict(input)));
+    async (PredictionEnginePool<SmartHeaterModel.ModelInput, SmartHeaterModel.ModelOutput> predictionEnginePool, SmartHeaterModel.ModelInput input)
+        => await Task.FromResult(predictionEnginePool.Predict(input)));
 
 app.Run();
