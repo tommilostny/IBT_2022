@@ -7,7 +7,7 @@ public record HeaterDetailModel(string IpAddress,
 {
     public HeaterTypes? HeaterType { get; set; }
 
-    public double? ReferenceTemperature { get; set; }
+    public float? ReferenceTemperature { get; set; }
 
     public HeaterStatusModel? LastMeasurement { get; set; }
 }

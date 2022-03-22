@@ -12,13 +12,13 @@ namespace SmartHeater.Hub.Invocables;
 /// 4. Based on result call ShellyService turn on/off methods.<br/>
 /// [5. Write measurement to InfluxDB (leave StatsCollectorInvocable running or replace it?)]
 /// </summary>
-public class SmartHeatersInvocable : IInvocable
+public class StatsCollectorInvocable : IInvocable
 {
     private readonly HeatersProvider _heatersProvider;
     private readonly IWeatherService _weatherService;
     private readonly IDatabaseService _database;
 
-    public SmartHeatersInvocable(HeatersProvider heatersProvider, IWeatherService weatherService, IDatabaseService database)
+    public StatsCollectorInvocable(HeatersProvider heatersProvider, IWeatherService weatherService, IDatabaseService database)
     {
         _heatersProvider = heatersProvider;
         _weatherService = weatherService;

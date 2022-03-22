@@ -1,6 +1,7 @@
 ﻿using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
+using SmartHeater.Hub.MachineLearning;
 
 namespace SmartHeater.Hub.Services;
 
@@ -27,12 +28,11 @@ public class InfluxDbService : IDatabaseService
             .Field("temperature", heater.Temperature ?? double.NaN)
             .Field("weather", weather ?? double.NaN)
             .Field("power", heater.Power ?? double.NaN)
-            .Field("turned_on", heater.IsTurnedOn ?? false)
             .Timestamp(heater.MeasurementTime, WritePrecision.Ns);
 
         using var client = CreateDbClient();
         using var writeApi = client.GetWriteApi();
-        writeApi.WritePoint(_bucket, _organization, point);
+        writeApi.WritePoint(point, _bucket, _organization);
 
         return point.ToLineProtocol();
     }
@@ -47,13 +47,13 @@ public class InfluxDbService : IDatabaseService
 
         using var client = CreateDbClient();
         var tables = await client.GetQueryApi().QueryAsync(query, _organization);
-        var temperatures = new List<SmartHeaterModel.ModelInput>();
+        var temperatures = new List<ModelInput>();
 
         foreach (var record in tables.SelectMany(table => table.Records))
         {
             temperatures.Add(new()
             {
-                TemperatureDiff = Convert.ToSingle(record.GetValue()) - (float)heater.ReferenceTemperature
+                TemperatureDiff = Convert.ToSingle(record.GetValue()) - heater.ReferenceTemperature
             });
         }
         return _mlContext.Data.LoadFromEnumerable(temperatures);

@@ -80,7 +80,7 @@ public class HeatersProvider
     {
         try
         {
-            var heaterListModel = await GetHeaterListModelAsync(ipAddress);
+            var heaterListModel = await GetHeaterAsync(ipAddress);
             var heaterService = GetHeaterService(heaterListModel);
 
             return new HeaterDetailModel(heaterListModel.IpAddress, heaterListModel.Name)
@@ -98,10 +98,10 @@ public class HeatersProvider
 
     public async Task<IHeaterService?> GetHeaterServiceAsync(string ipAddress)
     {
-        return GetHeaterService(await GetHeaterListModelAsync(ipAddress));
+        return GetHeaterService(await GetHeaterAsync(ipAddress));
     }
 
-    public async Task<HeaterListModel> GetHeaterListModelAsync(string ipAddress)
+    public async Task<HeaterListModel> GetHeaterAsync(string ipAddress)
     {
         return (await ReadHeatersAsync()).First(h => h.IpAddress == ipAddress);
     }

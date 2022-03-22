@@ -1,30 +1,29 @@
 using Coravel;
-using Microsoft.Extensions.ML;
 using SmartHeater.Hub.Services;
 using SmartHeater.Hub.Invocables;
 using SmartHeater.Hub.Providers;
+using SmartHeater.Hub.MachineLearning;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddPredictionEnginePool<SmartHeaterModel.ModelInput, SmartHeaterModel.ModelOutput>()
-    .FromFile(Path.Combine("..", "SmartHeater.ML", "SmartHeaterModel.zip"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<SmartHeatersInvocable>();
+builder.Services.AddTransient<StatsCollectorInvocable>();
+builder.Services.AddTransient<MLInvocable>();
 builder.Services.AddScheduler();
 
 builder.Services.AddSingleton<IDatabaseService, InfluxDbService>();
 builder.Services.AddSingleton<IWeatherService, OpenWeatherService>();
 builder.Services.AddSingleton<ICoordinatesService, IpApiService>();
-
 builder.Services.AddSingleton(sp => new HttpClient
 {
     Timeout = TimeSpan.FromSeconds(3)
 });
+
 builder.Services.AddSingleton<HeatersProvider>();
-builder.Services.AddSingleton<MLContext>();
+
+builder.Services.AddTransient<SmartHeaterModel>();
 
 var app = builder.Build();
 
@@ -38,7 +37,8 @@ if (app.Environment.IsDevelopment())
 
 app.Services.UseScheduler(scheduler =>
 {
-    scheduler.Schedule<SmartHeatersInvocable>().EveryTenSeconds();
+    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
+    //scheduler.Schedule<MLInvocable>().EveryMinute();
 });
 
 app.MapGet("/heaters/{ipAddress}/off",
@@ -95,10 +95,10 @@ app.MapGet("/weather",
 
 app.MapGet("/heaters/{ipAddress}/temp-history",
     async (IDatabaseService ds, HeatersProvider hp, string ipAddress)
-        => (await ds.ReadTemperatureHistoryAsync(await hp.GetHeaterListModelAsync(ipAddress)))).ToString();
+        => (await ds.ReadTemperatureHistoryAsync(await hp.GetHeaterAsync(ipAddress)))).ToString();
 
-app.MapPost("/predict",
-    async (PredictionEnginePool<SmartHeaterModel.ModelInput, SmartHeaterModel.ModelOutput> predictionEnginePool, SmartHeaterModel.ModelInput input)
-        => await Task.FromResult(predictionEnginePool.Predict(input)));
+app.MapPost("/heaters/{ipAddress}/predict",
+    async (SmartHeaterModel mlModel, /*ModelInput input,*/ string ipAddress)
+        => await mlModel.Predict(ipAddress, null));
 
 app.Run();

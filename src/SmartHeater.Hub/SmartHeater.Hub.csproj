@@ -8,13 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Coravel" Version="4.1.0" />
-    <PackageReference Include="InfluxDB.Client" Version="3.2.0" />
-    <PackageReference Include="Microsoft.Extensions.ML" Version="1.7.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="InfluxDB.Client" Version="4.0.0" />
+    <PackageReference Include="Microsoft.ML.TimeSeries" Version="1.7.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SmartHeater.ML\SmartHeater.ML.csproj" />
     <ProjectReference Include="..\SmartHeater.Shared\SmartHeater.Shared.csproj" />
   </ItemGroup>
 

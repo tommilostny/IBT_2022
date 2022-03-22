@@ -60,8 +60,8 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
         }
     }
 
-    private double _refTemp = 23;
-    public double ReferenceTemperature
+    private float _refTemp = 23;
+    public float ReferenceTemperature
     {
         get => _refTemp;
         set
@@ -124,7 +124,7 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
             IpAddress = HttpUtility.UrlDecode(query["IpAddress"].ToString());
             Name = HttpUtility.UrlDecode(query["Name"].ToString());
             HeaterType = (HeaterTypes)Convert.ToInt32(query["HeaterType"].ToString());
-            ReferenceTemperature = Convert.ToDouble(query["ReferenceTemperature"].ToString());
+            ReferenceTemperature = Convert.ToSingle(query["ReferenceTemperature"].ToString());
 
             Title = "Edit heater";
             ButtonText = "Save";

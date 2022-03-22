@@ -5,8 +5,6 @@ VisualStudioVersion = 17.1.32120.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.Hub", "SmartHeater.Hub\SmartHeater.Hub.csproj", "{2758AE01-CA02-4D40-AE5A-CD750BD84648}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.ML", "SmartHeater.ML\SmartHeater.ML.csproj", "{A261BB8F-DD6F-4970-B644-DC611D02DD3E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.Maui", "SmartHeater.Maui\SmartHeater.Maui.csproj", "{9024686A-F330-4629-AEEB-13EA845201F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.Shared", "SmartHeater.Shared\SmartHeater.Shared.csproj", "{846577C5-754B-4E34-8EA7-2D0BF2D37470}"
@@ -21,10 +19,6 @@ Global
 		{2758AE01-CA02-4D40-AE5A-CD750BD84648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2758AE01-CA02-4D40-AE5A-CD750BD84648}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2758AE01-CA02-4D40-AE5A-CD750BD84648}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A261BB8F-DD6F-4970-B644-DC611D02DD3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A261BB8F-DD6F-4970-B644-DC611D02DD3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A261BB8F-DD6F-4970-B644-DC611D02DD3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A261BB8F-DD6F-4970-B644-DC611D02DD3E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9024686A-F330-4629-AEEB-13EA845201F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9024686A-F330-4629-AEEB-13EA845201F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9024686A-F330-4629-AEEB-13EA845201F6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
