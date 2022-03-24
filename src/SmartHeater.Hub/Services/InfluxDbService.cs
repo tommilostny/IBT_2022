@@ -1,7 +1,6 @@
 ﻿using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
-using SmartHeater.ML;
 
 namespace SmartHeater.Hub.Services;
 

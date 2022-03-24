@@ -1,5 +1,4 @@
 ﻿using Coravel.Invocable;
-using SmartHeater.Hub.Providers;
 
 namespace SmartHeater.Hub.Invocables;
 
