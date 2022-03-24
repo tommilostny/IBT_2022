@@ -3,7 +3,7 @@
 public class SettingsProvider
 {
     [JsonIgnore]
-    public string HubUri => $"https://{HubIpAddress}:7232";
+    public string HubUri => $"http://{HubIpAddress}:5232";
 
     public string HubIpAddress { get; set; } = string.Empty;
 
