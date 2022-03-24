@@ -31,12 +31,12 @@ public class StatsCollectorInvocable : IInvocable
         
         foreach (var heater in await _heatersProvider.GetHeaterServicesAsync())
         {
-            tasks.Add(HeaterAction(heater, weather));
+            tasks.Add(CollectHeaterDataAction(heater, weather));
         }
         await Task.WhenAll(tasks);
     }
 
-    private async Task HeaterAction(IHeaterService heater, double? weather)
+    private async Task CollectHeaterDataAction(IHeaterService heater, double? weather)
     {
         var heaterStatus = await heater.GetStatusAsync();
         if (heaterStatus is null)

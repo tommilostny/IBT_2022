@@ -11,7 +11,7 @@ public static class SmartHeaterModel
 {
     public static async Task EnsureTrained(string mlProjectPath, bool overwrite = false)
     {
-        if (!overwrite && File.Exists(MLContants.DefaultModelName))
+        if (!overwrite && File.Exists(MLContants.DefaultModelFilePath))
         {
             return;
         }
@@ -26,9 +26,9 @@ public static class SmartHeaterModel
         var model = TrainPipeline(mlContext, data);
 
         var predEngine = model.CreateTimeSeriesEngine<MLModelInput, MLModelOutput>(mlContext);
-        predEngine.CheckPoint(mlContext, MLContants.DefaultModelName);
+        predEngine.CheckPoint(mlContext, MLContants.DefaultModelFilePath);
 
-        var trainingResult = File.Exists(MLContants.DefaultModelName);
+        var trainingResult = File.Exists(MLContants.DefaultModelFilePath);
         Console.WriteLine(trainingResult ? "Model is trained." : "Model is NOT trained.");
 
         //TODO: testing metrics?
@@ -40,31 +40,28 @@ public static class SmartHeaterModel
     /// </summary>
     /// <param name="input">model input.</param>
     /// <returns><seealso cref=" MLModelOutput"/></returns>
-    public static MLModelOutput Forecast(string heaterIpAddress, MLModelInput? input = null, int? horizon = null)
+    public static MLModelOutput Forecast(string heaterIpAddress, MLModelInput? input = null, int horizon = 10, bool saveModelCheckpoint = true)
     {
         var mlContext = new MLContext();
         var modelPath = ModelPathFromIP(heaterIpAddress);
 
         var predEngine = CreatePredictEngine(mlContext, modelPath);
         var result = predEngine.Predict(input!, horizon);
-        predEngine.CheckPoint(mlContext, modelPath);
 
+        if (saveModelCheckpoint)
+        {
+            predEngine.CheckPoint(mlContext, modelPath);
+        }
         return result;
     }
 
-    private static TimeSeriesPredictionEngine<MLModelInput, MLModelOutput> CreatePredictEngine(MLContext mlContext, string? ipAddress)
+    private static TimeSeriesPredictionEngine<MLModelInput, MLModelOutput> CreatePredictEngine(MLContext mlContext, string modelPath)
     {
-        string modelPath;
-        if (ipAddress is not null)
+        if (!File.Exists(modelPath))
         {
-            modelPath = ModelPathFromIP(ipAddress);
-            File.Copy(MLContants.DefaultModelName, modelPath, overwrite: false);
+            File.Copy(MLContants.DefaultModelFilePath, modelPath);
         }
-        else
-        {
-            modelPath = MLContants.DefaultModelName;
-        }
-        var mlModel = mlContext.Model.Load(modelPath, out var _);
+        var mlModel = mlContext.Model.Load(modelPath, inputSchema: out var _);
         return mlModel.CreateTimeSeriesEngine<MLModelInput, MLModelOutput>(mlContext);
     }
     #endregion

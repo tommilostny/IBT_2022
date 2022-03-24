@@ -2,7 +2,7 @@
 
 public static class MLContants
 {
-    public const string DefaultModelName = "SmartHeaterModel.zip";
+    public const string DefaultModelFilePath = "SmartHeaterModel.zip";
     public const string TrainingFileName = "training.csv";
     public const string TestingFileName = "testing.csv";
 
