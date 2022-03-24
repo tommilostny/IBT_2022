@@ -27,14 +27,14 @@ public class InfluxDbService : IDatabaseService
             .Field("power", heater.Power ?? double.NaN)
             .Timestamp(heater.MeasurementTime, WritePrecision.Ns);
 
-        using var client = CreateDbClient();
-        using var writeApi = client.GetWriteApi();
-        writeApi.WritePoint(point, _bucket, _organization);
+        //using var client = CreateDbClient();
+        //using var writeApi = client.GetWriteApi();
+        //writeApi.WritePoint(point, _bucket, _organization);
 
         return point.ToLineProtocol();
     }
 
-    public async Task<IEnumerable<MLModelInput>> ReadTemperatureDiffsAsync(HeaterListModel heater)
+    public async Task<IEnumerable<ModelInput>> ReadTemperatureDiffsAsync(HeaterListModel heater)
     {
         var query = $"from(bucket: \"{_bucket}\")"
                   +  " |> range(start: -12m)"
@@ -44,11 +44,11 @@ public class InfluxDbService : IDatabaseService
     
         using var client = CreateDbClient();
         var tables = await client.GetQueryApi().QueryAsync(query, _organization);
-        var temperatures = new List<MLModelInput>();
+        var temperatures = new List<ModelInput>();
     
         foreach (var record in tables.SelectMany(table => table.Records))
         {
-            temperatures.Add(new MLModelInput
+            temperatures.Add(new ModelInput
             {
                 TemperatureDiff = Convert.ToSingle(record.GetValue()) - heater.ReferenceTemperature
             });

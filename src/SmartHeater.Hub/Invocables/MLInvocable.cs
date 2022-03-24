@@ -33,12 +33,14 @@ public class MLInvocable : IInvocable
         {
             return;
         }
-        var input = new MLModelInput
+        var input = new ModelInput
         {
             TemperatureDiff = (float)status.Temperature - heater.ReferenceTemperature
         };
 
+        Console.WriteLine($"starting forecast for diff: {input.TemperatureDiff}");
         var forecast = SmartHeaterModel.Forecast(heater.IpAddress, input);
+        Console.WriteLine("end of forecast");
 
         Console.WriteLine("----------------------------------");
         foreach (var item in forecast.TemperatureDiff)

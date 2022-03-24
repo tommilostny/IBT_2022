@@ -11,36 +11,46 @@ public static class SmartHeaterModel
 {
     public static async Task EnsureTrained(string mlProjectPath, bool overwrite = false)
     {
+        //Setup
         if (!overwrite && File.Exists(MLContants.DefaultModelFilePath))
         {
             return;
         }
         if (!File.Exists(MLContants.TrainingFileName))
         {
-            var generator = new MLTrainingGenerator();
+            var generator = new MLDataGenerator();
             await generator.Run(Path.Combine(mlProjectPath, "Data", "B2MBUD01_T_N.csv"));
         }
 
+        //Training
         var mlContext = new MLContext();
-        var data = mlContext.Data.LoadFromTextFile<MLModelInput>(MLContants.TrainingFileName, separatorChar: ';', hasHeader: true);
-        var model = TrainPipeline(mlContext, data);
+        var trainingData = LoadDataFromCsv(mlContext, MLContants.TrainingFileName);
+        var model = TrainPipeline(mlContext, trainingData);
 
-        var predEngine = model.CreateTimeSeriesEngine<MLModelInput, MLModelOutput>(mlContext);
+        var predEngine = model.CreateTimeSeriesEngine<ModelInput, ModelOutput>(mlContext);
         predEngine.CheckPoint(mlContext, MLContants.DefaultModelFilePath);
 
         var trainingResult = File.Exists(MLContants.DefaultModelFilePath);
         Console.WriteLine(trainingResult ? "Model is trained." : "Model is NOT trained.");
 
-        //TODO: testing metrics?
+        //Testing
+        var testingData = LoadDataFromCsv(mlContext, MLContants.TestingFileName);
+        Evaluate(testingData, model, mlContext);
+
+        var output = predEngine.Predict(10);
+        foreach (var item in output.TemperatureDiff)
+        {
+            Console.WriteLine(item);
+        }
     }
 
     #region Consumption
     /// <summary>
-    /// Use this method to predict on <see cref="MLModelInput"/>.
+    /// Use this method to predict on <see cref="ModelInput"/>.
     /// </summary>
     /// <param name="input">model input.</param>
-    /// <returns><seealso cref=" MLModelOutput"/></returns>
-    public static MLModelOutput Forecast(string heaterIpAddress, MLModelInput? input = null, int horizon = 10, bool saveModelCheckpoint = true)
+    /// <returns><seealso cref=" ModelOutput"/></returns>
+    public static ModelOutput Forecast(string? heaterIpAddress, ModelInput? input = null, int horizon = 10, bool saveModelCheckpoint = true)
     {
         var mlContext = new MLContext();
         var modelPath = ModelPathFromIP(heaterIpAddress);
@@ -55,14 +65,14 @@ public static class SmartHeaterModel
         return result;
     }
 
-    private static TimeSeriesPredictionEngine<MLModelInput, MLModelOutput> CreatePredictEngine(MLContext mlContext, string modelPath)
+    private static TimeSeriesPredictionEngine<ModelInput, ModelOutput> CreatePredictEngine(MLContext mlContext, string modelPath)
     {
         if (!File.Exists(modelPath))
         {
             File.Copy(MLContants.DefaultModelFilePath, modelPath);
         }
         var mlModel = mlContext.Model.Load(modelPath, inputSchema: out var _);
-        return mlModel.CreateTimeSeriesEngine<MLModelInput, MLModelOutput>(mlContext);
+        return mlModel.CreateTimeSeriesEngine<ModelInput, ModelOutput>(mlContext);
     }
     #endregion
 
@@ -96,5 +106,42 @@ public static class SmartHeaterModel
     }
     #endregion
 
-    private static string ModelPathFromIP(string ipAddress) => $"SmartHeaterModel_{ipAddress}.zip";
+    private static string ModelPathFromIP(string? ipAddress)
+    {
+        return ipAddress is not null ? $"SmartHeaterModel_{ipAddress}.zip" : MLContants.DefaultModelFilePath;
+    }
+
+    private static IDataView LoadDataFromCsv(MLContext mlContext, string path)
+    {
+        return mlContext.Data.LoadFromTextFile<ModelInput>(path, separatorChar: ';', hasHeader: true);
+    }
+
+    private static void Evaluate(IDataView testData, ITransformer model, MLContext mlContext)
+    {
+        // Make predictions
+        IDataView predictions = model.Transform(testData);
+
+        // Actual values
+        IEnumerable<float> actual =
+            mlContext.Data.CreateEnumerable<ModelInput>(testData, true)
+                .Select(observed => observed.TemperatureDiff);
+
+        // Predicted values
+        IEnumerable<float> forecast =
+            mlContext.Data.CreateEnumerable<ModelOutput>(predictions, true)
+                .Select(prediction => prediction.TemperatureDiff[0]);
+
+        // Calculate error (actual - forecast)
+        var metrics = actual.Zip(forecast, (actualValue, forecastValue) => actualValue - forecastValue);
+
+        // Get metric averages
+        var MAE = metrics.Average(error => Math.Abs(error)); // Mean Absolute Error
+        var RMSE = Math.Sqrt(metrics.Average(error => Math.Pow(error, 2))); // Root Mean Squared Error
+
+        // Output metrics
+        Console.WriteLine("Evaluation Metrics");
+        Console.WriteLine("---------------------");
+        Console.WriteLine($"Mean Absolute Error: {MAE:F3}");
+        Console.WriteLine($"Root Mean Squared Error: {RMSE:F3}\n");
+    }
 }

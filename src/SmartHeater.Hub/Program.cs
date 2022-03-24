@@ -35,7 +35,7 @@ if (app.Environment.IsDevelopment())
 
 app.Services.UseScheduler(scheduler =>
 {
-    //scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
+    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
     scheduler.Schedule<MLInvocable>().EveryMinute();
 });
 

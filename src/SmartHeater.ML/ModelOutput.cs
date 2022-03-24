@@ -7,7 +7,7 @@ namespace SmartHeater.ML;
 /// <summary>
 /// model output class for SmartHeaterModel.
 /// </summary>
-public class MLModelOutput
+public class ModelOutput
 {
     [ColumnName(@"temperatureDiff")]
     public float[] TemperatureDiff { get; set; }

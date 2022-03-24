@@ -5,7 +5,7 @@ namespace SmartHeater.ML;
 /// <summary>
 /// model input class for SmartHeaterModel.
 /// </summary>
-public class MLModelInput
+public class ModelInput
 {
     [ColumnName(@"temperatureDiff")]
     [LoadColumn(fieldIndex: 1)]

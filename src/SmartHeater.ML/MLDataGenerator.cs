@@ -2,7 +2,7 @@
 
 namespace SmartHeater.ML;
 
-internal class MLTrainingGenerator
+internal class MLDataGenerator
 {
     //Heater parameters with preset values.
     private bool _powerState = false;
@@ -18,12 +18,18 @@ internal class MLTrainingGenerator
 
     public async Task Run(string weatherDataFilePath)
     {
+        Console.WriteLine("Generating ML training and testing csv files...");
+
         //Load weather data.
         using var weatherFile = await GetWeatherFileReaderAsync(weatherDataFilePath);
 
-        //Create generated file and write csv file headers.
-        using var generatedFile = new StreamWriter(MLContants.TrainingFileName);
-        await generatedFile.WriteLineAsync("dateTime;temperatureDiff;weather;turnedOn");
+        //Create generated files and write csv file headers.
+        using var trainingFile = new StreamWriter(MLContants.TrainingFileName);
+        using var testingFile = new StreamWriter(MLContants.TestingFileName);
+
+        var headers = "dateTime;temperatureDiff;turnedOn";
+        await trainingFile.WriteLineAsync(headers);
+        await testingFile.WriteLineAsync(headers);
 
         //Start the main loop until full end year.
         while (_time.Year <= MLContants.TrainingEndYear)
@@ -40,7 +46,10 @@ internal class MLTrainingGenerator
             }
 
             //Write heater status to the csv.
-            await generatedFile.WriteLineAsync($"{_time};{_roomTemp - refTemp};{_thisDayTemp};{shouldBeOn}");
+            var line = $"{_time};{(_roomTemp - refTemp).ToString().Replace(',', '.')};{shouldBeOn}";
+
+            var fileRef = _time.Year < MLContants.TrainingEndYear ? trainingFile : testingFile;
+            await fileRef.WriteLineAsync(line);
 
             //Update heater power status and room temperature.
             var oldPowerState = _powerState;
@@ -55,12 +64,17 @@ internal class MLTrainingGenerator
             }
             else if (oldPowerState == _powerState)
             {
-                _roomTemp += (_powerState ? _random.Next(1, 35) : _random.Next(-10, -1)) / 100.0;
+                _roomTemp += (_powerState ? _random.Next(8, 35) : _random.Next(-16, -1)) / 100.0;
+            }
+            else
+            {
+                _roomTemp += (_powerState ? _random.Next(10, 30) : _random.Next(-30, -10)) / 1000.0;
             }
             //Advance time.
             _time = _time.AddMinutes(1);
         }
         //End of main loop.
+        Console.WriteLine("Generating of file is finished.");
     }
 
     //Returns if heater should be on and if weather factor should be used to update temperature.
@@ -72,8 +86,8 @@ internal class MLTrainingGenerator
             return (0, true);
         }
         return _powerState
-            ? ((_roomTemp <= refTemp + 0.16 ? 1 : 0), false)
-            : ((_roomTemp <= refTemp - 0.23 ? 1 : 0), false);
+            ? (_roomTemp <= refTemp + 0.12 ? 1 : 0, false)
+            : (_roomTemp <= refTemp - 0.21 ? 1 : 0, false);
     }
 
     //Returns reference temperature based on time period of the day.
