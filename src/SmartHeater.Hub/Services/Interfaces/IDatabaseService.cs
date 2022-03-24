@@ -1,4 +1,6 @@
-﻿namespace SmartHeater.Hub.Services.Interfaces;
+﻿using SmartHeater.ML;
+
+namespace SmartHeater.Hub.Services.Interfaces;
 
 public interface IDatabaseService
 {
@@ -10,5 +12,5 @@ public interface IDatabaseService
     /// <returns>String representation of the measurement written to the database.</returns>
     string WriteMeasurement(HeaterStatusModel heater, double? weather);
 
-    Task<IDataView> ReadTemperatureHistoryAsync(HeaterListModel heater);
+    Task<IEnumerable<MLModelInput>> ReadTemperatureDiffsAsync(HeaterListModel heater);
 }

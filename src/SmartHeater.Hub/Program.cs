@@ -2,7 +2,9 @@ using Coravel;
 using SmartHeater.Hub.Services;
 using SmartHeater.Hub.Invocables;
 using SmartHeater.Hub.Providers;
-using SmartHeater.Hub.MachineLearning;
+using SmartHeater.ML;
+
+await SmartHeaterModel.EnsureTrained(mlProjectPath: Path.Combine("..", "SmartHeater.ML"), true);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +24,6 @@ builder.Services.AddSingleton(sp => new HttpClient
 });
 
 builder.Services.AddSingleton<HeatersProvider>();
-
-builder.Services.AddTransient<SmartHeaterModel>();
 
 var app = builder.Build();
 
@@ -93,12 +93,14 @@ app.MapGet("/weather",
         => await ws.ReadCelsiusAsync()
 );
 
-app.MapGet("/heaters/{ipAddress}/temp-history",
-    async (IDatabaseService ds, HeatersProvider hp, string ipAddress)
-        => (await ds.ReadTemperatureHistoryAsync(await hp.GetHeaterAsync(ipAddress)))).ToString();
-
-app.MapPost("/heaters/{ipAddress}/predict",
-    async (SmartHeaterModel mlModel, /*ModelInput input,*/ string ipAddress)
-        => await mlModel.Predict(ipAddress, null));
+//app.MapGet("/heaters/{ipAddress}/temp-history",
+//    async (IDatabaseService ds, HeatersProvider hp, string ipAddress)
+//        => await ds.ReadTemperatureDiffsAsync(await hp.GetHeaterAsync(ipAddress))
+//);
+//
+//app.MapPost("/heaters/{ipAddress}/predict",
+//    async (SmartHeaterModel mlModel, /*ModelInput input,*/ string ipAddress)
+//        => await Task.FromResult(mlModel.Forecast(ipAddress, null))
+//);
 
 app.Run();

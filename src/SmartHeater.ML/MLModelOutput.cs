@@ -1,13 +1,13 @@
 ﻿using Microsoft.ML.Data;
 
-namespace SmartHeater.Hub.MachineLearning;
+namespace SmartHeater.ML;
 
 #nullable disable
 
 /// <summary>
 /// model output class for SmartHeaterModel.
 /// </summary>
-public class ModelOutput
+public class MLModelOutput
 {
     [ColumnName(@"temperatureDiff")]
     public float[] TemperatureDiff { get; set; }
@@ -17,5 +17,4 @@ public class ModelOutput
 
     [ColumnName(@"temperatureDiff_UB")]
     public float[] TemperatureDiff_UB { get; set; }
-
 }

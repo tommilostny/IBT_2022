@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.Maui", "SmartHe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.Shared", "SmartHeater.Shared\SmartHeater.Shared.csproj", "{846577C5-754B-4E34-8EA7-2D0BF2D37470}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHeater.ML", "SmartHeater.ML\SmartHeater.ML.csproj", "{68FCFE4C-342A-4006-AB47-9C3D5BEBEA08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{846577C5-754B-4E34-8EA7-2D0BF2D37470}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{846577C5-754B-4E34-8EA7-2D0BF2D37470}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{846577C5-754B-4E34-8EA7-2D0BF2D37470}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68FCFE4C-342A-4006-AB47-9C3D5BEBEA08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68FCFE4C-342A-4006-AB47-9C3D5BEBEA08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68FCFE4C-342A-4006-AB47-9C3D5BEBEA08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68FCFE4C-342A-4006-AB47-9C3D5BEBEA08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
