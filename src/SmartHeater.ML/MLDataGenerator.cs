@@ -4,6 +4,13 @@ namespace SmartHeater.ML;
 
 internal class MLDataGenerator
 {
+    private readonly string _weatherDataFilePath;
+
+    public MLDataGenerator(string weatherDataFilePath)
+    {
+        _weatherDataFilePath = weatherDataFilePath;
+    }
+
     //Heater parameters with preset values.
     private bool _powerState = false;
     private double _roomTemp = MLContants.TrainingStartRoomTemperature;
@@ -16,12 +23,12 @@ internal class MLDataGenerator
     private DateTime _time = new(MLContants.TrainingStartYear, 1, 1);
     private readonly Random _random = new();
 
-    public async Task Run(string weatherDataFilePath)
+    public async Task Run()
     {
         Console.WriteLine("Generating ML training and testing csv files...");
 
         //Load weather data.
-        using var weatherFile = await GetWeatherFileReaderAsync(weatherDataFilePath);
+        using var weatherFile = await GetWeatherFileReaderAsync(_weatherDataFilePath);
 
         //Create generated files and write csv file headers.
         using var trainingFile = new StreamWriter(MLContants.TrainingFileName);
@@ -74,7 +81,7 @@ internal class MLDataGenerator
             _time = _time.AddMinutes(1);
         }
         //End of main loop.
-        Console.WriteLine("Generating of file is finished.");
+        Console.WriteLine("Generating of csv files is finished.");
     }
 
     //Returns if heater should be on and if weather factor should be used to update temperature.

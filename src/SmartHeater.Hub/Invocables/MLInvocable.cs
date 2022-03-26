@@ -48,27 +48,33 @@ public class MLInvocable : IInvocable
         var trend = ForecastingTrend(forecast);
         if (trend > 0 && status?.IsTurnedOn == true)
         {
+#if DEBUG
             Console.WriteLine("sending off command");
+#endif
             await heaterService.TurnOffAsync();
         }
         else if (trend < 0 && status?.IsTurnedOn == false)
         {
+#if DEBUG
             Console.WriteLine("sending on command");
+#endif
             await heaterService.TurnOnAsync();
         }
     }
 
     private static ModelOutput ForecastAndPrint(HeaterListModel heater, ModelInput input)
     {
+#if DEBUG
         Console.WriteLine($"starting forecast for diff: {input.TemperatureDiff}");
-
+#endif
         var forecast = SmartHeaterModel.Forecast(heater.IpAddress, input);
-
+#if DEBUG
         Console.WriteLine("----------------------------------");
         foreach (var item in forecast.TemperatureDiff)
         {
             Console.WriteLine(item);
         }
+#endif
         return forecast;
     }
 
@@ -80,7 +86,9 @@ public class MLInvocable : IInvocable
             diffs.Add(forecast.TemperatureDiff[i + 1] - forecast.TemperatureDiff[i]);
         }
         var trend = diffs.Average();
+#if DEBUG
         Console.WriteLine($"trend: {trend}");
+#endif
         return trend;
     }
 }
