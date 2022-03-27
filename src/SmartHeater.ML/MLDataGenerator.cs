@@ -1,4 +1,5 @@
 ﻿using SmartHeater.Shared.Static;
+using System.Globalization;
 
 namespace SmartHeater.ML;
 
@@ -133,6 +134,6 @@ internal class MLDataGenerator
         //(but it's possible to encounter previous day for some reason).
         while (day != _lastDayNumber);
 
-        return Convert.ToDouble(line[3]);
+        return Convert.ToDouble(line[3], CultureInfo.InvariantCulture);
     }
 }

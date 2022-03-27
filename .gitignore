@@ -456,5 +456,5 @@ $RECYCLE.BIN/
 *stats_*.csv
 /src/SmartHeater.Hub/heaters.json
 /src/SmartHeater.Hub/training.csv
-/src/SmartHeater.Hub/SmartHeaterModel*.zip
+/src/SmartHeater.Hub/SmartHeaterModel_*.zip
 /src/SmartHeater.Hub/testing.csv
