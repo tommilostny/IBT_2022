@@ -44,8 +44,8 @@ public class MLInvocable : IInvocable
 
         //Check for over or under-heating.
         var average = forecast.TemperatureDiff.Average();
-        var overheating = average > 2;
-        var underheating = average < -2;
+        var overheating = average > 0.6f;
+        var underheating = average < -0.9f;
 #if DEBUG
         Console.WriteLine($"Overheating: {overheating}");
         Console.WriteLine($"Underheating: {underheating}");

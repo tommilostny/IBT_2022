@@ -59,7 +59,7 @@ public static class SmartHeaterModel
         var mlContext = new MLContext();
         var modelPath = ModelPathFromIP(heaterIpAddress);
 
-        var predEngine = CreatePredictEngine(mlContext, modelPath);
+        using var predEngine = CreatePredictEngine(mlContext, modelPath);
         var result = predEngine.Predict(input!, horizon);
 
         if (saveModelCheckpoint)
