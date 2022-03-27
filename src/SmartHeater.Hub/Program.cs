@@ -41,11 +41,11 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 
-//app.Services.UseScheduler(scheduler =>
-//{
-//    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
-//    scheduler.Schedule<MLInvocable>().EveryMinute();
-//});
+app.Services.UseScheduler(scheduler =>
+{
+    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
+    scheduler.Schedule<MLInvocable>().EveryMinute();
+});
 
 app.MapGet("/heaters/{ipAddress}/off",
     async (IHeatersRepositoryService hp, string ipAddress) =>
