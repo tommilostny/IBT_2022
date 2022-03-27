@@ -42,19 +42,21 @@ public class MLInvocable : IInvocable
         //Perform forecasting
         var forecast = GetForecast(heater, input);
 
-        //Check for over or under-heating.
+        //Check for over or under-heating and get forecasted trend (function direction).
+        //These variables are used as follows:
+        //  Overheating => turn off,
+        //  Underheating => turn on,
+        //  else if upward trend (>0) => turn on,
+        //  else if downward trend (<0) => turn off.
         var overheating = forecast.TemperatureDiff.All(x => x > 0);
         var underheating = forecast.TemperatureDiff.All(x => x < 0);
+        var trend = ForecastingTrend(forecast);
+
 #if DEBUG
         Console.WriteLine($"Overheating: {overheating}");
         Console.WriteLine($"Underheating: {underheating}");
 #endif
-
-        //Control heater based on forecasted trend.
-        //Upward trend (>0): turn off
-        //Downward trend (<0): turn on
-        var trend = ForecastingTrend(forecast);
-        if (overheating || trend < 0)
+        if (overheating || (trend < 0 && !underheating))
         {
 #if DEBUG
             Console.WriteLine("sending off command");
@@ -62,7 +64,7 @@ public class MLInvocable : IInvocable
             if (status.IsTurnedOn == true)
                 await heaterService.TurnOffAsync();
         }
-        else if (underheating || trend > 0)
+        else if (underheating || (trend > 0 && !overheating))
         {
 #if DEBUG
             Console.WriteLine("sending on command");
