@@ -1,20 +1,18 @@
-﻿using SmartHeater.Hub.Services;
+﻿namespace SmartHeater.Hub.Services;
 
-namespace SmartHeater.Hub.Providers;
-
-public class HeatersProvider
+public class HeatersRepositoryService : IHeatersRepositoryService
 {
     private readonly HttpClient _httpClient;
     private const string _heatersJsonFile = "heaters.json";
 
-    public HeatersProvider(HttpClient httpClient)
+    public HeatersRepositoryService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
 
-    public async Task<ICollection<IHeaterService>> GetHeaterServicesAsync()
+    public async Task<ICollection<IHeaterControlService>> GetHeaterServicesAsync()
     {
-        var services = new List<IHeaterService>();
+        var services = new List<IHeaterControlService>();
         foreach (var heater in await ReadHeatersAsync())
         {
             var heaterService = GetHeaterService(heater);
@@ -26,7 +24,7 @@ public class HeatersProvider
         return services;
     }
 
-    public IHeaterService? GetHeaterService(HeaterListModel heater)
+    public IHeaterControlService? GetHeaterService(HeaterListModel heater)
     {
         return heater.HeaterType switch
         {
@@ -96,7 +94,7 @@ public class HeatersProvider
         }
     }
 
-    public async Task<IHeaterService?> GetHeaterServiceAsync(string ipAddress)
+    public async Task<IHeaterControlService?> GetHeaterServiceAsync(string ipAddress)
     {
         return GetHeaterService(await GetHeaterAsync(ipAddress));
     }
@@ -112,7 +110,7 @@ public class HeatersProvider
         return JsonConvert.DeserializeObject<List<HeaterListModel>>(jsonStr ?? "[]") ?? new();
     }
 
-    private static async Task WriteHeatersAsync(ICollection<HeaterListModel> heaters)
+    public async Task WriteHeatersAsync(ICollection<HeaterListModel> heaters)
     {
         var jsonStr = JsonConvert.SerializeObject(heaters);
         await File.WriteAllTextAsync(_heatersJsonFile, jsonStr);

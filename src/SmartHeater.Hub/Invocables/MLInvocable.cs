@@ -4,9 +4,9 @@ namespace SmartHeater.Hub.Invocables;
 
 public class MLInvocable : IInvocable
 {
-    private readonly HeatersProvider _heatersProvider;
+    private readonly IHeatersRepositoryService _heatersProvider;
 
-    public MLInvocable(HeatersProvider heatersProvider)
+    public MLInvocable(IHeatersRepositoryService heatersProvider)
     {
         _heatersProvider = heatersProvider;
     }

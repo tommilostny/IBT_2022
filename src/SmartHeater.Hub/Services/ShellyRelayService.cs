@@ -2,7 +2,7 @@
 
 namespace SmartHeater.Hub.Services;
 
-public class ShellyRelayService : IHeaterService
+public class ShellyRelayService : IHeaterControlService
 {
     private readonly HttpClient _httpClient;
 

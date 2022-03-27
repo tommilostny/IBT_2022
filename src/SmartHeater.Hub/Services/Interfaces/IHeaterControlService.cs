@@ -1,6 +1,6 @@
 ﻿namespace SmartHeater.Hub.Services.Interfaces;
 
-public interface IHeaterService
+public interface IHeaterControlService
 {
     string IPAddress { get; }
 

@@ -19,7 +19,7 @@ public static class SmartHeaterModel
             return;
         }
         //Model is not trained, check if the training file exists (if not, generate it).
-        if (!File.Exists(MLContants.TrainingFileName))
+        if (!File.Exists(MLContants.TrainingFileName) || !File.Exists(MLContants.TestingFileName))
         {
             var weatherFilePath = Path.Combine(mlProjectPath, "Data", "B2MBUD01_T_N.csv");
             var generator = new MLDataGenerator(weatherFilePath);
@@ -31,7 +31,7 @@ public static class SmartHeaterModel
         var trainingData = LoadDataFromCsv(mlContext, MLContants.TrainingFileName);
         var model = TrainPipeline(mlContext, trainingData);
 
-        var predEngine = model.CreateTimeSeriesEngine<ModelInput, ModelOutput>(mlContext);
+        using var predEngine = model.CreateTimeSeriesEngine<ModelInput, ModelOutput>(mlContext);
         predEngine.CheckPoint(mlContext, MLContants.DefaultModelFilePath);
 
         var trainingResult = File.Exists(MLContants.DefaultModelFilePath);

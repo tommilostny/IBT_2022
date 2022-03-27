@@ -1,4 +1,6 @@
-﻿namespace SmartHeater.Hub.Services;
+﻿using System.Text.Json.Serialization;
+
+namespace SmartHeater.Hub.Services;
 
 public class OpenWeatherService : IWeatherService
 {
@@ -35,7 +37,7 @@ public class OpenWeatherService : IWeatherService
 
     private class OpenWeatherModel
     {
-        [JsonProperty("main")]
+        [JsonPropertyName("main")]
         public Dictionary<string, object>? Data { get; set; }
     }
 }

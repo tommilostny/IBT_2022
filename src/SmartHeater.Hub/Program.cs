@@ -2,7 +2,15 @@ using Coravel;
 using SmartHeater.Hub.Services;
 using SmartHeater.Hub.Invocables;
 
-await SmartHeaterModel.EnsureTrainedAsync(mlProjectPath: Path.Combine("..", "SmartHeater.ML"));
+try
+{
+    await SmartHeaterModel.EnsureTrainedAsync(mlProjectPath: Path.Combine("..", "SmartHeater.ML"));
+}
+catch (Exception ex)
+{
+    Console.Error.WriteLine("Unable to train machine learning model.");
+    Console.Error.WriteLine($"Exception message: {ex.Message}");
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +29,7 @@ builder.Services.AddSingleton(sp => new HttpClient
     Timeout = TimeSpan.FromSeconds(3)
 });
 
-builder.Services.AddSingleton<HeatersProvider>();
+builder.Services.AddSingleton<IHeatersRepositoryService, HeatersRepositoryService>();
 
 var app = builder.Build();
 
@@ -33,14 +41,14 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 
-app.Services.UseScheduler(scheduler =>
-{
-    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
-    scheduler.Schedule<MLInvocable>().EveryMinute();
-});
+//app.Services.UseScheduler(scheduler =>
+//{
+//    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
+//    scheduler.Schedule<MLInvocable>().EveryMinute();
+//});
 
 app.MapGet("/heaters/{ipAddress}/off",
-    async (HeatersProvider hp, string ipAddress) =>
+    async (IHeatersRepositoryService hp, string ipAddress) =>
     {
         var service = await hp.GetHeaterServiceAsync(ipAddress);
         if (service is not null)
@@ -51,7 +59,7 @@ app.MapGet("/heaters/{ipAddress}/off",
 );
 
 app.MapGet("/heaters/{ipAddress}/on",
-    async (HeatersProvider hp, string ipAddress) =>
+    async (IHeatersRepositoryService hp, string ipAddress) =>
     {
         var service = await hp.GetHeaterServiceAsync(ipAddress);
         if (service is not null)
@@ -62,27 +70,27 @@ app.MapGet("/heaters/{ipAddress}/on",
 );
 
 app.MapGet("/heaters",
-    async (HeatersProvider hp)
+    async (IHeatersRepositoryService hp)
         => await hp.ReadHeatersAsync()
 );
 
 app.MapGet("/heaters/{ipAddress}",
-    async (HeatersProvider hp, string ipAddress)
+    async (IHeatersRepositoryService hp, string ipAddress)
         => await hp.GetHeaterDetailAsync(ipAddress)
 );
 
 app.MapPost("/heaters",
-    async (HeatersProvider hp, HeaterListModel heater)
+    async (IHeatersRepositoryService hp, HeaterListModel heater)
         => await hp.InsertAsync(heater)
 );
 
 app.MapPut("/heaters/{ipAddress}",
-    async (HeatersProvider hp, string ipAddress, HeaterListModel heater)
+    async (IHeatersRepositoryService hp, string ipAddress, HeaterListModel heater)
         => await hp.UpdateAsync(ipAddress, heater)
 );
 
 app.MapDelete("/heaters/{ipAddress}",
-    async (HeatersProvider hp, string ipAddress)
+    async (IHeatersRepositoryService hp, string ipAddress)
         => await hp.DeleteAsync(ipAddress)
 );
 
@@ -91,14 +99,9 @@ app.MapGet("/weather",
         => await ws.ReadCelsiusAsync()
 );
 
-//app.MapGet("/heaters/{ipAddress}/temp-history",
-//    async (IDatabaseService ds, HeatersProvider hp, string ipAddress)
-//        => await ds.ReadTemperatureDiffsAsync(await hp.GetHeaterAsync(ipAddress))
-//);
-//
-//app.MapPost("/heaters/{ipAddress}/predict",
-//    async (SmartHeaterModel mlModel, /*ModelInput input,*/ string ipAddress)
-//        => await Task.FromResult(mlModel.Forecast(ipAddress, null))
-//);
+app.MapGet("/heaters/{ipAddress}/temp-history",
+    async (IDatabaseService ds, IHeatersRepositoryService hp, string ipAddress)
+        => await ds.ReadTemperatureDiffsAsync(await hp.GetHeaterAsync(ipAddress))
+);
 
 app.Run();
