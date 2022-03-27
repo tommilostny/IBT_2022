@@ -89,7 +89,6 @@ public class ShellyRelayService : IHeaterService
         }
         catch (Exception ex)
         {
-            //TODO: logger?
             Console.WriteLine(ex.Message);
         }
     }

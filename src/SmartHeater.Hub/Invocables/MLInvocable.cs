@@ -13,25 +13,25 @@ public class MLInvocable : IInvocable
 
     public async Task Invoke()
     {
-        var tasks = new List<Task>();
         foreach (var heater in await _heatersProvider.ReadHeatersAsync())
         {
-            tasks.Add(ForecastHeaterAction(heater));
+            await SmartHeaterActionAsync(heater);
         }
-        await Task.WhenAll(tasks);
     }
 
-    private async Task ForecastHeaterAction(HeaterListModel heater)
+    private async Task SmartHeaterActionAsync(HeaterListModel heater)
     {
         //Get data from heater for model input.
         var heaterService = _heatersProvider.GetHeaterService(heater);
         if (heaterService is null)
         {
+            Console.Error.WriteLine($"{heater.IpAddress}: Unable to load heater service.");
             return;
         }
         var status = await heaterService.GetStatusAsync();
         if (status?.Temperature is null)
         {
+            Console.Error.WriteLine($"{heater.IpAddress}: Unable to load room temperature.");
             return;
         }
         var input = new ModelInput
@@ -40,29 +40,40 @@ public class MLInvocable : IInvocable
         };
 
         //Perform forecasting
-        var forecast = ForecastAndPrint(heater, input);
+        var forecast = GetForecast(heater, input);
+
+        //Check for over or under-heating.
+        var average = forecast.TemperatureDiff.Average();
+        var overheating = average > 2;
+        var underheating = average < -2;
+#if DEBUG
+        Console.WriteLine($"Overheating: {overheating}");
+        Console.WriteLine($"Underheating: {underheating}");
+#endif
 
         //Control heater based on forecasted trend.
         //Upward trend (>0): turn off
-        //Downward trend (<=0): turn on
+        //Downward trend (<0): turn on
         var trend = ForecastingTrend(forecast);
-        if (trend > 0 && status?.IsTurnedOn == true)
+        if (trend > 0 || overheating)
         {
 #if DEBUG
             Console.WriteLine("sending off command");
 #endif
-            await heaterService.TurnOffAsync();
+            if (status.IsTurnedOn == true)
+                await heaterService.TurnOffAsync();
         }
-        else if (trend < 0 && status?.IsTurnedOn == false)
+        else if (trend < 0 || underheating)
         {
 #if DEBUG
             Console.WriteLine("sending on command");
 #endif
-            await heaterService.TurnOnAsync();
+            if (status.IsTurnedOn == false)
+                await heaterService.TurnOnAsync();
         }
     }
 
-    private static ModelOutput ForecastAndPrint(HeaterListModel heater, ModelInput input)
+    private static ModelOutput GetForecast(HeaterListModel heater, ModelInput input)
     {
 #if DEBUG
         Console.WriteLine($"starting forecast for diff: {input.TemperatureDiff}");

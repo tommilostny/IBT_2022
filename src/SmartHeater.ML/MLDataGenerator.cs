@@ -23,7 +23,7 @@ internal class MLDataGenerator
     private DateTime _time = new(MLContants.TrainingStartYear, 1, 1);
     private readonly Random _random = new();
 
-    public async Task Run()
+    public async Task RunAsync()
     {
         Console.WriteLine("Generating ML training and testing csv files...");
 

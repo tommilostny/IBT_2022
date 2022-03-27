@@ -10,7 +10,7 @@ namespace SmartHeater.ML;
 
 public static class SmartHeaterModel
 {
-    public static async Task EnsureTrained(string mlProjectPath, bool overwrite = false)
+    public static async Task EnsureTrainedAsync(string mlProjectPath, bool overwrite = false)
     {
         //Setup
         //Check if model base is trained already (ensured existence, can skip).
@@ -23,7 +23,7 @@ public static class SmartHeaterModel
         {
             var weatherFilePath = Path.Combine(mlProjectPath, "Data", "B2MBUD01_T_N.csv");
             var generator = new MLDataGenerator(weatherFilePath);
-            await generator.Run();
+            await generator.RunAsync();
         }
 
         //Training
@@ -41,7 +41,7 @@ public static class SmartHeaterModel
         var testingData = LoadDataFromCsv(mlContext, MLContants.TestingFileName);
         Evaluate(testingData, model, mlContext);
 
-        var output = predEngine.Predict(10);
+        var output = predEngine.Predict(MLContants.Horizon);
         foreach (var item in output.TemperatureDiff)
         {
             Console.WriteLine(item);
@@ -54,7 +54,7 @@ public static class SmartHeaterModel
     /// </summary>
     /// <param name="input">model input.</param>
     /// <returns><seealso cref=" ModelOutput"/></returns>
-    public static ModelOutput Forecast(string? heaterIpAddress, ModelInput? input = null, int horizon = 10, bool saveModelCheckpoint = true)
+    public static ModelOutput Forecast(string? heaterIpAddress, ModelInput? input = null, int horizon = MLContants.Horizon, bool saveModelCheckpoint = true)
     {
         var mlContext = new MLContext();
         var modelPath = ModelPathFromIP(heaterIpAddress);

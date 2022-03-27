@@ -10,4 +10,6 @@ public static class MLContants
     public const int TrainingEndYear = 2020;
 
     public const double TrainingStartRoomTemperature = 18.5;
+
+    public const int Horizon = 10;
 }

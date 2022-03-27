@@ -2,7 +2,7 @@ using Coravel;
 using SmartHeater.Hub.Services;
 using SmartHeater.Hub.Invocables;
 
-await SmartHeaterModel.EnsureTrained(mlProjectPath: Path.Combine("..", "SmartHeater.ML"));
+await SmartHeaterModel.EnsureTrainedAsync(mlProjectPath: Path.Combine("..", "SmartHeater.ML"));
 
 var builder = WebApplication.CreateBuilder(args);
 
