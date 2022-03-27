@@ -27,9 +27,9 @@ public class InfluxDbService : IDatabaseService
             .Field("power", heater.Power ?? double.NaN)
             .Timestamp(heater.MeasurementTime, WritePrecision.Ns);
 
-        //using var client = CreateDbClient();
-        //using var writeApi = client.GetWriteApi();
-        //writeApi.WritePoint(point, _bucket, _organization);
+        using var client = CreateDbClient();
+        using var writeApi = client.GetWriteApi();
+        writeApi.WritePoint(point, _bucket, _organization);
 
         return point.ToLineProtocol();
     }
