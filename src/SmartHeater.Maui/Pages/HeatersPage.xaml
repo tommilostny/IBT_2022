@@ -6,50 +6,56 @@
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
              xmlns:models="clr-namespace:SmartHeater.Shared.Models;assembly=SmartHeater.Shared"
              x:DataType="viewmodels:HeatersViewModel">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add"
-                    Command="{Binding AddCommand}" />
-        <ToolbarItem Text="Reload"
-                    Command="{Binding LoadCommand}" />
-    </ContentPage.ToolbarItems>
-
     <StackLayout>
-        <Label IsVisible="{Binding HeatersCollectionEmpty}"
-               Text="Setup your first heater by pressing the Add button."
-               Margin="10" />
+        <StackLayout VerticalOptions="FillAndExpand">
+            <Label IsVisible="{Binding HeatersCollectionEmpty}"
+                   Text="Setup your first heater by pressing the Add button."
+                   Margin="10" />
         
-        <Label IsVisible="{Binding LoadError}"
-               Text="{Binding LoadErrorMessage}"
-               TextColor="Red"
-               Margin="10" />
+            <Label IsVisible="{Binding LoadError}"
+                   Text="{Binding LoadErrorMessage}"
+                   TextColor="Red"
+                   Margin="10" />
 
-        <ActivityIndicator IsRunning="{Binding IsLoading}"
-                           IsVisible="{Binding IsLoading}"
-                           Color="{DynamicResource PrimaryColor}"
-                           Margin="20" />
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{DynamicResource PrimaryColor}"
+                               Margin="20" />
 
-        <CollectionView ItemsSource="{Binding Heaters}"
-                        VerticalOptions="FillAndExpand" 
-                        HorizontalOptions="FillAndExpand"
-                        SelectionMode="Single"
-                        SelectionChangedCommand="{Binding SelectionCommand}"
-                        SelectedItem="{Binding SelectedHeater}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:HeaterListModel">
+            <CollectionView ItemsSource="{Binding Heaters}"
+                            VerticalOptions="FillAndExpand" 
+                            HorizontalOptions="FillAndExpand"
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding SelectionCommand}"
+                            SelectedItem="{Binding SelectedHeater}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:HeaterListModel">
 
-                    <StackLayout Padding="15, 10">
-                        <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding HeaterType}" FontSize="12" />
-                            <Label Text="(" Margin="4, 0, 0, 0" FontSize="11" />
-                            <Label Text="{Binding IpAddress}" FontSize="11" />
-                            <Label Text=")" FontSize="11" />
+                        <StackLayout Padding="15, 10">
+                            <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding HeaterType}" FontSize="12" />
+                                <Label Text="(" Margin="4, 0, 0, 0" FontSize="11" />
+                                <Label Text="{Binding IpAddress}" FontSize="11" />
+                                <Label Text=")" FontSize="11" />
+                            </StackLayout>
                         </StackLayout>
-                    </StackLayout>
 
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
 
-        </CollectionView>
+            </CollectionView>
+        </StackLayout>
+
+        <StackLayout VerticalOptions="End"
+                     Orientation="Horizontal"
+                     HorizontalOptions="Center">
+            <Button Text="Reload"
+                    Command="{Binding LoadCommand}"
+                    Margin="3, 10" />
+            <Button Text="Add"
+                    Command="{Binding AddCommand}"
+                    Margin="3, 10" />
+        </StackLayout>
     </StackLayout>
 </ContentPage>

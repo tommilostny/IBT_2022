@@ -6,29 +6,34 @@
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
              x:DataType="viewmodels:WeatherViewModel">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding ReloadCommand}"
-                     Text="Reload" />
-    </ContentPage.ToolbarItems>
-
     <StackLayout>
-        <Label IsVisible="{Binding LoadError}"
-               Text="Unable to load weather."
-               TextColor="Red"
-               Margin="10" />
+        <StackLayout VerticalOptions="FillAndExpand">
+            <Label IsVisible="{Binding LoadError}"
+                   Text="Unable to load weather."
+                   TextColor="Red"
+                   Margin="10" />
 
-        <ActivityIndicator IsRunning="{Binding IsLoading}"
-                           IsVisible="{Binding IsLoading}"
-                           Color="{DynamicResource PrimaryColor}"
-                           Margin="20" />
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{DynamicResource PrimaryColor}"
+                               Margin="20" />
 
-        <StackLayout Orientation="Horizontal"
-                     Padding="20"
-                     IsVisible="{Binding TemperatureIsValid}">
-            <Label Text="{Binding TemperatureC}"
-                   FontSize="42"/>
-            <Label Text="°C"
-                   FontSize="30"/>
+            <StackLayout Orientation="Horizontal"
+                         Padding="20"
+                         IsVisible="{Binding TemperatureIsValid}">
+                <Label Text="{Binding TemperatureC}"
+                       FontSize="42"/>
+                <Label Text="°C"
+                       FontSize="30"/>
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout VerticalOptions="End"
+                     Orientation="Horizontal"
+                     HorizontalOptions="Center">
+            <Button Command="{Binding ReloadCommand}"
+                    Text="Reload"
+                    Margin="10" />
         </StackLayout>
     </StackLayout>
 </ContentPage>

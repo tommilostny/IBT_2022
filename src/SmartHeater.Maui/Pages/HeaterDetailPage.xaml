@@ -6,68 +6,77 @@
              x:DataType="viewmodels:HeaterDetailViewModel"
              Title="{Binding HeaterDetail.Name}">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding ReloadCommand}"
-                     Text="Reload" />
-        <ToolbarItem Command="{Binding EditCommand}"
-                     Text="Edit" />
-        <ToolbarItem Command="{Binding DeleteCommand}"
-                     Text="Delete" />
-    </ContentPage.ToolbarItems>
-
-    <StackLayout Margin="20">
-        <Label IsVisible="{Binding LoadingError}"
-               Text="Unable to load heater data."
-               TextColor="Red" />
+    <StackLayout>
         
-        <ActivityIndicator IsRunning="{Binding IsLoading}"
-                           IsVisible="{Binding IsLoading}"
-                           Color="{DynamicResource PrimaryColor}" />
+        <StackLayout Margin="20"
+                     VerticalOptions="FillAndExpand">
+            <Label IsVisible="{Binding LoadingError}"
+                   Text="Unable to load heater data."
+                   TextColor="Red" />
+        
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{DynamicResource PrimaryColor}" />
 
-        <StackLayout IsVisible="{Binding IsLoaded}">
-            <Label Text="IP address:" />
-            <Label Text="{Binding HeaterDetail.IpAddress}"
-                   FontAttributes="Bold"
-                   Margin="0, 0, 0, 15" />
-
-            <Label Text="Heater type:" />
-            <Label Text="{Binding HeaterDetail.HeaterType}"
-                   FontAttributes="Bold"
-                   Margin="0, 0, 0, 15" />
-
-            <Label Text="Reference temperature:" />
-            <StackLayout Orientation="Horizontal"
-                         Margin="0, 0, 0, 15">
-                <Label Text="{Binding HeaterDetail.ReferenceTemperature}"
-                       FontAttributes="Bold" />
-                <Label Text="°C" />
-            </StackLayout>
-
-            <StackLayout IsVisible="{Binding ShowLastMeasurement}">
-                <Label Text="Measurement time:" />
-                <Label Text="{Binding HeaterDetail.LastMeasurement.MeasurementTime, Converter={StaticResource UtcToLocalConverter}}"
+            <StackLayout IsVisible="{Binding IsLoaded}">
+                <Label Text="IP address:" />
+                <Label Text="{Binding HeaterDetail.IpAddress}"
                        FontAttributes="Bold"
-                       Margin="0, 0, 0, 15"/>
+                       Margin="0, 0, 0, 15" />
 
-                <Label Text="Room temperature:" />
+                <Label Text="Heater type:" />
+                <Label Text="{Binding HeaterDetail.HeaterType}"
+                       FontAttributes="Bold"
+                       Margin="0, 0, 0, 15" />
+
+                <Label Text="Reference temperature:" />
                 <StackLayout Orientation="Horizontal"
                              Margin="0, 0, 0, 15">
-                    <Label Text="{Binding HeaterDetail.LastMeasurement.Temperature}"
+                    <Label Text="{Binding HeaterDetail.ReferenceTemperature}"
                            FontAttributes="Bold" />
                     <Label Text="°C" />
                 </StackLayout>
 
-                <Label Text="Power:" />
-                <StackLayout Orientation="Horizontal"
-                             Margin="0, 0, 0, 15">
-                    <Label Text="{Binding HeaterDetail.LastMeasurement.Power}"
-                           FontAttributes="Bold" />
-                    <Label Text="W" />
-                </StackLayout>
+                <StackLayout IsVisible="{Binding ShowLastMeasurement}">
+                    <Label Text="Measurement time:" />
+                    <Label Text="{Binding HeaterDetail.LastMeasurement.MeasurementTime, Converter={StaticResource UtcToLocalConverter}}"
+                           FontAttributes="Bold"
+                           Margin="0, 0, 0, 15"/>
 
-                <Label Text="{Binding HeaterDetail.LastMeasurement.IsTurnedOn, Converter={StaticResource MeasurementStatusConverter}}"
-                       FontSize="16"/>
+                    <Label Text="Room temperature:" />
+                    <StackLayout Orientation="Horizontal"
+                                 Margin="0, 0, 0, 15">
+                        <Label Text="{Binding HeaterDetail.LastMeasurement.Temperature}"
+                               FontAttributes="Bold" />
+                        <Label Text="°C" />
+                    </StackLayout>
+
+                    <Label Text="Power:" />
+                    <StackLayout Orientation="Horizontal"
+                                 Margin="0, 0, 0, 15">
+                        <Label Text="{Binding HeaterDetail.LastMeasurement.Power}"
+                               FontAttributes="Bold" />
+                        <Label Text="W" />
+                    </StackLayout>
+
+                    <Label Text="{Binding HeaterDetail.LastMeasurement.IsTurnedOn, Converter={StaticResource MeasurementStatusConverter}}"
+                           FontSize="16"/>
+                </StackLayout>
             </StackLayout>
+        </StackLayout>
+
+        <StackLayout VerticalOptions="End"
+                     Orientation="Horizontal"
+                     HorizontalOptions="Center">
+            <Button Command="{Binding ReloadCommand}"
+                    Text="Reload"
+                    Margin="3, 10"/>
+            <Button Command="{Binding EditCommand}"
+                    Text="Edit"
+                    Margin="3, 10"/>
+            <Button Command="{Binding DeleteCommand}"
+                    Text="Delete"
+                    Margin="3, 10"/>
         </StackLayout>
     </StackLayout>
 </ContentPage>
