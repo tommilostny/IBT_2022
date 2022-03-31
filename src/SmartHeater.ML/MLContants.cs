@@ -1,6 +1,6 @@
 ﻿namespace SmartHeater.Shared.Static;
 
-public static class MLContants
+internal static class MLContants
 {
     public const string DefaultModelFilePath = "SmartHeaterModel.zip";
     public const string TrainingFileName = "training.csv";

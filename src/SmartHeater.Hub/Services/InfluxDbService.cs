@@ -34,24 +34,21 @@ public class InfluxDbService : IDatabaseService
         return point.ToLineProtocol();
     }
 
-    public async Task<IEnumerable<ModelInput>> ReadTemperatureDiffsAsync(HeaterListModel heater)
+    public async Task<IEnumerable<float>> ReadTemperatureDiffsAsync(HeaterListModel heater, string period)
     {
         var query = $"from(bucket: \"{_bucket}\")"
-                  +  " |> range(start: -12m)"
+                  + $" |> range(start: -{period})"
                   +  " |> filter(fn: (r) => r[\"_measurement\"] == \"heater_status\")"
                   +  " |> filter(fn: (r) => r[\"_field\"] == \"temperature\")"
                   + $" |> filter(fn: (r) => r[\"heater\"] == \"{heater.IpAddress}\")";
     
         using var client = CreateDbClient();
         var tables = await client.GetQueryApi().QueryAsync(query, _organization);
-        var temperatures = new List<ModelInput>();
-    
+        var temperatures = new List<float>();
+
         foreach (var record in tables.SelectMany(table => table.Records))
         {
-            temperatures.Add(new ModelInput
-            {
-                TemperatureDiff = Convert.ToSingle(record.GetValue()) - heater.ReferenceTemperature
-            });
+            temperatures.Add(Convert.ToSingle(record.GetValue()));
         }
         return temperatures;
     }
