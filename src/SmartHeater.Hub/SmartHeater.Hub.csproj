@@ -11,8 +11,9 @@
     <None Remove="MachineLearning\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Coravel" Version="4.1.0" />
+    <PackageReference Include="Coravel" Version="4.1.1" />
     <PackageReference Include="InfluxDB.Client" Version="4.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.HttpOverrides" Version="2.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
   <ItemGroup>

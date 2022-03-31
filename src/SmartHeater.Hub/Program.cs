@@ -1,4 +1,5 @@
 using Coravel;
+using Microsoft.AspNetCore.HttpOverrides;
 using SmartHeater.Hub.Services;
 using SmartHeater.Hub.Invocables;
 
@@ -10,6 +11,7 @@ catch (Exception ex)
 {
     Console.Error.WriteLine("Unable to train machine learning model.");
     Console.Error.WriteLine($"Exception message: {ex.Message}");
+    return;
 }
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,25 +23,36 @@ builder.Services.AddTransient<StatsCollectorInvocable>();
 builder.Services.AddTransient<MLInvocable>();
 builder.Services.AddScheduler();
 
+builder.Services.AddSingleton<IHeatersRepositoryService, HeatersRepositoryService>();
 builder.Services.AddSingleton<IDatabaseService, InfluxDbService>();
 builder.Services.AddSingleton<IWeatherService, OpenWeatherService>();
 builder.Services.AddSingleton<ICoordinatesService, IpApiService>();
+
 builder.Services.AddSingleton(sp => new HttpClient
 {
     Timeout = TimeSpan.FromSeconds(3)
 });
 
-builder.Services.AddSingleton<IHeatersRepositoryService, HeatersRepositoryService>();
-
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
+app.UseAuthentication();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+else
+{
+    app.UseDeveloperExceptionPage();
 }
 
-//app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.Services.UseScheduler(scheduler =>
 {
