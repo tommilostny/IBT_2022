@@ -2,7 +2,7 @@
 
 public interface IHeatersRepositoryService
 {
-    Task<HeaterListModel> GetHeaterAsync(string ipAddress);
+    Task<HeaterListModel?> GetHeaterAsync(string ipAddress);
     Task<HeaterDetailModel?> GetHeaterDetailAsync(string ipAddress);
 
     Task<ICollection<HeaterListModel>> ReadHeatersAsync();

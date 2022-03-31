@@ -96,12 +96,17 @@ public class HeatersRepositoryService : IHeatersRepositoryService
 
     public async Task<IHeaterControlService?> GetHeaterServiceAsync(string ipAddress)
     {
-        return GetHeaterService(await GetHeaterAsync(ipAddress));
+        var heater = await GetHeaterAsync(ipAddress);
+        if (heater is null)
+        {
+            return null;
+        }
+        return GetHeaterService(heater);
     }
 
-    public async Task<HeaterListModel> GetHeaterAsync(string ipAddress)
+    public async Task<HeaterListModel?> GetHeaterAsync(string ipAddress)
     {
-        return (await ReadHeatersAsync()).First(h => h.IpAddress == ipAddress);
+        return (await ReadHeatersAsync()).FirstOrDefault(h => h.IpAddress == ipAddress);
     }
 
     public async Task<ICollection<HeaterListModel>> ReadHeatersAsync()

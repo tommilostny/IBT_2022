@@ -10,5 +10,5 @@ public interface IDatabaseService
     /// <returns>String representation of the measurement written to the database.</returns>
     string WriteMeasurement(HeaterStatusModel heater, double? weather);
 
-    Task<IEnumerable<float>?> ReadHistoryAsync(HeaterListModel heater, string period, string field);
+    Task<IEnumerable<float>?> ReadHistoryAsync(HeaterListModel? heater, string period, string field);
 }

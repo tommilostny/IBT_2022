@@ -34,9 +34,9 @@ public class InfluxDbService : IDatabaseService
         return point.ToLineProtocol();
     }
 
-    public async Task<IEnumerable<float>?> ReadHistoryAsync(HeaterListModel heater, string period, string field)
+    public async Task<IEnumerable<float>?> ReadHistoryAsync(HeaterListModel? heater, string period, string field)
     {
-        if (!HistoryFields.IsValid(field) || !HistoryPeriods.IsValid(period))
+        if (heater is null || !HistoryFields.IsValid(field) || !HistoryPeriods.IsValid(period))
         {
             return null;
         }
