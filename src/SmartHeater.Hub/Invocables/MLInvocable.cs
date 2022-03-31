@@ -4,16 +4,16 @@ namespace SmartHeater.Hub.Invocables;
 
 public class MLInvocable : IInvocable
 {
-    private readonly IHeatersRepositoryService _heatersProvider;
+    private readonly IHeatersRepositoryService _heatersRespository;
 
-    public MLInvocable(IHeatersRepositoryService heatersProvider)
+    public MLInvocable(IHeatersRepositoryService heatersRepository)
     {
-        _heatersProvider = heatersProvider;
+        _heatersRespository = heatersRepository;
     }
 
     public async Task Invoke()
     {
-        foreach (var heater in await _heatersProvider.ReadHeatersAsync())
+        foreach (var heater in await _heatersRespository.ReadHeatersAsync())
         {
             await SmartHeaterActionAsync(heater);
         }
@@ -22,7 +22,7 @@ public class MLInvocable : IInvocable
     private async Task SmartHeaterActionAsync(HeaterListModel heater)
     {
         //Get data from heater for model input.
-        var heaterService = _heatersProvider.GetHeaterService(heater);
+        var heaterService = _heatersRespository.GetHeaterService(heater);
         if (heaterService is null)
         {
             Console.Error.WriteLine($"{heater.IpAddress}: Unable to load heater service.");

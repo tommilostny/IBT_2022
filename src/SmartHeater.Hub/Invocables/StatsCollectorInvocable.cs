@@ -4,13 +4,13 @@ namespace SmartHeater.Hub.Invocables;
 
 public class StatsCollectorInvocable : IInvocable
 {
-    private readonly IHeatersRepositoryService _heatersProvider;
+    private readonly IHeatersRepositoryService _heatersRepository;
     private readonly IWeatherService _weatherService;
     private readonly IDatabaseService _database;
 
-    public StatsCollectorInvocable(IHeatersRepositoryService heatersProvider, IWeatherService weatherService, IDatabaseService database)
+    public StatsCollectorInvocable(IHeatersRepositoryService heatersRepository, IWeatherService weatherService, IDatabaseService database)
     {
-        _heatersProvider = heatersProvider;
+        _heatersRepository = heatersRepository;
         _weatherService = weatherService;
         _database = database;
     }
@@ -19,7 +19,7 @@ public class StatsCollectorInvocable : IInvocable
     {
         var weather = await _weatherService.ReadCelsiusAsync();
 
-        foreach (var heater in await _heatersProvider.GetHeaterServicesAsync())
+        foreach (var heater in await _heatersRepository.GetHeaterServicesAsync())
         {
             await CollectHeaterDataAsync(heater, weather);
         }

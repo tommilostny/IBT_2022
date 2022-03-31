@@ -40,7 +40,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-app.UseAuthentication();
+//app.UseAuthentication();
 
 if (!app.Environment.IsDevelopment())
 {
