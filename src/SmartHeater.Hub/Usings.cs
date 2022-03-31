@@ -3,5 +3,6 @@ global using SmartHeater.Hub.Services.Interfaces;
 global using SmartHeater.ML;
 global using SmartHeater.Shared.Enums;
 global using SmartHeater.Shared.Models;
+global using SmartHeater.Shared.Static;
 global using System.Globalization;
 global using System.Net.Http.Json;

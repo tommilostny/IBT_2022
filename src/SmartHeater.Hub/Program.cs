@@ -2,7 +2,6 @@ using Coravel;
 using Microsoft.AspNetCore.HttpOverrides;
 using SmartHeater.Hub.Services;
 using SmartHeater.Hub.Invocables;
-using SmartHeater.Shared.Static;
 
 try
 {
@@ -113,13 +112,17 @@ app.MapGet("/weather",
         => await ws.ReadCelsiusAsync()
 );
 
-app.MapGet("/heaters/{ipAddress}/temp-history/{period}",
-    async (IDatabaseService ds, IHeatersRepositoryService hp, string ipAddress, string period)
-        => await ds.ReadTemperatureDiffsAsync(await hp.GetHeaterAsync(ipAddress), period)
+app.MapGet("/heaters/{ipAddress}/temp-history/{period}/{field}",
+    async (IDatabaseService ds, IHeatersRepositoryService hp, string ipAddress, string period, string field)
+        => await ds.ReadHistoryAsync(await hp.GetHeaterAsync(ipAddress), period, field)
 );
 
 app.MapGet("/periods",
     async () => await Task.FromResult(HistoryPeriods.GetAll())
+);
+
+app.MapGet("/fields",
+    async () => await Task.FromResult(HistoryFields.GetAll())
 );
 
 app.Run();

@@ -34,12 +34,16 @@ public class InfluxDbService : IDatabaseService
         return point.ToLineProtocol();
     }
 
-    public async Task<IEnumerable<float>> ReadTemperatureDiffsAsync(HeaterListModel heater, string period)
+    public async Task<IEnumerable<float>?> ReadHistoryAsync(HeaterListModel heater, string period, string field)
     {
+        if (!HistoryFields.IsValid(field) || !HistoryPeriods.IsValid(period))
+        {
+            return null;
+        }
         var query = $"from(bucket: \"{_bucket}\")"
                   + $" |> range(start: -{period})"
                   +  " |> filter(fn: (r) => r[\"_measurement\"] == \"heater_status\")"
-                  +  " |> filter(fn: (r) => r[\"_field\"] == \"temperature\")"
+                  + $" |> filter(fn: (r) => r[\"_field\"] == \"{field}\")"
                   + $" |> filter(fn: (r) => r[\"heater\"] == \"{heater.IpAddress}\")";
     
         using var client = CreateDbClient();

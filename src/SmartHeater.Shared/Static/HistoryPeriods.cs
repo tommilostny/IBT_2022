@@ -20,6 +20,8 @@ public static class HistoryPeriods
     public const string Days14 = "14d";
     public const string Days30 = "30d";
 
+    public static bool IsValid(string value) => GetAll().Contains(value);
+
     public static IEnumerable<string> GetAll()
     {
         yield return Minute1;
