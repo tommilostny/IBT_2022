@@ -79,6 +79,10 @@ public class HeatersRepositoryService : IHeatersRepositoryService
         try
         {
             var heaterListModel = await GetHeaterAsync(ipAddress);
+            if (heaterListModel is null)
+            {
+                return null;
+            }
             var heaterService = GetHeaterService(heaterListModel);
 
             return new HeaterDetailModel(heaterListModel.IpAddress, heaterListModel.Name)
