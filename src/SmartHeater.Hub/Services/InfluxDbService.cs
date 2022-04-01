@@ -20,11 +20,11 @@ public class InfluxDbService : IDatabaseService
     public string WriteMeasurement(HeaterStatusModel heater, double? weather)
     {
         var point = PointData
-            .Measurement("heater_status")
-            .Tag("heater", heater.IPAddress)
-            .Field("temperature", heater.Temperature ?? double.NaN)
-            .Field("weather", weather ?? double.NaN)
-            .Field("power", heater.Power ?? double.NaN)
+            .Measurement(DbFields.MeasurementName)
+            .Tag(DbFields.HeaterTag, heater.IPAddress)
+            .Field(DbFields.Temperature, heater.Temperature ?? double.NaN)
+            .Field(DbFields.Weather, weather ?? double.NaN)
+            .Field(DbFields.Power, heater.Power ?? double.NaN)
             .Timestamp(heater.MeasurementTime, WritePrecision.Ns);
 
         using var client = CreateDbClient();
@@ -36,15 +36,15 @@ public class InfluxDbService : IDatabaseService
 
     public async Task<IEnumerable<float>?> ReadHistoryAsync(HeaterListModel? heater, string period, string field)
     {
-        if (heater is null || !HistoryFields.IsValid(field) || !HistoryPeriods.IsValid(period))
+        if (heater is null || !DbFields.IsValid(field) || !HistoryPeriods.IsValid(period))
         {
             return null;
         }
         var query = $"from(bucket: \"{_bucket}\")"
                   + $" |> range(start: -{period})"
-                  +  " |> filter(fn: (r) => r[\"_measurement\"] == \"heater_status\")"
+                  + $" |> filter(fn: (r) => r[\"_measurement\"] == \"{DbFields.MeasurementName}\")"
                   + $" |> filter(fn: (r) => r[\"_field\"] == \"{field}\")"
-                  + $" |> filter(fn: (r) => r[\"heater\"] == \"{heater.IpAddress}\")";
+                  + $" |> filter(fn: (r) => r[\"{DbFields.HeaterTag}\"] == \"{heater.IpAddress}\")";
     
         using var client = CreateDbClient();
         var tables = await client.GetQueryApi().QueryAsync(query, _organization);

@@ -1,10 +1,13 @@
 ﻿namespace SmartHeater.Shared.Static;
 
-public static class HistoryFields
+public static class DbFields
 {
     public const string Temperature = "temperature";
     public const string Power = "power";
     public const string Weather = "weather";
+
+    public const string MeasurementName = "heater_status";
+    public const string HeaterTag = "heater";
 
     public static bool IsValid(string value) => GetAll().Contains(value);
 

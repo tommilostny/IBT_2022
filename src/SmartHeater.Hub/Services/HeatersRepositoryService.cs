@@ -10,6 +10,47 @@ public class HeatersRepositoryService : IHeatersRepositoryService
         _httpClient = httpClient;
     }
 
+    public async Task<HeaterListModel?> GetHeaterAsync(string ipAddress)
+    {
+        return (await ReadHeatersAsync()).FirstOrDefault(h => h.IpAddress == ipAddress);
+    }
+
+    public async Task<HeaterDetailModel?> GetHeaterDetailAsync(string ipAddress)
+    {
+        try
+        {
+            var heaterListModel = await GetHeaterAsync(ipAddress);
+            if (heaterListModel is null)
+            {
+                return null;
+            }
+            var heaterService = GetHeaterService(heaterListModel);
+
+            return new HeaterDetailModel(heaterListModel.IpAddress, heaterListModel.Name)
+            {
+                HeaterType = heaterListModel.HeaterType,
+                ReferenceTemperature = heaterListModel.ReferenceTemperature,
+                LastMeasurement = heaterService is not null ? await heaterService.GetStatusAsync() : null
+            };
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+    }
+
+    public async Task<ICollection<HeaterListModel>> ReadHeatersAsync()
+    {
+        var jsonStr = File.Exists(_heatersJsonFile) ? await File.ReadAllTextAsync(_heatersJsonFile) : null;
+        return JsonConvert.DeserializeObject<List<HeaterListModel>>(jsonStr ?? "[]") ?? new();
+    }
+
+    public async Task WriteHeatersAsync(ICollection<HeaterListModel> heaters)
+    {
+        var jsonStr = JsonConvert.SerializeObject(heaters);
+        await File.WriteAllTextAsync(_heatersJsonFile, jsonStr);
+    }
+
     public async Task<ICollection<IHeaterControlService>> GetHeaterServicesAsync()
     {
         var services = new List<IHeaterControlService>();
@@ -22,6 +63,16 @@ public class HeatersRepositoryService : IHeatersRepositoryService
             }
         }
         return services;
+    }
+
+    public async Task<IHeaterControlService?> GetHeaterServiceAsync(string ipAddress)
+    {
+        var heater = await GetHeaterAsync(ipAddress);
+        if (heater is null)
+        {
+            return null;
+        }
+        return GetHeaterService(heater);
     }
 
     public IHeaterControlService? GetHeaterService(HeaterListModel heater)
@@ -72,56 +123,5 @@ public class HeatersRepositoryService : IHeatersRepositoryService
             await WriteHeatersAsync(heaters);
         }
         return heaters;
-    }
-
-    public async Task<HeaterDetailModel?> GetHeaterDetailAsync(string ipAddress)
-    {
-        try
-        {
-            var heaterListModel = await GetHeaterAsync(ipAddress);
-            if (heaterListModel is null)
-            {
-                return null;
-            }
-            var heaterService = GetHeaterService(heaterListModel);
-
-            return new HeaterDetailModel(heaterListModel.IpAddress, heaterListModel.Name)
-            {
-                HeaterType = heaterListModel.HeaterType,
-                ReferenceTemperature = heaterListModel.ReferenceTemperature,
-                LastMeasurement = heaterService is not null ? await heaterService.GetStatusAsync() : null
-            };
-        }
-        catch (InvalidOperationException)
-        {
-            return null;
-        }
-    }
-
-    public async Task<IHeaterControlService?> GetHeaterServiceAsync(string ipAddress)
-    {
-        var heater = await GetHeaterAsync(ipAddress);
-        if (heater is null)
-        {
-            return null;
-        }
-        return GetHeaterService(heater);
-    }
-
-    public async Task<HeaterListModel?> GetHeaterAsync(string ipAddress)
-    {
-        return (await ReadHeatersAsync()).FirstOrDefault(h => h.IpAddress == ipAddress);
-    }
-
-    public async Task<ICollection<HeaterListModel>> ReadHeatersAsync()
-    {
-        var jsonStr = File.Exists(_heatersJsonFile) ? await File.ReadAllTextAsync(_heatersJsonFile) : null;
-        return JsonConvert.DeserializeObject<List<HeaterListModel>>(jsonStr ?? "[]") ?? new();
-    }
-
-    public async Task WriteHeatersAsync(ICollection<HeaterListModel> heaters)
-    {
-        var jsonStr = JsonConvert.SerializeObject(heaters);
-        await File.WriteAllTextAsync(_heatersJsonFile, jsonStr);
-    }
+    }   
 }

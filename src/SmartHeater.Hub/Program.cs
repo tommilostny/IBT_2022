@@ -122,7 +122,7 @@ app.MapGet("/periods",
 );
 
 app.MapGet("/fields",
-    async () => await Task.FromResult(HistoryFields.GetAll())
+    async () => await Task.FromResult(DbFields.GetAll())
 );
 
 app.Run();
