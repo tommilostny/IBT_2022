@@ -48,8 +48,8 @@ public class MLInvocable : IInvocable
         //  Underheating => turn on,
         //  else if upward trend (>0) => turn on,
         //  else if downward trend (<0) => turn off.
-        var overheating = forecast.TemperatureDiff.All(x => x > 0);
-        var underheating = forecast.TemperatureDiff.All(x => x < 0);
+        var overheating = forecast.TemperatureDiff.All(x => x > 0) && forecast.TemperatureDiff.Average() > 0.25;
+        var underheating = forecast.TemperatureDiff.All(x => x < 0) && forecast.TemperatureDiff.Average() < -0.25;
         var trend = ForecastingTrend(forecast);
 
 #if DEBUG
