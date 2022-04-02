@@ -40,11 +40,7 @@ public class MLInvocable : IInvocable
         };
 
         //Perform forecasting
-        #if DEBUG
-            var forecast = GetAndPrintForecast(heater, input);
-        #else
-            var forecast = SmartHeaterModel.Forecast(heater.IpAddress, input);
-        #endif
+        var forecast = SmartHeaterModel.Forecast(heater.IpAddress, input);
 
         //Check for over or under-heating and get forecasted trend (function direction).
         //These metrics variables are used as follows:
@@ -73,21 +69,6 @@ public class MLInvocable : IInvocable
             #endif
         }
     }
-
-#if DEBUG
-    private static ModelOutput GetAndPrintForecast(HeaterListModel heater, ModelInput input)
-    {
-        Console.WriteLine($"starting forecast for diff: {input.TemperatureDiff}");
-
-        var forecast = SmartHeaterModel.Forecast(heater.IpAddress, input);
-        
-        foreach (var item in forecast.TemperatureDiff)
-        {
-            Console.WriteLine(item);
-        }
-        return forecast;
-    }
-#endif
 
     private static (bool, bool, float) GetDecisionMetrics(ModelOutput forecast)
     {

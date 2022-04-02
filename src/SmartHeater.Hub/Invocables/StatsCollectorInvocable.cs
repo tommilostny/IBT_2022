@@ -34,6 +34,9 @@ public class StatsCollectorInvocable : IInvocable
             return;
         }
         var writtenToDb = _database.WriteMeasurement(heaterStatus, weather);
-        Console.WriteLine(writtenToDb);
+
+        #if DEBUG
+            Console.WriteLine(writtenToDb);
+        #endif
     }
 }

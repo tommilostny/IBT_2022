@@ -56,6 +56,10 @@ public static class SmartHeaterModel
     /// <returns><seealso cref=" ModelOutput"/></returns>
     public static ModelOutput Forecast(string? heaterIpAddress, ModelInput? input = null, int horizon = MLContants.Horizon, bool saveModelCheckpoint = true)
     {
+        #if DEBUG
+            Console.WriteLine($"starting forecast for input: {input?.TemperatureDiff}");
+        #endif
+
         var mlContext = new MLContext();
         var modelPath = ModelPathFromIP(heaterIpAddress);
 
@@ -63,9 +67,15 @@ public static class SmartHeaterModel
         var result = predEngine.Predict(input!, horizon);
 
         if (saveModelCheckpoint)
-        {
             predEngine.CheckPoint(mlContext, modelPath);
-        }
+        
+        #if DEBUG
+            foreach (var item in result.TemperatureDiff)
+            {
+                Console.WriteLine(item);
+            }
+        #endif
+        
         return result;
     }
 
