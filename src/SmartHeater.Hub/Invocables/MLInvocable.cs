@@ -90,9 +90,9 @@ public class MLInvocable : IInvocable
         });
 
         #if DEBUG
-            Console.WriteLine($"Overheating: {overheating}");
-            Console.WriteLine($"Underheating: {underheating}");
-            Console.WriteLine($"Trend: {trend}");
+            Console.WriteLine($"Overheating: {overheating.Value}");
+            Console.WriteLine($"Underheating: {underheating.Value}");
+            Console.WriteLine($"Trend: {trend.Value}");
         #endif
         
         return (overheating, underheating, trend);
