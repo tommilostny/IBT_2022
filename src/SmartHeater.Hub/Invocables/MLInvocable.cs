@@ -50,7 +50,7 @@ public class MLInvocable : IInvocable
         //  else if downward trend (<0) => turn off.
         (var overheating, var underheating, var trend) = GetDecisionMetrics(forecast);
 
-        if (overheating || (trend < 0 && !underheating))
+        if (overheating.Value || (trend.Value < 0 && !underheating.Value))
         {
             if (status.IsTurnedOn == true)
                 await heaterService.TurnOffAsync();
@@ -59,7 +59,7 @@ public class MLInvocable : IInvocable
                 Console.WriteLine("sending off command");
             #endif
         }
-        else if (underheating || (trend > 0 && !overheating))
+        else if (underheating.Value || (trend.Value > 0 && !overheating.Value))
         {
             if (status.IsTurnedOn == false)
                 await heaterService.TurnOnAsync();
@@ -70,21 +70,24 @@ public class MLInvocable : IInvocable
         }
     }
 
-    private static (bool, bool, float) GetDecisionMetrics(ModelOutput forecast)
+    private static (Lazy<bool>, Lazy<bool>, Lazy<float>) GetDecisionMetrics(ModelOutput forecast)
     {
         //Compute over and under heating booleans.
-        var overheating = forecast.TemperatureDiff.All(x => x > 0) && forecast.TemperatureDiff.Average() > 0.25;
-        var underheating = forecast.TemperatureDiff.All(x => x < 0) && forecast.TemperatureDiff.Average() < -0.25;
+        Lazy<bool> overheating  = new(() => forecast.TemperatureDiff.All(x => x > 0) && forecast.TemperatureDiff.Average() > 0.25);
+        Lazy<bool> underheating = new(() => forecast.TemperatureDiff.All(x => x < 0) && forecast.TemperatureDiff.Average() < -0.25);
 
         //Compute the trend as the average value of differences between predicted values.
-        float sum = .0f;
-        int cnt = 0;
-        do
+        Lazy<float> trend = new(() =>
         {
-            sum += forecast.TemperatureDiff[cnt + 1] - forecast.TemperatureDiff[cnt];
-        }
-        while (++cnt < forecast.TemperatureDiff.Length - 1);
-        var trend = sum / cnt;
+            float sum = .0f;
+            int cnt = 0;
+            do
+            {
+                sum += forecast.TemperatureDiff[cnt + 1] - forecast.TemperatureDiff[cnt];
+            }
+            while (++cnt < forecast.TemperatureDiff.Length - 1);
+            return sum / cnt;
+        });
 
         #if DEBUG
             Console.WriteLine($"Overheating: {overheating}");
