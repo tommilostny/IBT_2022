@@ -112,7 +112,7 @@ app.MapGet("/weather",
         => await ws.ReadCelsiusAsync()
 );
 
-app.MapGet("/heaters/{ipAddress}/temp-history/{period}/{field}",
+app.MapGet("/heaters/{ipAddress}/history/{period}/{field}",
     async (IDatabaseService ds, IHeatersRepositoryService hp, string ipAddress, string period, string field)
         => await ds.ReadHistoryAsync(await hp.GetHeaterAsync(ipAddress), period, field)
 );
