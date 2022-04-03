@@ -72,15 +72,19 @@ public class MLInvocable : IInvocable
 
     private static (bool, bool, float) GetDecisionMetrics(ModelOutput forecast)
     {
+        //Compute over and under heating booleans.
         var overheating = forecast.TemperatureDiff.All(x => x > 0) && forecast.TemperatureDiff.Average() > 0.25;
         var underheating = forecast.TemperatureDiff.All(x => x < 0) && forecast.TemperatureDiff.Average() < -0.25;
 
-        var diffs = new List<float>();
-        for (int i = 0; i < forecast.TemperatureDiff.Length - 1; i++)
+        //Compute the trend as the average value of differences between predicted values.
+        float sum = .0f;
+        int cnt = 0;
+        do
         {
-            diffs.Add(forecast.TemperatureDiff[i + 1] - forecast.TemperatureDiff[i]);
+            sum += forecast.TemperatureDiff[cnt + 1] - forecast.TemperatureDiff[cnt];
         }
-        var trend = diffs.Average();
+        while (++cnt < forecast.TemperatureDiff.Length - 1);
+        var trend = sum / cnt;
 
         #if DEBUG
             Console.WriteLine($"Overheating: {overheating}");
