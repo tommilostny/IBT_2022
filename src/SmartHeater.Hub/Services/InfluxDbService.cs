@@ -34,7 +34,7 @@ public class InfluxDbService : IDatabaseService
         return point.ToLineProtocol();
     }
 
-    public async Task<ICollection<TemperatureRecordModel>?> ReadHistoryAsync(HeaterListModel? heater, string period, string field)
+    public async Task<ICollection<DbRecordModel>?> ReadHistoryAsync(HeaterListModel? heater, string period, string field)
     {
         if (heater is null || !DbFields.IsValid(field) || !HistoryPeriods.IsValid(period))
         {
@@ -48,13 +48,13 @@ public class InfluxDbService : IDatabaseService
     
         using var client = CreateDbClient();
         var tables = await client.GetQueryApi().QueryAsync(query, _organization);
-        var temperatures = new List<TemperatureRecordModel>();
+        var temperatures = new List<DbRecordModel>();
 
         foreach (var record in tables.SelectMany(table => table.Records))
         {
-            temperatures.Add(new TemperatureRecordModel
+            temperatures.Add(new DbRecordModel
             {
-                Temperature = Convert.ToSingle(record.GetValue()),
+                Value = Convert.ToSingle(record.GetValue()),
                 MeasurementTime = record.GetTimeInDateTime()
             });
         }

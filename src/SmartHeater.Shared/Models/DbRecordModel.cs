@@ -1,8 +1,8 @@
 ﻿namespace SmartHeater.Shared.Models;
 
-public record TemperatureRecordModel
+public record DbRecordModel
 {
-    public float Temperature { get; set; }
+    public float Value { get; set; }
 
     public DateTime? MeasurementTime { get; set; }
 }
