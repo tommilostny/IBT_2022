@@ -40,4 +40,18 @@ public static class HistoryPeriods
         yield return Days14;
         yield return Days30;
     }
+
+    public static string? AggregationWindow(string period) => period switch
+    {
+        Minute1 => "1s",
+        Minutes5 or Minutes15 or Minutes30 or Minutes45 or Hour1 => "10s",
+        Hours2 or Hours3 or Hours6 => "1m",
+        Hours12 => "2m",
+        Hours24 => "4m",
+        Days2 => "10m",
+        Days7 => "30m",
+        Days14 => "45m",
+        Days30 => "1h",
+        _ => null
+    };
 }

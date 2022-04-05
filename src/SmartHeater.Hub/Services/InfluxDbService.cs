@@ -44,7 +44,9 @@ public class InfluxDbService : IDatabaseService
                   + $" |> range(start: -{period})"
                   + $" |> filter(fn: (r) => r[\"_measurement\"] == \"{DbFields.MeasurementName}\")"
                   + $" |> filter(fn: (r) => r[\"_field\"] == \"{field}\")"
-                  + $" |> filter(fn: (r) => r[\"{DbFields.HeaterTag}\"] == \"{heater.IpAddress}\")";
+                  + $" |> filter(fn: (r) => r[\"{DbFields.HeaterTag}\"] == \"{heater.IpAddress}\")"
+                  + $" |> aggregateWindow(every: {HistoryPeriods.AggregationWindow(period)}, fn: mean, createEmpty: false)"
+                  +  " |> yield(name: \"mean\")";
     
         using var client = CreateDbClient();
         var tables = await client.GetQueryApi().QueryAsync(query, _organization);

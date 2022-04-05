@@ -40,13 +40,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-//app.UseAuthentication();
-
-if (!app.Environment.IsDevelopment())
-{
-    //app.UseHttpsRedirection();
-}
-else
+if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
@@ -54,11 +48,11 @@ else
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.Services.UseScheduler(scheduler =>
-{
-    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
-    scheduler.Schedule<MLInvocable>().EveryMinute();
-});
+//app.Services.UseScheduler(scheduler =>
+//{
+//    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
+//    scheduler.Schedule<MLInvocable>().EveryMinute();
+//});
 
 app.MapGet("/heaters/{ipAddress}/off",
     async (IHeatersRepositoryService hp, string ipAddress) =>
