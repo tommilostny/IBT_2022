@@ -6,7 +6,12 @@ public class SettingsConnectTextConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return (bool)value ? "Connected" : "Not connected";
+        return (bool?)value switch
+        {
+            null => "Connecting...",
+            true => "Connected",
+            false => "Not connected"
+        };
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

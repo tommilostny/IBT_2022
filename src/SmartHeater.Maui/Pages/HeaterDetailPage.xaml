@@ -3,80 +3,170 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartHeater.Maui.Pages.HeaterDetailPage"
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
              x:DataType="viewmodels:HeaterDetailViewModel"
              Title="{Binding HeaterDetail.Name}">
 
-    <StackLayout>
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="300" />
+                <RowDefinition Height="300" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            
+            <StackLayout Margin="20"
+                         Grid.Column="0"
+                         Grid.Row="0"
+                         Grid.RowSpan="2">
+
+                <Label IsVisible="{Binding LoadingError}"
+                       Text="Unable to load heater data."
+                       TextColor="Red" />
         
-        <StackLayout Margin="20"
-                     VerticalOptions="FillAndExpand">
-            <Label IsVisible="{Binding LoadingError}"
-                   Text="Unable to load heater data."
-                   TextColor="Red" />
-        
-            <ActivityIndicator IsRunning="{Binding IsLoading}"
-                               IsVisible="{Binding IsLoading}"
-                               Color="{DynamicResource PrimaryColor}" />
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   Color="{DynamicResource PrimaryColor}" />
 
-            <StackLayout IsVisible="{Binding IsLoaded}">
-                <Label Text="IP address:" />
-                <Label Text="{Binding HeaterDetail.IpAddress}"
-                       FontAttributes="Bold"
-                       Margin="0, 0, 0, 15" />
-
-                <Label Text="Heater type:" />
-                <Label Text="{Binding HeaterDetail.HeaterType}"
-                       FontAttributes="Bold"
-                       Margin="0, 0, 0, 15" />
-
-                <Label Text="Reference temperature:" />
-                <StackLayout Orientation="Horizontal"
-                             Margin="0, 0, 0, 15">
-                    <Label Text="{Binding HeaterDetail.ReferenceTemperature}"
-                           FontAttributes="Bold" />
-                    <Label Text="°C" />
-                </StackLayout>
-
-                <StackLayout IsVisible="{Binding ShowLastMeasurement}">
-                    <Label Text="Measurement time:" />
-                    <Label Text="{Binding HeaterDetail.LastMeasurement.MeasurementTime, Converter={StaticResource UtcToLocalConverter}}"
+                <StackLayout IsVisible="{Binding IsLoaded}">
+                    <Label Text="IP address:" />
+                    <Label Text="{Binding HeaterDetail.IpAddress}"
                            FontAttributes="Bold"
-                           Margin="0, 0, 0, 15"/>
+                           Margin="0, 0, 0, 15" />
 
-                    <Label Text="Room temperature:" />
+                    <Label Text="Heater type:" />
+                    <Label Text="{Binding HeaterDetail.HeaterType}"
+                           FontAttributes="Bold"
+                           Margin="0, 0, 0, 15" />
+
+                    <Label Text="Reference temperature:" />
                     <StackLayout Orientation="Horizontal"
                                  Margin="0, 0, 0, 15">
-                        <Label Text="{Binding HeaterDetail.LastMeasurement.Temperature}"
+                        <Label Text="{Binding HeaterDetail.ReferenceTemperature}"
                                FontAttributes="Bold" />
                         <Label Text="°C" />
                     </StackLayout>
 
-                    <Label Text="Power:" />
-                    <StackLayout Orientation="Horizontal"
-                                 Margin="0, 0, 0, 15">
-                        <Label Text="{Binding HeaterDetail.LastMeasurement.Power}"
-                               FontAttributes="Bold" />
-                        <Label Text="W" />
-                    </StackLayout>
+                    <StackLayout IsVisible="{Binding ShowLastMeasurement}">
+                        <Label Text="Measurement time:" />
+                        <Label Text="{Binding HeaterDetail.LastMeasurement.MeasurementTime, Converter={StaticResource UtcToLocalConverter}}"
+                           FontAttributes="Bold"
+                           Margin="0, 0, 0, 15"/>
 
-                    <Label Text="{Binding HeaterDetail.LastMeasurement.IsTurnedOn, Converter={StaticResource MeasurementStatusConverter}}"
+                        <Label Text="Room temperature:" />
+                        <StackLayout Orientation="Horizontal"
+                                 Margin="0, 0, 0, 15">
+                            <Label Text="{Binding HeaterDetail.LastMeasurement.Temperature}"
+                               FontAttributes="Bold" />
+                            <Label Text="°C" />
+                        </StackLayout>
+
+                        <Label Text="Power:" />
+                        <StackLayout Orientation="Horizontal"
+                                 Margin="0, 0, 0, 15">
+                            <Label Text="{Binding HeaterDetail.LastMeasurement.Power}"
+                               FontAttributes="Bold" />
+                            <Label Text="W" />
+                        </StackLayout>
+
+                        <Label Text="{Binding HeaterDetail.LastMeasurement.IsTurnedOn, Converter={StaticResource MeasurementStatusConverter}}"
                            FontSize="16"/>
+                    </StackLayout>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal"
+                             Margin="0, 10">
+                    <Button Command="{Binding ReloadCommand}"
+                        Text="Reload"
+                        Margin="3, 10"/>
+                    <Button Command="{Binding EditCommand}"
+                        Text="Edit"
+                        Margin="3, 10"/>
+                    <Button Command="{Binding DeleteCommand}"
+                        Text="Delete"
+                        Margin="3, 10"/>
                 </StackLayout>
             </StackLayout>
-        </StackLayout>
 
-        <StackLayout VerticalOptions="End"
-                     Orientation="Horizontal"
-                     HorizontalOptions="Center">
-            <Button Command="{Binding ReloadCommand}"
-                    Text="Reload"
-                    Margin="3, 10"/>
-            <Button Command="{Binding EditCommand}"
-                    Text="Edit"
-                    Margin="3, 10"/>
-            <Button Command="{Binding DeleteCommand}"
-                    Text="Delete"
-                    Margin="3, 10"/>
-        </StackLayout>
-    </StackLayout>
+            <chart:SfCartesianChart Margin="20"
+                                    Grid.Column="1"
+                                    Grid.Row="0">
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Power history"
+                           Margin="10"/>
+                </chart:SfCartesianChart.Title>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis ShowMajorGridLines="False">
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="White" />
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMajorGridLines="False">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Power [W]" TextColor="White" />
+                        </chart:NumericalAxis.Title>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="White" />
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:SfCartesianChart.Series>
+                    <chart:SplineSeries ItemsSource="{Binding PowerData}" 
+                                        XBindingPath="MeasurementTime" 
+                                        YBindingPath="Value"
+                                        EnableTooltip="True"
+                                        StrokeWidth="2"
+                                        Type="Monotonic">
+                    </chart:SplineSeries>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+
+            <chart:SfCartesianChart Margin="20"
+                                    Grid.Column="1"
+                                    Grid.Row="1">
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Temperature history"
+                           Margin="10"/>
+                </chart:SfCartesianChart.Title>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis ShowMajorGridLines="False">
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="White" />
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMajorGridLines="False">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Temperature [°C]" TextColor="White" />
+                        </chart:NumericalAxis.Title>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="White" />
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:SfCartesianChart.Series>
+                    <chart:SplineSeries ItemsSource="{Binding TemperatureData}" 
+                                        XBindingPath="MeasurementTime" 
+                                        YBindingPath="Value"
+                                        EnableTooltip="True"
+                                        StrokeWidth="2"
+                                        Type="Clamped">
+                    </chart:SplineSeries>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+
+        </Grid>
+    </ScrollView>
 </ContentPage>

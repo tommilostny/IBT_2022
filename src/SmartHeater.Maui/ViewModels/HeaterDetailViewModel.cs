@@ -80,10 +80,14 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
         }
     }
 
+    public ObservableCollection<DbRecordModel> PowerData { get; } = new();
+
+    public ObservableCollection<DbRecordModel> TemperatureData { get; } = new();
+
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         var ipAddress = HttpUtility.UrlDecode(query["ipAddress"].ToString());
-        await GetHeaterInfoAsync(ipAddress);
+        await GetHeaterDataAsync(ipAddress);
         if (LoadingError)
         {
             _heatersViewModel.LoadError = true;
@@ -93,10 +97,10 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
 
     private async void ReLoad()
     {
-        await GetHeaterInfoAsync(HeaterDetail.IpAddress);
+        await GetHeaterDataAsync(HeaterDetail.IpAddress);
     }
 
-    private async Task GetHeaterInfoAsync(string ipAddress)
+    private async Task GetHeaterDataAsync(string ipAddress)
     {
         IsLoading = true;
         IsLoaded = false;
@@ -106,6 +110,22 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
             var uri = $"{_settingsProvider.HubUri}/heaters/{ipAddress}";
             HeaterDetail = await _httpClient.GetFromJsonAsync<HeaterDetailModel>(uri);
             IsLoaded = true;
+
+            uri = $"{_settingsProvider.HubUri}/heaters/{ipAddress}/history/3h/power";
+            PowerData.Clear();
+            foreach (var item in await _httpClient.GetFromJsonAsync<List<DbRecordModel>>(uri))
+            {
+                item.MeasurementTime = item.MeasurementTime.Value.ToLocalTime();
+                PowerData.Add(item);
+            }
+
+            uri = $"{_settingsProvider.HubUri}/heaters/{ipAddress}/history/3h/temperature";
+            TemperatureData.Clear();
+            foreach (var item in await _httpClient.GetFromJsonAsync<List<DbRecordModel>>(uri))
+            {
+                item.MeasurementTime = item.MeasurementTime.Value.ToLocalTime();
+                TemperatureData.Add(item);
+            }
         }
         catch
         {

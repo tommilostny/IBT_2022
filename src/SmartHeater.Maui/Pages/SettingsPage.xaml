@@ -34,13 +34,14 @@
                         Command="{Binding ManualConnectCommand}" />
                 <Button Text="Try autodiscover"
                         Margin="5"
-                        Command="{Binding AutodiscoverCommand}" />
+                        Command="{Binding AutodiscoverCommand}"
+                        IsEnabled="False" />
             </StackLayout>
         </StackLayout>
 
         <Label Text="SmartHeater © Tomáš Milostný 2022"
                VerticalOptions="End"
-               TextColor="Grey"
+               TextColor="Gray"
                FontSize="11" />
     </StackLayout>
 </ContentPage>

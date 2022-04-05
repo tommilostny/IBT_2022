@@ -4,6 +4,7 @@
              x:Class="SmartHeater.Maui.Pages.WeatherPage"
              Title="Weather"
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
              x:DataType="viewmodels:WeatherViewModel">
 
     <StackLayout>
@@ -26,6 +27,42 @@
                 <Label Text="°C"
                        FontSize="30"/>
             </StackLayout>
+
+            <chart:SfCartesianChart Margin="20">
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Weather history"
+                           Margin="10"/>
+                </chart:SfCartesianChart.Title>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis ShowMajorGridLines="False">
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="White" />
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMajorGridLines="False">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Temperature [°C]" TextColor="White" />
+                        </chart:NumericalAxis.Title>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="White" />
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:SfCartesianChart.Series>
+                    <chart:SplineSeries ItemsSource="{Binding Data}" 
+                                        XBindingPath="MeasurementTime" 
+                                        YBindingPath="Value"
+                                        EnableTooltip="True"
+                                        StrokeWidth="2"
+                                        Type="Cardinal">
+                    </chart:SplineSeries>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
         </StackLayout>
 
         <StackLayout VerticalOptions="End"

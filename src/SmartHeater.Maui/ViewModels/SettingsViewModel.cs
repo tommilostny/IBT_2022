@@ -1,4 +1,8 @@
-﻿namespace SmartHeater.Maui.ViewModels;
+﻿using System.Net;
+using System.Net.NetworkInformation;
+using System.Text;
+
+namespace SmartHeater.Maui.ViewModels;
 
 public class SettingsViewModel : BindableObject
 {
@@ -30,8 +34,8 @@ public class SettingsViewModel : BindableObject
         }
     }
 
-    private bool _isConnected;
-    public bool IsConnected
+    private bool? _isConnected;
+    public bool? IsConnected
     {
         get => _isConnected;
         set
@@ -74,34 +78,71 @@ public class SettingsViewModel : BindableObject
         }
     }
 
-    private void ManualConnect()
+    private async void ManualConnect()
     {
-        IsConnected = false;
-        if (HubIpAddress != "localhost")
+        //Start connecting.
+        IsConnected = null;
+
+        if (HubIpAddress == "localhost")
         {
-            try
-            {
-                System.Net.IPAddress.Parse(HubIpAddress);
-            }
-            catch (FormatException)
-            {
-                ErrorMessage = $"'{HubIpAddress}' is not valid IP address.";
-                ShowError = true;
-                return;
-            }
+            _settingsProvider.SetHubAddress(HubIpAddress);
+            IsConnected = true;
+            return;
         }
-        _settingsProvider.SetHubAddress(HubIpAddress);
-        IsConnected = true;
+
+        //Parse given IP address.
+        IPAddress iPAddress;
+        try
+        {
+            iPAddress = IPAddress.Parse(HubIpAddress);
+        }
+        catch (FormatException)
+        {
+            ErrorMessage = $"'{HubIpAddress}' is not valid IP address.";
+            ShowError = true;
+            IsConnected = false;
+            return;
+        }
+
+        //Check connection using ICMP ping.
+        await Task.Run(() => CheckAvailability(iPAddress));
     }
 
     private void Autodiscover()
     {
-        IsConnected = false;
+        IsConnected = null;
 
         HubIpAddress = "localhost";
 
         _settingsProvider.SetHubAddress(HubIpAddress);
         IsConnected = true;
         ShowError = false;
+    }
+
+    private void CheckAvailability(IPAddress ipAddress)
+    {
+        var pingSender = new Ping();
+        var options = new PingOptions
+        {
+            // Use the default Ttl value which is 128,
+            // but change the fragmentation behavior.
+            DontFragment = true
+        };
+        // Create a buffer of 32 bytes of data to be transmitted.
+        string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        byte[] buffer = Encoding.ASCII.GetBytes(data);
+        int timeout = 120;
+        PingReply reply = pingSender.Send(ipAddress, timeout, buffer, options);
+
+        if (reply.Status == IPStatus.Success)
+        {
+            _settingsProvider.SetHubAddress(ipAddress.ToString());
+            IsConnected = true;
+            ShowError = false;
+            return;
+        }
+        ErrorMessage = $"Could not connect to {ipAddress}.";
+        ShowError = true;
+        IsConnected = false;
     }
 }

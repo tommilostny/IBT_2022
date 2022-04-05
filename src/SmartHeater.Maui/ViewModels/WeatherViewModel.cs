@@ -59,6 +59,8 @@ public class WeatherViewModel : BindableObject
         }
     }
 
+    public ObservableCollection<DbRecordModel> Data { get; } = new();
+
     private async void Load()
     {
         IsLoading = true;
@@ -69,6 +71,14 @@ public class WeatherViewModel : BindableObject
             var uri = $"{_settingsProvider.HubUri}/weather";
             TemperatureC = await _httpClient.GetFromJsonAsync<double>(uri);
             TemperatureIsValid = true;
+
+            uri = $"{_settingsProvider.HubUri}/heaters/192.168.1.253/history/3h/weather";
+            Data.Clear();
+            foreach (var item in await _httpClient.GetFromJsonAsync<List<DbRecordModel>>(uri))
+            {
+                item.MeasurementTime = item.MeasurementTime.Value.ToLocalTime();
+                Data.Add(item);
+            }
         }
         catch
         {
