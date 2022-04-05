@@ -25,13 +25,13 @@ public class MLInvocable : IInvocable
         var heaterService = _heatersRespository.GetHeaterService(heater);
         if (heaterService is null)
         {
-            Console.Error.WriteLine($"{heater.IpAddress}: Unable to load heater service.");
+            Console.Error.WriteLine($"{DateTime.Now}: {heater.IpAddress}: Unable to load heater service.");
             return;
         }
         var status = await heaterService.GetStatusAsync();
         if (status?.Temperature is null)
         {
-            Console.Error.WriteLine($"{heater.IpAddress}: Unable to load room temperature.");
+            Console.Error.WriteLine($"{DateTime.Now}: {heater.IpAddress}: Unable to load room temperature.");
             return;
         }
         var input = new ModelInput

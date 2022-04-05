@@ -9,7 +9,7 @@ try
 }
 catch (Exception ex)
 {
-    Console.Error.WriteLine("Unable to train machine learning model.");
+    Console.Error.WriteLine($"{DateTime.Now}: Unable to train machine learning model.");
     Console.Error.WriteLine($"Exception message: {ex.Message}");
     return;
 }

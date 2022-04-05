@@ -30,7 +30,7 @@ public class StatsCollectorInvocable : IInvocable
         var heaterStatus = await heater.GetStatusAsync();
         if (heaterStatus is null)
         {
-            Console.Error.WriteLine($"Could not get data from heater '{heater.IPAddress}'");
+            Console.Error.WriteLine($"{DateTime.Now}: Could not get data from heater '{heater.IPAddress}'");
             return;
         }
         var writtenToDb = _database.WriteMeasurement(heaterStatus, weather);

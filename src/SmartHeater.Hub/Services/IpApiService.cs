@@ -48,7 +48,7 @@ public class IpApiService : ICoordinatesService
         }
         catch
         {
-            Console.Error.WriteLine("Error while getting public IP.");
+            Console.Error.WriteLine($"{DateTime.Now}: Error while getting public IP.");
             return null;
         }
     }
@@ -62,7 +62,7 @@ public class IpApiService : ICoordinatesService
         }
         catch
         {
-            Console.Error.WriteLine("Error while getting latitude and longitude.");
+            Console.Error.WriteLine($"{DateTime.Now}: Error while getting latitude and longitude.");
             return null;
         }
     }

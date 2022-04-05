@@ -30,7 +30,7 @@ public class OpenWeatherService : IWeatherService
         }
         catch
         {
-            Console.Error.WriteLine("Error while getting weather.");
+            Console.Error.WriteLine($"{DateTime.Now}: Error while getting weather.");
             return null;
         }
     }

@@ -89,7 +89,7 @@ public class ShellyRelayService : IHeaterControlService
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine(ex.Message);
+            Console.Error.WriteLine($"{DateTime.Now}: {ex.Message}");
         }
     }
 
