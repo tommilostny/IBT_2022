@@ -20,7 +20,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<WeatherPage>();
         builder.Services.AddSingleton<SettingsPage>();
         builder.Services.AddTransient<AddHeaterPage>();
-        builder.Services.AddTransient<HeaterDetailPage>();
+
+        #if ANDROID || IOS
+            builder.Services.AddTransient<HeaterDetailMobilePage>();
+        #else
+            builder.Services.AddTransient<HeaterDetailDesktopPage>();
+        #endif
 
         builder.Services.AddSingleton<HeatersViewModel>();
         builder.Services.AddSingleton<WeatherViewModel>();

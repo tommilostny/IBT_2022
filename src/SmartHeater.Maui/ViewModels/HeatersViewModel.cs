@@ -10,9 +10,6 @@ public class HeatersViewModel : BindableObject
         _httpClient = httpClient;
         _settingsProvider = settingsProvider;
         Load();
-        //TODO
-        //MessagingCenter.Subscribe<HeaterListModel>(this, "deleteHeater", AddHeaterToCollectionView);
-        //MessagingCenter.Subscribe<HeaterListModel>(this, "addHeater", DeleteHeaterFromCollectionView);
     }
 
     private ICommand _addCommand;
@@ -26,7 +23,16 @@ public class HeatersViewModel : BindableObject
 
     public ObservableCollection<HeaterListModel> Heaters { get; } = new();
 
-    public HeaterListModel SelectedHeater { get; set; }
+    private HeaterListModel _model;
+    public HeaterListModel SelectedHeater
+    {
+        get => _model;
+        set
+        {
+            _model = value;
+            OnPropertyChanged(nameof(SelectedHeater));
+        }
+    }
 
     private bool _loadError = false;
     public bool LoadError
@@ -111,20 +117,9 @@ public class HeatersViewModel : BindableObject
     {
         if (SelectedHeater is not null)
         {
-            var uri = $"{nameof(HeaterDetailPage)}?ipAddress={SelectedHeater.IpAddress}";
+            var uri = $"HeaterDetailPage?ipAddress={SelectedHeater.IpAddress}";
             await Shell.Current.GoToAsync(uri);
-            DeselectSelectedHeater();
-        }
-    }
-
-    private void DeselectSelectedHeater()
-    {
-        var heater = SelectedHeater;
-        if (heater is not null)
-        {
-            var index = Heaters.IndexOf(heater);
-            Heaters.RemoveAt(index);
-            Heaters.Insert(index, heater);
+            SelectedHeater = null;
         }
     }
 }

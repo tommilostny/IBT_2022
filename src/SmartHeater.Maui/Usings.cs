@@ -2,6 +2,7 @@
 global using SmartHeater.Maui.Pages;
 global using SmartHeater.Maui.Providers;
 global using SmartHeater.Maui.ViewModels;
+global using SmartHeater.Maui.Views;
 global using SmartHeater.Shared.Enums;
 global using SmartHeater.Shared.Models;
 global using System.Collections.ObjectModel;

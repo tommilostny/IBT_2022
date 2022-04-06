@@ -6,6 +6,11 @@ public partial class AppShell
 	{
 		InitializeComponent();
 		Routing.RegisterRoute(nameof(AddHeaterPage), typeof(AddHeaterPage));
-		Routing.RegisterRoute(nameof(HeaterDetailPage), typeof(HeaterDetailPage));
+
+		#if ANDROID || IOS
+			Routing.RegisterRoute("HeaterDetailPage", typeof(HeaterDetailMobilePage));
+		#else
+			Routing.RegisterRoute("HeaterDetailPage", typeof(HeaterDetailDesktopPage));
+		#endif
 	}
 }

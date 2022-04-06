@@ -7,6 +7,11 @@
              xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
              x:DataType="viewmodels:WeatherViewModel">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding ReloadCommand}"
+                     Text="Reload"/>
+    </ContentPage.ToolbarItems>
+    
     <StackLayout>
         <StackLayout VerticalOptions="FillAndExpand">
             <Label IsVisible="{Binding LoadError}"
@@ -28,7 +33,7 @@
                        FontSize="30"/>
             </StackLayout>
 
-            <chart:SfCartesianChart Margin="20">
+            <chart:SfCartesianChart Margin="5">
                 <chart:SfCartesianChart.Title>
                     <Label Text="Weather history"
                            Margin="10"/>
@@ -63,14 +68,6 @@
                     </chart:SplineSeries>
                 </chart:SfCartesianChart.Series>
             </chart:SfCartesianChart>
-        </StackLayout>
-
-        <StackLayout VerticalOptions="End"
-                     Orientation="Horizontal"
-                     HorizontalOptions="Center">
-            <Button Command="{Binding ReloadCommand}"
-                    Text="Reload"
-                    Margin="10" />
         </StackLayout>
     </StackLayout>
 </ContentPage>

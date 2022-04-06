@@ -7,8 +7,10 @@
              xmlns:converters="clr-namespace:SmartHeater.Maui.Converters">
     <Application.Resources>
         <ResourceDictionary>
+            <Color x:Key="DarkColor">#121212</Color>
+            <Color x:Key="LightColor">#EFEFEF</Color>
 
-            <Color x:Key="PrimaryColor">#512bdf</Color>
+            <Color x:Key="PrimaryColor">#b71c1c</Color>
             <Color x:Key="SecondaryColor">White</Color>
             <!--
             <Style TargetType="Label">
@@ -27,6 +29,7 @@
             <converters:SettingsConnectTextConverter x:Key="ConnectTextConverter" />
             <converters:MeasurementStatusConverter x:Key="MeasurementStatusConverter" />
             <converters:UtcToLocalConverter x:Key="UtcToLocalConverter" />
+            <converters:ShowNotNullConverter x:Key="ShowNotNullConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

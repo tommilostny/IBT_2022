@@ -3,17 +3,33 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        x:Class="SmartHeater.Maui.AppShell"
        BackgroundColor="{DynamicResource PrimaryColor}"
-       xmlns:pages="clr-namespace:SmartHeater.Maui.Pages">
-       <!--BackgroundColor="{AppThemeBinding Dark={DynamicResource PrimaryColor}, Light={DynamicResource SecondaryColor}}"-->
-    <TabBar>
-        <Tab Title="Heaters">
-            <ShellContent ContentTemplate="{DataTemplate pages:HeatersPage}" />
-        </Tab>
-        <Tab Title="Weather">
-            <ShellContent ContentTemplate="{DataTemplate pages:WeatherPage}" />
-        </Tab>
-        <Tab Title="Settings">
-            <ShellContent ContentTemplate="{DataTemplate pages:SettingsPage}" />
-        </Tab>
-    </TabBar>
+       xmlns:pages="clr-namespace:SmartHeater.Maui.Pages"
+       FlyoutBackground="{DynamicResource PrimaryColor}">
+    <!--
+       FlyoutBackground="{AppThemeBinding Dark={DynamicResource DarkColor}, Light={DynamicResource LightColor}}">
+       -->
+
+    <Shell.FlyoutHeader>
+        <Grid>
+            <Label Text="SmartHeater"
+                   Margin="10"
+                   FontSize="24" />
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <ShellContent ContentTemplate="{DataTemplate pages:HeatersPage}"
+                  Title="Heaters" />
+    <ShellContent ContentTemplate="{DataTemplate pages:WeatherPage}"
+                  Title="Weather" />
+    <ShellContent ContentTemplate="{DataTemplate pages:SettingsPage}"
+                  Title="Settings" />
+
+    <Shell.FlyoutFooter>
+        <Grid>
+            <Label Text="SmartHeater © Tomáš Milostný 2022"
+                   VerticalOptions="End"
+                   FontSize="11"
+                   Margin="8" />
+        </Grid>
+    </Shell.FlyoutFooter>
 </Shell>

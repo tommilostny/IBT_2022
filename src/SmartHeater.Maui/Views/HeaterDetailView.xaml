@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartHeater.Maui.Views.HeaterDetailView"
+             xmlns:models="clr-namespace:SmartHeater.Shared.Models;assembly=SmartHeater.Shared"
+             x:DataType="models:HeaterDetailModel">
+    <ContentView.Content>
+        <StackLayout>
+            <Label Text="IP address:" />
+            <Label Text="{Binding IpAddress}"
+                   FontAttributes="Bold"
+                   Margin="0, 0, 0, 15"
+                   FontSize="17"/>
+
+            <Label Text="Heater type:" />
+            <Label Text="{Binding HeaterType}"
+                   FontAttributes="Bold"
+                   Margin="0, 0, 0, 15"
+                   FontSize="17"/>
+
+            <Label Text="Reference temperature:" />
+            <StackLayout Orientation="Horizontal"
+                         Margin="0, 0, 0, 15">
+                <Label Text="{Binding ReferenceTemperature}"
+                       FontAttributes="Bold"
+                       FontSize="17" />
+                <Label Text="°C" />
+            </StackLayout>
+
+            <StackLayout IsVisible="{Binding LastMeasurement, Converter={StaticResource ShowNotNullConverter}}">
+                <Label Text="Measurement time:" />
+                <Label Text="{Binding LastMeasurement.MeasurementTime, Converter={StaticResource UtcToLocalConverter}}"
+                       FontAttributes="Bold"
+                       Margin="0, 0, 0, 15"
+                       FontSize="17"/>
+
+                <Label Text="Room temperature:" />
+                <StackLayout Orientation="Horizontal"
+                             Margin="0, 0, 0, 15">
+                    <Label Text="{Binding LastMeasurement.Temperature}"
+                           FontAttributes="Bold"
+                           FontSize="17"/>
+                    <Label Text="°C" />
+                </StackLayout>
+
+                <Label Text="Power:" />
+                <StackLayout Orientation="Horizontal"
+                             Margin="0, 0, 0, 15">
+                    <Label Text="{Binding LastMeasurement.Power}"
+                           FontAttributes="Bold"
+                           FontSize="17"/>
+                    <Label Text="W"
+                           FontSize="17"/>
+                </StackLayout>
+
+                <Label Text="{Binding LastMeasurement.IsTurnedOn, Converter={StaticResource MeasurementStatusConverter}}"
+                       FontSize="16"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

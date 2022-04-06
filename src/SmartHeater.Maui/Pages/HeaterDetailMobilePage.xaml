@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartHeater.Maui.Pages.HeaterDetailMobilePage"
+             xmlns:views="clr-namespace:SmartHeater.Maui.Views"
+             xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             x:DataType="viewmodels:HeaterDetailViewModel"
+             Title="{Binding HeaterDetail.Name}">
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding ReloadCommand}"
+                     Text="Reload" />
+        <ToolbarItem Command="{Binding EditCommand}"
+                     Text="Edit" />
+        <ToolbarItem Command="{Binding DeleteCommand}"
+                     Text="Delete" />
+    </ContentPage.ToolbarItems>
+    
+    <ScrollView>
+        <StackLayout Margin="5">
+            
+            <Label IsVisible="{Binding LoadingError}"
+                   Text="Unable to load heater data."
+                   TextColor="Red" />
+
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{DynamicResource PrimaryColor}" />
+
+
+            <StackLayout IsVisible="{Binding IsLoaded}"
+                         Margin="0, 5, 0, 20">
+                <views:HeaterDetailView BindingContext="{Binding HeaterDetail}" />
+            </StackLayout>
+
+            <views:HeaterChartsView BindingContext="{Binding HeaterChartsViewModel}"
+                                    Grid.Column="1"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

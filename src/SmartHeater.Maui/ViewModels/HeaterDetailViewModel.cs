@@ -22,7 +22,10 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
         _httpClient = httpClient;
         _settingsProvider = settingsProvider;
         _heatersViewModel = heatersViewModel;
+        HeaterChartsViewModel = new(settingsProvider, httpClient);
     }
+
+    public HeaterChartsViewModel HeaterChartsViewModel { get; set; }
 
     private HeaterDetailModel _heaterDetailModel = new(string.Empty, "Loading...");
     public HeaterDetailModel HeaterDetail
@@ -32,18 +35,6 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
         {
             _heaterDetailModel = value;
             OnPropertyChanged(nameof(HeaterDetail));
-            ShowLastMeasurement = value.LastMeasurement is not null;
-        }
-    }
-
-    private bool _showLastMeasurement = false;
-    public bool ShowLastMeasurement
-    {
-        get => _showLastMeasurement;
-        set
-        {
-            _showLastMeasurement = value;
-            OnPropertyChanged(nameof(ShowLastMeasurement));
         }
     }
 
@@ -80,10 +71,6 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
         }
     }
 
-    public ObservableCollection<DbRecordModel> PowerData { get; } = new();
-
-    public ObservableCollection<DbRecordModel> TemperatureData { get; } = new();
-
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         var ipAddress = HttpUtility.UrlDecode(query["ipAddress"].ToString());
@@ -109,23 +96,9 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
         {
             var uri = $"{_settingsProvider.HubUri}/heaters/{ipAddress}";
             HeaterDetail = await _httpClient.GetFromJsonAsync<HeaterDetailModel>(uri);
+
+            await HeaterChartsViewModel.Load(ipAddress);
             IsLoaded = true;
-
-            uri = $"{_settingsProvider.HubUri}/heaters/{ipAddress}/history/3h/power";
-            PowerData.Clear();
-            foreach (var item in await _httpClient.GetFromJsonAsync<List<DbRecordModel>>(uri))
-            {
-                item.MeasurementTime = item.MeasurementTime.Value.ToLocalTime();
-                PowerData.Add(item);
-            }
-
-            uri = $"{_settingsProvider.HubUri}/heaters/{ipAddress}/history/3h/temperature";
-            TemperatureData.Clear();
-            foreach (var item in await _httpClient.GetFromJsonAsync<List<DbRecordModel>>(uri))
-            {
-                item.MeasurementTime = item.MeasurementTime.Value.ToLocalTime();
-                TemperatureData.Add(item);
-            }
         }
         catch
         {
@@ -139,13 +112,16 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
 
     private async void Delete()
     {
-        //TODO: Some confirmation dialog.
-        var uri = $"{_settingsProvider.HubUri}/heaters/{HeaterDetail.IpAddress}";
-        var response = await _httpClient.DeleteAsync(uri);
-        if (response.IsSuccessStatusCode)
+        var delete = await App.Current.MainPage.DisplayAlert("Delete", $"Delete heater '{HeaterDetail.IpAddress}'?", "Yes", "No");
+        if (delete)
         {
-            await _heatersViewModel.UpdateHeatersFromHttpAsync(response);
-            await Shell.Current.GoToAsync("..");
+            var uri = $"{_settingsProvider.HubUri}/heaters/{HeaterDetail.IpAddress}";
+            var response = await _httpClient.DeleteAsync(uri);
+            if (response.IsSuccessStatusCode)
+            {
+                await _heatersViewModel.UpdateHeatersFromHttpAsync(response);
+                await Shell.Current.GoToAsync("..");
+            }
         }
     }
 

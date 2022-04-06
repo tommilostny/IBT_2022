@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartHeater.Maui.Views.HeaterChartsView"
+             xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
+             x:DataType="viewmodels:HeaterChartsViewModel">
+
+    <ContentView.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="275" />
+                <RowDefinition Height="275" />
+            </Grid.RowDefinitions>
+
+            <chart:SfCartesianChart Margin="5"
+                                    Grid.Row="1">
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Power history"
+                           Margin="10"/>
+                </chart:SfCartesianChart.Title>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis ShowMajorGridLines="False">
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="White" />
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMajorGridLines="False">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Power [W]" TextColor="White" />
+                        </chart:NumericalAxis.Title>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="White" />
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:SfCartesianChart.Series>
+                    <chart:SplineSeries ItemsSource="{Binding PowerData}" 
+                                        XBindingPath="MeasurementTime" 
+                                        YBindingPath="Value"
+                                        EnableTooltip="True"
+                                        StrokeWidth="2"
+                                        Type="Monotonic">
+                    </chart:SplineSeries>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+
+            <chart:SfCartesianChart Margin="5"
+                                    Grid.Row="0">
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Temperature history"
+                           Margin="10"/>
+                </chart:SfCartesianChart.Title>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis ShowMajorGridLines="False">
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="White" />
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMajorGridLines="False">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Temperature [°C]" TextColor="White" />
+                        </chart:NumericalAxis.Title>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="White" />
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:SfCartesianChart.Series>
+                    <chart:SplineSeries ItemsSource="{Binding TemperatureData}" 
+                                        XBindingPath="MeasurementTime" 
+                                        YBindingPath="Value"
+                                        EnableTooltip="True"
+                                        StrokeWidth="2"
+                                        Type="Cardinal">
+                    </chart:SplineSeries>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

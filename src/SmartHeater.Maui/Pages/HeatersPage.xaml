@@ -6,12 +6,20 @@
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
              xmlns:models="clr-namespace:SmartHeater.Shared.Models;assembly=SmartHeater.Shared"
              x:DataType="viewmodels:HeatersViewModel">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Reload"
+                    Command="{Binding LoadCommand}" />
+        <ToolbarItem Text="Add"
+                    Command="{Binding AddCommand}" />
+    </ContentPage.ToolbarItems>
+    
     <StackLayout>
         <StackLayout VerticalOptions="FillAndExpand">
             <Label IsVisible="{Binding HeatersCollectionEmpty}"
                    Text="Setup your first heater by pressing the Add button."
                    Margin="10" />
-        
+
             <Label IsVisible="{Binding LoadError}"
                    Text="{Binding LoadErrorMessage}"
                    TextColor="Red"
@@ -45,17 +53,6 @@
                 </CollectionView.ItemTemplate>
 
             </CollectionView>
-        </StackLayout>
-
-        <StackLayout VerticalOptions="End"
-                     Orientation="Horizontal"
-                     HorizontalOptions="Center">
-            <Button Text="Reload"
-                    Command="{Binding LoadCommand}"
-                    Margin="3, 10" />
-            <Button Text="Add"
-                    Command="{Binding AddCommand}"
-                    Margin="3, 10" />
         </StackLayout>
     </StackLayout>
 </ContentPage>
