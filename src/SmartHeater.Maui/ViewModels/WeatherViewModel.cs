@@ -9,11 +9,16 @@ public class WeatherViewModel : BindableObject
     {
         _httpClient = httpClient;
         _settingsProvider = settingsProvider;
-        Load();
+        PeriodSelectorViewModel = new(() => Load(false, true));
+        Load(true, false);
     }
 
+    public PeriodSelectorViewModel PeriodSelectorViewModel { get; }
+
     private ICommand _reloadCommand;
-    public ICommand ReloadCommand => _reloadCommand ??= new Command(Load);
+    public ICommand ReloadCommand => _reloadCommand ??= new Command(() => Load(true, true));
+
+    public ObservableCollection<DbRecordModel> Data { get; } = new();
 
     private bool _loadError = false;
     public bool LoadError
@@ -59,26 +64,28 @@ public class WeatherViewModel : BindableObject
         }
     }
 
-    public ObservableCollection<DbRecordModel> Data { get; } = new();
+    private bool _historyLoaded = false;
+    public bool HistoryLoaded
+    {
+        get => _historyLoaded;
+        set
+        {
+            _historyLoaded = value;
+            OnPropertyChanged(nameof(HistoryLoaded));
+        }
+    }
 
-    private async void Load()
+    private async void Load(bool loadCurrent, bool loadHistory)
     {
         IsLoading = true;
         LoadError = false;
-        TemperatureIsValid = false;
         try
         {
-            var uri = $"{_settingsProvider.HubUri}/weather";
-            TemperatureC = await _httpClient.GetFromJsonAsync<double>(uri);
-            TemperatureIsValid = true;
+            if (loadCurrent)
+                await LoadCurrentWeatherAsync();
 
-            uri = $"{_settingsProvider.HubUri}/heaters/192.168.1.253/history/3h/weather";
-            Data.Clear();
-            foreach (var item in await _httpClient.GetFromJsonAsync<List<DbRecordModel>>(uri))
-            {
-                item.MeasurementTime = item.MeasurementTime.Value.ToLocalTime();
-                Data.Add(item);
-            }
+            if (loadHistory)
+                await LoadWeatherHistoryAsync();
         }
         catch
         {
@@ -88,5 +95,30 @@ public class WeatherViewModel : BindableObject
         {
             IsLoading = false;
         }
+    }
+
+    private async Task LoadWeatherHistoryAsync()
+    {
+        HistoryLoaded = false;
+
+        var uri = $"{_settingsProvider.HubUri}/heaters/192.168.1.253/history/{PeriodSelectorViewModel.SelectedPeriod}/weather";
+        Data.Clear();
+        foreach (var item in await _httpClient.GetFromJsonAsync<DbRecordModel[]>(uri))
+        {
+            item.MeasurementTime = item.MeasurementTime.Value.ToLocalTime();
+            Data.Add(item);
+        }
+
+        HistoryLoaded = true;
+    }
+
+    private async Task LoadCurrentWeatherAsync()
+    {
+        TemperatureIsValid = false;
+
+        var uri = $"{_settingsProvider.HubUri}/weather";
+        TemperatureC = await _httpClient.GetFromJsonAsync<double>(uri);
+        
+        TemperatureIsValid = true;
     }
 }

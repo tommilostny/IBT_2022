@@ -18,7 +18,7 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
     private ICommand _addHeaterCommand;
     public ICommand AddHeaterCommand => _addHeaterCommand ??= new Command(AddUpdateHeater);
 
-    public HeaterTypes[] HeaterTypesList { get; } = Enum.GetValues(typeof(HeaterTypes)).Cast<HeaterTypes>().ToArray();
+    public HeaterTypes[] HeaterTypesList { get; } = (HeaterTypes[])Enum.GetValues(typeof(HeaterTypes));
 
     private HeaterTypes _type = HeaterTypes.Shelly1PM;
     public HeaterTypes HeaterType

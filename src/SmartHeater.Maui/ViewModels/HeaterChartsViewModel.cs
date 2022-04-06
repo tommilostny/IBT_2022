@@ -1,20 +1,18 @@
-﻿using SmartHeater.Shared.Static;
-
-namespace SmartHeater.Maui.ViewModels;
+﻿namespace SmartHeater.Maui.ViewModels;
 
 public class HeaterChartsViewModel : BindableObject
 {
     private readonly SettingsProvider _settingsProvider;
     private readonly HttpClient _httpClient;
 
-    private ICommand _loadCommand;
-    public ICommand LoadHistoryCommand => _loadCommand ??= new Command(Load);
-
     public HeaterChartsViewModel(SettingsProvider settingsProvider, HttpClient httpClient)
     {
         _settingsProvider = settingsProvider;
         _httpClient = httpClient;
+        PeriodSelectorViewModel = new(Load);
     }
+
+    public PeriodSelectorViewModel PeriodSelectorViewModel { get; }
 
     public string IpAddress { get; set; } = null;
 
@@ -44,19 +42,6 @@ public class HeaterChartsViewModel : BindableObject
         }
     }
 
-    public string[] PeriodsList { get; } = HistoryPeriods.GetAll().ToArray();
-
-    private string _selectedPeriod = HistoryPeriods.Hours3;
-    public string SelectedPeriod
-    {
-        get => _selectedPeriod;
-        set
-        {
-            _selectedPeriod = value;
-            OnPropertyChanged(nameof(SelectedPeriod));
-        }
-    }
-
     private async void Load()
     {
         if (string.IsNullOrWhiteSpace(IpAddress))
@@ -67,15 +52,15 @@ public class HeaterChartsViewModel : BindableObject
         PowerData.Clear();
         TemperatureData.Clear();
 
-        var uri = $"{_settingsProvider.HubUri}/heaters/{IpAddress}/history/{SelectedPeriod}/power";
-        foreach (var item in await _httpClient.GetFromJsonAsync<List<DbRecordModel>>(uri))
+        var uri = $"{_settingsProvider.HubUri}/heaters/{IpAddress}/history/{PeriodSelectorViewModel.SelectedPeriod}/power";
+        foreach (var item in await _httpClient.GetFromJsonAsync<DbRecordModel[]>(uri))
         {
             item.MeasurementTime = item.MeasurementTime.Value.ToLocalTime();
             PowerData.Add(item);
         }
 
-        uri = $"{_settingsProvider.HubUri}/heaters/{IpAddress}/history/{SelectedPeriod}/temperature";
-        foreach (var item in await _httpClient.GetFromJsonAsync<List<DbRecordModel>>(uri))
+        uri = $"{_settingsProvider.HubUri}/heaters/{IpAddress}/history/{PeriodSelectorViewModel.SelectedPeriod}/temperature";
+        foreach (var item in await _httpClient.GetFromJsonAsync<DbRecordModel[]>(uri))
         {
             item.MeasurementTime = item.MeasurementTime.Value.ToLocalTime();
             TemperatureData.Add(item);

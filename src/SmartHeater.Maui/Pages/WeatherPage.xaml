@@ -4,6 +4,7 @@
              x:Class="SmartHeater.Maui.Pages.WeatherPage"
              Title="Weather"
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             xmlns:views="clr-namespace:SmartHeater.Maui.Views"
              xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
              x:DataType="viewmodels:WeatherViewModel">
 
@@ -19,11 +20,6 @@
                    TextColor="Red"
                    Margin="10" />
 
-            <ActivityIndicator IsRunning="{Binding IsLoading}"
-                               IsVisible="{Binding IsLoading}"
-                               Color="{DynamicResource PrimaryColor}"
-                               Margin="20" />
-
             <StackLayout Orientation="Horizontal"
                          Padding="20"
                          IsVisible="{Binding TemperatureIsValid}">
@@ -33,7 +29,16 @@
                        FontSize="30"/>
             </StackLayout>
 
-            <chart:SfCartesianChart Margin="5">
+            <views:PeriodSelectorView BindingContext="{Binding PeriodSelectorViewModel}"
+                                      Margin="15" />
+
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{DynamicResource PrimaryColor}"
+                               Margin="20" />
+
+            <chart:SfCartesianChart Margin="5"
+                                    IsVisible="{Binding HistoryLoaded}">
                 <chart:SfCartesianChart.Title>
                     <Label Text="Weather history"
                            Margin="10"/>

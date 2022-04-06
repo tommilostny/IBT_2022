@@ -98,7 +98,7 @@ public class HeatersViewModel : BindableObject
         try
         {
             var uri = $"{_settingsProvider.HubUri}/heaters";
-            var heaters = await _httpClient.GetFromJsonAsync<List<HeaterListModel>>(uri);
+            var heaters = await _httpClient.GetFromJsonAsync<HeaterListModel[]>(uri);
             foreach (var heater in heaters)
                 Heaters.Add(heater);
         }
