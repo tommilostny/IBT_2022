@@ -33,6 +33,7 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
         get => _heaterDetailModel;
         set
         {
+            HeaterChartsViewModel.IpAddress = value.IpAddress;
             _heaterDetailModel = value;
             OnPropertyChanged(nameof(HeaterDetail));
         }
@@ -96,8 +97,6 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
         {
             var uri = $"{_settingsProvider.HubUri}/heaters/{ipAddress}";
             HeaterDetail = await _httpClient.GetFromJsonAsync<HeaterDetailModel>(uri);
-
-            await HeaterChartsViewModel.Load(ipAddress);
             IsLoaded = true;
         }
         catch
