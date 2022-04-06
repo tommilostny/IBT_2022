@@ -8,21 +8,29 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
     private readonly HeatersViewModel _heatersViewModel;
     private readonly SettingsProvider _settingsProvider;
 
-    public List<HeaterTypes> HeaterTypesList { get; } = new();
-
     public AddHeaterViewModel(HttpClient httpClient, HeatersViewModel heatersViewModel, SettingsProvider settingsProvider)
     {
         _httpClient = httpClient;
         _heatersViewModel = heatersViewModel;
         _settingsProvider = settingsProvider;
-        foreach (var item in Enum.GetValues(typeof(HeaterTypes)))
-        {
-            HeaterTypesList.Add((HeaterTypes)item);
-        }
     }
 
     private ICommand _addHeaterCommand;
     public ICommand AddHeaterCommand => _addHeaterCommand ??= new Command(AddUpdateHeater);
+
+    public HeaterTypes[] HeaterTypesList { get; } = Enum.GetValues(typeof(HeaterTypes)).Cast<HeaterTypes>().ToArray();
+
+    private HeaterTypes _type = HeaterTypes.Shelly1PM;
+    public HeaterTypes HeaterType
+    {
+        get => _type;
+        set
+        {
+            _type = value;
+            ShowError = false;
+            OnPropertyChanged(nameof(HeaterType));
+        }
+    }
 
     private string _ipAddress = string.Empty;
     public string IpAddress
@@ -45,18 +53,6 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
             _name = value;
             ShowError = false;
             OnPropertyChanged(nameof(Name));
-        }
-    }
-
-    private HeaterTypes _type = HeaterTypes.Shelly1PM;
-    public HeaterTypes HeaterType
-    {
-        get => _type;
-        set
-        {
-            _type = value;
-            ShowError = false;
-            OnPropertyChanged(nameof(HeaterType));
         }
     }
 

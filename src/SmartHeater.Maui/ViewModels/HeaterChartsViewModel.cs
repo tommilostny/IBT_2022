@@ -44,7 +44,7 @@ public class HeaterChartsViewModel : BindableObject
         }
     }
 
-    public List<string> PeriodsList { get; } = HistoryPeriods.GetAll().ToList();
+    public string[] PeriodsList { get; } = HistoryPeriods.GetAll().ToArray();
 
     private string _selectedPeriod = HistoryPeriods.Hours3;
     public string SelectedPeriod
