@@ -26,6 +26,12 @@
         <Button Text="{Binding ButtonText}"
                 Margin="0, 20, 0, 0"
                 HorizontalOptions="Start"
-                Command="{Binding AddHeaterCommand}" />
+                Command="{Binding AddHeaterCommand}">
+            <Button.ImageSource>
+                <FontImageSource Glyph="{Binding SaveIcon}"
+                                 FontFamily="MaterialDesignIcons"
+                                 Size="20" />
+            </Button.ImageSource>
+        </Button>
     </StackLayout>
 </ContentPage>

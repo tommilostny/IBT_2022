@@ -2,9 +2,10 @@
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        x:Class="SmartHeater.Maui.AppShell"
-       BackgroundColor="{DynamicResource PrimaryColor}"
        xmlns:pages="clr-namespace:SmartHeater.Maui.Pages"
-       FlyoutBackground="{DynamicResource PrimaryColor}">
+       xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers"
+       FlyoutBackground="{DynamicResource PrimaryColor}"
+       BackgroundColor="{DynamicResource PrimaryColor}">
     <!--
        FlyoutBackground="{AppThemeBinding Dark={DynamicResource DarkColor}, Light={DynamicResource LightColor}}">
        -->
@@ -12,24 +13,61 @@
     <Shell.FlyoutHeader>
         <Grid>
             <Label Text="SmartHeater"
-                   Margin="10"
-                   FontSize="24" />
+                   Margin="15, 10"
+                   FontSize="24"
+                   TextColor="{DynamicResource SecondaryColor}"/>
         </Grid>
     </Shell.FlyoutHeader>
 
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <StackLayout HeightRequest="50"
+                         Padding="0, 12, 0, 0">
+                <Grid ColumnDefinitions="0.2*,0.8*"
+                      VerticalOptions="Center">
+                    <Image Source="{Binding FlyoutIcon}"
+                           Margin="0"
+                           HeightRequest="20" />
+                    <Label Grid.Column="1"
+                           Text="{Binding Title}"
+                           TextColor="{DynamicResource SecondaryColor}"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+            </StackLayout>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
     <ShellContent ContentTemplate="{DataTemplate pages:HeatersPage}"
-                  Title="Heaters" />
+                  Title="Heaters">
+        <ShellContent.Icon>
+            <FontImageSource Glyph="{x:Static helpers:IconFontHelper.Radiator}"
+                             FontFamily="MaterialDesignIcons" />
+        </ShellContent.Icon>
+    </ShellContent>
+
     <ShellContent ContentTemplate="{DataTemplate pages:WeatherPage}"
-                  Title="Weather" />
+                  Title="Weather">
+        <ShellContent.Icon>
+            <FontImageSource Glyph="{x:Static helpers:IconFontHelper.WeatherPartlyCloudy}"
+                             FontFamily="MaterialDesignIcons" />
+        </ShellContent.Icon>
+    </ShellContent>
+
     <ShellContent ContentTemplate="{DataTemplate pages:SettingsPage}"
-                  Title="Settings" />
+                  Title="Settings">
+        <ShellContent.Icon>
+            <FontImageSource Glyph="{x:Static helpers:IconFontHelper.CogOutline}"
+                             FontFamily="MaterialDesignIcons" />
+        </ShellContent.Icon>
+    </ShellContent>
 
     <Shell.FlyoutFooter>
         <Grid>
             <Label Text="SmartHeater © Tomáš Milostný 2022"
                    VerticalOptions="End"
                    FontSize="11"
-                   Margin="8" />
+                   Margin="10"
+                   TextColor="{DynamicResource LightColor}"/>
         </Grid>
     </Shell.FlyoutFooter>
 </Shell>

@@ -82,10 +82,13 @@ public class WeatherViewModel : BindableObject
         try
         {
             if (loadCurrent)
+            {
                 await LoadCurrentWeatherAsync();
-
-            if (loadHistory)
+            }
+            if (loadHistory && (!loadCurrent || HistoryLoaded))
+            {
                 await LoadWeatherHistoryAsync();
+            }
         }
         catch
         {

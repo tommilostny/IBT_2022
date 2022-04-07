@@ -18,8 +18,11 @@ public class SettingsViewModel : BindableObject
     {
         _settingsProvider = settingsProvider;
         _hubIpAddress = _settingsProvider.HubIpAddress;
-        _darkMode = _settingsProvider.DarkMode;
-        _isConnected = !string.IsNullOrEmpty(_hubIpAddress);
+        try
+        {
+            CheckAvailability(IPAddress.Parse(_hubIpAddress));
+        }
+        catch { }
     }
 
     private string _hubIpAddress;
@@ -34,7 +37,7 @@ public class SettingsViewModel : BindableObject
         }
     }
 
-    private bool? _isConnected;
+    private bool? _isConnected = null;
     public bool? IsConnected
     {
         get => _isConnected;
@@ -42,17 +45,6 @@ public class SettingsViewModel : BindableObject
         {
             _isConnected = value;
             OnPropertyChanged(nameof(IsConnected));
-        }
-    }
-
-    private bool _darkMode;
-    public bool DarkMode
-    {
-        get => _darkMode;
-        set
-        {
-            _darkMode = value;
-            _settingsProvider.SetDarkMode(value);
         }
     }
 
@@ -112,7 +104,7 @@ public class SettingsViewModel : BindableObject
     {
         IsConnected = null;
 
-        HubIpAddress = "localhost";
+        HubIpAddress = "192.168.1.242";
 
         _settingsProvider.SetHubAddress(HubIpAddress);
         IsConnected = true;
@@ -131,18 +123,24 @@ public class SettingsViewModel : BindableObject
         // Create a buffer of 32 bytes of data to be transmitted.
         string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         byte[] buffer = Encoding.ASCII.GetBytes(data);
-        int timeout = 120;
-        PingReply reply = pingSender.Send(ipAddress, timeout, buffer, options);
-
-        if (reply.Status == IPStatus.Success)
+        int timeout = 10;
+        try
         {
+            PingReply reply = pingSender.Send(ipAddress, timeout, buffer, options);
+
+            if (reply.Status != IPStatus.Success)
+            {
+                throw new PingException($"Could not connect to {ipAddress}.");
+            }
             _settingsProvider.SetHubAddress(ipAddress.ToString());
             IsConnected = true;
             ShowError = false;
-            return;
         }
-        ErrorMessage = $"Could not connect to {ipAddress}.";
-        ShowError = true;
-        IsConnected = false;
+        catch (PingException e)
+        {
+            ErrorMessage = e.Message;
+            ShowError = true;
+            IsConnected = false;
+        }
     }
 }

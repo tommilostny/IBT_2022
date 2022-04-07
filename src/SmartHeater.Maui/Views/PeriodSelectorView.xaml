@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartHeater.Maui.Views.PeriodSelectorView"
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers"
              x:DataType="viewmodels:PeriodSelectorViewModel">
 
     <StackLayout Margin="0, 10, 0, 0">
@@ -15,7 +16,13 @@
 
             <Button Text="Load history"
                             Command="{Binding LoadHistoryCommand}"
-                            Margin="10, 5" />
+                            Margin="10, 5">
+                <Button.ImageSource>
+                    <FontImageSource Glyph="{x:Static helpers:IconFontHelper.ChartLine}"
+                                     FontFamily="MaterialDesignIcons"
+                                     Size="20" />
+                </Button.ImageSource>
+            </Button>
         </StackLayout>
     </StackLayout>
 </ContentView>

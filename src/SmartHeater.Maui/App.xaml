@@ -10,7 +10,7 @@
             <Color x:Key="DarkColor">#121212</Color>
             <Color x:Key="LightColor">#EFEFEF</Color>
 
-            <Color x:Key="PrimaryColor">#b71c1c</Color>
+            <Color x:Key="PrimaryColor">#7f0000</Color>
             <Color x:Key="SecondaryColor">White</Color>
             <!--
             <Style TargetType="Label">

@@ -6,13 +6,9 @@
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
              xmlns:views="clr-namespace:SmartHeater.Maui.Views"
              xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
+             xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers"
              x:DataType="viewmodels:WeatherViewModel">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding ReloadCommand}"
-                     Text="Reload"/>
-    </ContentPage.ToolbarItems>
-    
     <StackLayout>
         <StackLayout VerticalOptions="FillAndExpand">
             <Label IsVisible="{Binding LoadError}"
@@ -21,16 +17,26 @@
                    Margin="10" />
 
             <StackLayout Orientation="Horizontal"
-                         Padding="20"
+                         Padding="20, 18, 20, -3"
                          IsVisible="{Binding TemperatureIsValid}">
                 <Label Text="{Binding TemperatureC}"
                        FontSize="42"/>
                 <Label Text="°C"
                        FontSize="30"/>
+
+                <Button Command="{Binding ReloadCommand}"
+                        Text="Reload"
+                        Margin="10">
+                    <Button.ImageSource>
+                        <FontImageSource Glyph="{x:Static helpers:IconFontHelper.Reload}"
+                                         FontFamily="MaterialDesignIcons"
+                                         Size="20" />
+                    </Button.ImageSource>
+                </Button>
             </StackLayout>
 
             <views:PeriodSelectorView BindingContext="{Binding PeriodSelectorViewModel}"
-                                      Margin="15" />
+                                      Margin="5"/>
 
             <ActivityIndicator IsRunning="{Binding IsLoading}"
                                IsVisible="{Binding IsLoading}"

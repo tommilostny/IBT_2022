@@ -18,10 +18,12 @@
             <views:PeriodSelectorView BindingContext="{Binding PeriodSelectorViewModel}"
                                       Grid.Row="0" />
 
-            <ActivityIndicator IsRunning="{Binding IsLoading}"
-                               IsVisible="{Binding IsLoading}"
-                               Color="{DynamicResource PrimaryColor}"
-                               Grid.Row="1" />
+            <StackLayout Margin="50"
+                         Grid.Row="1">
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   Color="{DynamicResource PrimaryColor}" />
+            </StackLayout>
 
             <chart:SfCartesianChart Margin="5"
                                     Grid.Row="2"

@@ -5,17 +5,39 @@
              Title="Heaters"
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
              xmlns:models="clr-namespace:SmartHeater.Shared.Models;assembly=SmartHeater.Shared"
-             x:DataType="viewmodels:HeatersViewModel">
+             x:DataType="viewmodels:HeatersViewModel"
+             xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Reload"
-                    Command="{Binding LoadCommand}" />
-        <ToolbarItem Text="Add"
-                    Command="{Binding AddCommand}" />
-    </ContentPage.ToolbarItems>
-    
     <StackLayout>
+
+        <StackLayout Orientation="Horizontal"
+                     VerticalOptions="Start"
+                     Margin="5">
+
+            <Button Text="Add"
+                    Command="{Binding AddCommand}"
+                    Margin="5, 5, 0, 5">
+                <Button.ImageSource>
+                    <FontImageSource Glyph="{x:Static helpers:IconFontHelper.PlusCircleOutline}"
+                                     FontFamily="MaterialDesignIcons"
+                                     Size="20" />
+                </Button.ImageSource>
+            </Button>
+
+            <Button Text="Reload"
+                    Command="{Binding LoadCommand}"
+                    Margin="2, 5, 0, 5">
+                <Button.ImageSource>
+                    <FontImageSource Glyph="{x:Static helpers:IconFontHelper.Reload}"
+                                     FontFamily="MaterialDesignIcons"
+                                     Size="20" />
+                </Button.ImageSource>
+            </Button>
+
+        </StackLayout>
+        
         <StackLayout VerticalOptions="FillAndExpand">
+
             <Label IsVisible="{Binding HeatersCollectionEmpty}"
                    Text="Setup your first heater by pressing the Add button."
                    Margin="10" />

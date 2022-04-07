@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using SmartHeater.Maui.Helpers;
+using System.Web;
 
 namespace SmartHeater.Maui.ViewModels;
 
@@ -111,6 +112,17 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
         }
     }
 
+    private string _saveIcon = IconFontHelper.ContentSaveOutline;
+    public string SaveIcon
+    {
+        get => _saveIcon;
+        set
+        {
+            _saveIcon = value;
+            OnPropertyChanged(nameof(SaveIcon));
+        }
+    }
+
     private string _originalIpAddress = null;
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -124,6 +136,7 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
 
             Title = "Edit heater";
             ButtonText = "Save";
+            SaveIcon = IconFontHelper.ContentSaveEditOutline;
             _originalIpAddress = IpAddress;
         }
     }

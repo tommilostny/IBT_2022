@@ -4,20 +4,48 @@
              x:Class="SmartHeater.Maui.Pages.HeaterDetailMobilePage"
              xmlns:views="clr-namespace:SmartHeater.Maui.Views"
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers"
              x:DataType="viewmodels:HeaterDetailViewModel"
              Title="{Binding HeaterDetail.Name}">
-    
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding ReloadCommand}"
-                     Text="Reload" />
-        <ToolbarItem Command="{Binding EditCommand}"
-                     Text="Edit" />
-        <ToolbarItem Command="{Binding DeleteCommand}"
-                     Text="Delete" />
-    </ContentPage.ToolbarItems>
-    
+
     <ScrollView>
         <StackLayout Margin="5">
+            <StackLayout Grid.Column="0"
+                         Grid.ColumnSpan="2"
+                         Orientation="Horizontal"
+                         Margin="0, 5, 0, 10">
+
+                <Button Text="Reload"
+                        Command="{Binding ReloadCommand}"
+                        Margin="2, 5, 0, 5">
+                    <Button.ImageSource>
+                        <FontImageSource Glyph="{x:Static helpers:IconFontHelper.Reload}"
+                                         FontFamily="MaterialDesignIcons"
+                                         Size="20" />
+                    </Button.ImageSource>
+                </Button>
+
+                <Button Text="Edit"
+                        Command="{Binding EditCommand}"
+                        Margin="5, 5, 0, 5">
+                    <Button.ImageSource>
+                        <FontImageSource Glyph="{x:Static helpers:IconFontHelper.FileEditOutline}"
+                                         FontFamily="MaterialDesignIcons"
+                                         Size="20" />
+                    </Button.ImageSource>
+                </Button>
+
+                <Button Text="Delete"
+                        Command="{Binding DeleteCommand}"
+                        Margin="5, 5, 0, 5">
+                    <Button.ImageSource>
+                        <FontImageSource Glyph="{x:Static helpers:IconFontHelper.DeleteOutline}"
+                                         FontFamily="MaterialDesignIcons"
+                                         Size="20" />
+                    </Button.ImageSource>
+                </Button>
+
+            </StackLayout>
             
             <Label IsVisible="{Binding LoadingError}"
                    Text="Unable to load heater data."

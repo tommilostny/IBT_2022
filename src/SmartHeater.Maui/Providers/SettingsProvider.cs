@@ -7,17 +7,9 @@ public class SettingsProvider
 
     public string HubIpAddress { get; set; } = string.Empty;
 
-    public bool DarkMode { get; set; } = false;
-
     public void SetHubAddress(string ipAddress)
     {
         HubIpAddress = ipAddress;
-        SaveToJson();
-    }
-
-    public void SetDarkMode(bool darkMode)
-    {
-        DarkMode = darkMode;
         SaveToJson();
     }
 
