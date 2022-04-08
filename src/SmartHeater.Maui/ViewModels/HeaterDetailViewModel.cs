@@ -27,7 +27,7 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
 
     public HeaterChartsViewModel HeaterChartsViewModel { get; set; }
 
-    private HeaterDetailModel _heaterDetailModel = new(string.Empty, "Loading...");
+    private HeaterDetailModel _heaterDetailModel;
     public HeaterDetailModel HeaterDetail
     {
         get => _heaterDetailModel;
