@@ -36,7 +36,7 @@
                 <chart:SfCartesianChart.XAxes>
                     <chart:DateTimeAxis ShowMajorGridLines="False">
                         <chart:DateTimeAxis.LabelStyle>
-                            <chart:ChartAxisLabelStyle TextColor="White" />
+                            <chart:ChartAxisLabelStyle TextColor="Gray" />
                         </chart:DateTimeAxis.LabelStyle>
                     </chart:DateTimeAxis>
                 </chart:SfCartesianChart.XAxes>
@@ -44,10 +44,10 @@
                 <chart:SfCartesianChart.YAxes>
                     <chart:NumericalAxis ShowMajorGridLines="False">
                         <chart:NumericalAxis.Title>
-                            <chart:ChartAxisTitle Text="Power [W]" TextColor="White" />
+                            <chart:ChartAxisTitle Text="Power [W]" TextColor="Gray" />
                         </chart:NumericalAxis.Title>
                         <chart:NumericalAxis.LabelStyle>
-                            <chart:ChartAxisLabelStyle TextColor="White" />
+                            <chart:ChartAxisLabelStyle TextColor="Gray" />
                         </chart:NumericalAxis.LabelStyle>
                     </chart:NumericalAxis>
                 </chart:SfCartesianChart.YAxes>
@@ -74,7 +74,7 @@
                 <chart:SfCartesianChart.XAxes>
                     <chart:DateTimeAxis ShowMajorGridLines="False">
                         <chart:DateTimeAxis.LabelStyle>
-                            <chart:ChartAxisLabelStyle TextColor="White" />
+                            <chart:ChartAxisLabelStyle TextColor="Gray" />
                         </chart:DateTimeAxis.LabelStyle>
                     </chart:DateTimeAxis>
                 </chart:SfCartesianChart.XAxes>
@@ -82,10 +82,10 @@
                 <chart:SfCartesianChart.YAxes>
                     <chart:NumericalAxis ShowMajorGridLines="False">
                         <chart:NumericalAxis.Title>
-                            <chart:ChartAxisTitle Text="Temperature [°C]" TextColor="White" />
+                            <chart:ChartAxisTitle Text="Temperature [°C]" TextColor="Gray" />
                         </chart:NumericalAxis.Title>
                         <chart:NumericalAxis.LabelStyle>
-                            <chart:ChartAxisLabelStyle TextColor="White" />
+                            <chart:ChartAxisLabelStyle TextColor="Gray" />
                         </chart:NumericalAxis.LabelStyle>
                     </chart:NumericalAxis>
                 </chart:SfCartesianChart.YAxes>

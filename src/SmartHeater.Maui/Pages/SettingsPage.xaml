@@ -6,7 +6,7 @@
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
              xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers"
              x:DataType="viewmodels:SettingsViewModel">
-    <StackLayout Margin="20, 0, 20, 10">
+    <StackLayout Margin="15, 0, 15, 10">
         <StackLayout VerticalOptions="FillAndExpand">
 
             <Label Text="Hub IP address:"
@@ -46,6 +46,11 @@
                 -->
             </StackLayout>
         </StackLayout>
-        
+
+        <StackLayout VerticalOptions="End">
+            <Label Text="SmartHeater © Tomáš Milostný 2022"
+                   FontSize="11" />
+        </StackLayout>
+
     </StackLayout>
 </ContentPage>

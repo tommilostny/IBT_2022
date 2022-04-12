@@ -6,18 +6,6 @@
        xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers"
        FlyoutBackground="{DynamicResource PrimaryColor}"
        BackgroundColor="{DynamicResource PrimaryColor}">
-    <!--
-       FlyoutBackground="{AppThemeBinding Dark={DynamicResource DarkColor}, Light={DynamicResource LightColor}}">
-
-    <Shell.FlyoutHeader>
-        <Grid>
-            <Label Text="SmartHeater"
-                   Margin="15, 10"
-                   FontSize="24"
-                   TextColor="{DynamicResource SecondaryColor}"/>
-        </Grid>
-    </Shell.FlyoutHeader>
-       -->
 
     <Shell.ItemTemplate>
         <DataTemplate>
@@ -61,13 +49,4 @@
         </ShellContent.Icon>
     </ShellContent>
 
-    <Shell.FlyoutFooter>
-        <Grid>
-            <Label Text="SmartHeater © Tomáš Milostný 2022"
-                   VerticalOptions="End"
-                   FontSize="11"
-                   Margin="10"
-                   TextColor="{DynamicResource LightColor}"/>
-        </Grid>
-    </Shell.FlyoutFooter>
 </Shell>

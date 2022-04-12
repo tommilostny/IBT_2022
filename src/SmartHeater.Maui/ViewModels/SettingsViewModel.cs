@@ -110,7 +110,6 @@ public class SettingsViewModel : BindableObject
             return;
         }
 
-        //Check connection using ICMP ping.
         await CheckAvailabilityAsync();
     }
 }
