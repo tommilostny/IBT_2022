@@ -1,6 +1,7 @@
 ﻿using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
+using System.Text;
 
 namespace SmartHeater.Hub.Services;
 
@@ -40,16 +41,17 @@ public class InfluxDbService : IDatabaseService
         {
             return null;
         }
-        var query = $"from(bucket: \"{_bucket}\")"
-                  + $" |> range(start: -{period})"
-                  + $" |> filter(fn: (r) => r[\"_measurement\"] == \"{DbFields.MeasurementName}\")"
-                  + $" |> filter(fn: (r) => r[\"_field\"] == \"{field}\")"
-                  + $" |> filter(fn: (r) => r[\"{DbFields.HeaterTag}\"] == \"{heater.IpAddress}\")"
-                  + $" |> aggregateWindow(every: {HistoryPeriods.AggregationWindow(period)}, fn: mean, createEmpty: false)"
-                  +  " |> yield(name: \"mean\")";
+        var queryBuilder = new StringBuilder()
+            .Append($"from(bucket: \"{_bucket}\")")
+            .Append($" |> range(start: -{period})")
+            .Append($" |> filter(fn: (r) => r[\"_measurement\"] == \"{DbFields.MeasurementName}\")")
+            .Append($" |> filter(fn: (r) => r[\"_field\"] == \"{field}\")")
+            .Append($" |> filter(fn: (r) => r[\"{DbFields.HeaterTag}\"] == \"{heater.IpAddress}\")")
+            .Append($" |> aggregateWindow(every: {HistoryPeriods.AggregationWindow(period)}, fn: mean, createEmpty: false)")
+            .Append( " |> yield(name: \"mean\")");
     
         using var client = CreateDbClient();
-        var tables = await client.GetQueryApi().QueryAsync(query, _organization);
+        var tables = await client.GetQueryApi().QueryAsync(queryBuilder.ToString(), _organization);
         var temperatures = new List<DbRecordModel>();
 
         foreach (var record in tables.SelectMany(table => table.Records))

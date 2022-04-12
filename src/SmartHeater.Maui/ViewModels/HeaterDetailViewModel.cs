@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Text;
+using System.Web;
 
 namespace SmartHeater.Maui.ViewModels;
 
@@ -126,10 +127,12 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
 
     private async void GoToEditPage()
     {
-        var uri = $"{nameof(AddHeaterPage)}?IpAddress={HeaterDetail.IpAddress}";
-        uri += $"&Name={HeaterDetail.Name}";
-        uri += $"&HeaterType={(int)HeaterDetail.HeaterType}";
-        uri += $"&ReferenceTemperature={HeaterDetail.ReferenceTemperature}";
-        await Shell.Current.GoToAsync(uri);
+        var uriBuilder = new StringBuilder()
+            .Append($"{nameof(AddHeaterPage)}?IpAddress={HeaterDetail.IpAddress}")
+            .Append($"&Name={HeaterDetail.Name}")
+            .Append($"&HeaterType={(int)HeaterDetail.HeaterType}")
+            .Append($"&ReferenceTemperature={HeaterDetail.ReferenceTemperature}");
+
+        await Shell.Current.GoToAsync(uriBuilder.ToString());
     }
 }
