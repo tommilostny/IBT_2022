@@ -10,13 +10,13 @@
         <Label Text="Time period:" />
         <StackLayout Orientation="Horizontal">
             <Picker ItemsSource="{Binding PeriodsList}"
-                            SelectedItem="{Binding SelectedPeriod}"
-                            Margin="0, 7, 0, 0"
-                            HeightRequest="35" />
+                    SelectedItem="{Binding SelectedPeriod}"
+                    Margin="0, 7, 0, 0"
+                    HeightRequest="35" />
 
             <Button Text="Load history"
-                            Command="{Binding LoadHistoryCommand}"
-                            Margin="10, 5">
+                    Command="{Binding LoadHistoryCommand}"
+                    Margin="10, 5">
                 <Button.ImageSource>
                     <FontImageSource Glyph="{x:Static helpers:IconFontHelper.ChartLine}"
                                      FontFamily="MaterialDesignIcons"

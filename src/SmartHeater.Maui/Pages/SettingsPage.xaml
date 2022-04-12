@@ -5,52 +5,45 @@
              Title="Settings"
              xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
              xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers"
-             x:DataType="viewmodels:SettingsViewModel">
-    <StackLayout Margin="15, 0, 15, 10">
-        <StackLayout VerticalOptions="FillAndExpand">
-
-            <Label Text="Hub IP address:"
-                   Margin="0, 10, 0, 5" />
-            <Entry Text="{Binding HubIpAddress}" />
+             x:DataType="viewmodels:SettingsViewModel"
+             xmlns:views="clr-namespace:SmartHeater.Maui.Views">
+    <ScrollView>
+        <StackLayout Margin="15, 0, 15, 10">
 
             <Label Margin="0, 15"
-                   Text="{Binding IsConnected, Converter={StaticResource ConnectTextConverter}}"
-                   TextColor="{Binding IsConnected, Converter={StaticResource ConnectColorConverter}}" />
+                    Text="{Binding IsConnected, Converter={StaticResource ConnectTextConverter}}"
+                    TextColor="{Binding IsConnected, Converter={StaticResource ConnectColorConverter}}" />
 
             <Label IsVisible="{Binding ShowError}"
-                   Text="{Binding ErrorMessage}"
-                   TextColor="Red"
-                   Margin="0, 0, 0, 10" />
+                    Text="{Binding ErrorMessage}"
+                    TextColor="Red"
+                    Margin="0, 0, 0, 10" />
+
+            <StackLayout Margin="5">
+                <Label Text="Hub IP address:" />
+                <Entry Text="{Binding HubIpAddress}"
+                        WidthRequest="200"
+                        Margin="5" />
+            </StackLayout>
 
             <StackLayout Orientation="Horizontal">
-                <Button Text="Connect"
-                        Margin="0, 5, 5, 5"
+                <Button Text="Manual connect"
+                        Margin="0, 5, 15, 5"
                         Command="{Binding ManualConnectCommand}">
                     <Button.ImageSource>
-                        <FontImageSource Glyph="{x:Static helpers:IconFontHelper.WifiArrowUp}"
+                        <FontImageSource Glyph="{x:Static helpers:IconFontHelper.WifiArrowRight}"
                                          FontFamily="MaterialDesignIcons"
                                          Size="20" />
                     </Button.ImageSource>
                 </Button>
-                <!--
-                <Button Text="Try autodiscover"
-                        Margin="5"
-                        Command="{Binding AutodiscoverCommand}"
-                        IsEnabled="False">
-                    <Button.ImageSource>
-                        <FontImageSource Glyph="{x:Static helpers:IconFontHelper.WifiSync}"
-                                         FontFamily="MaterialDesignIcons"
-                                         Size="20" />
-                    </Button.ImageSource>
-                </Button>
-                -->
             </StackLayout>
-        </StackLayout>
 
-        <StackLayout VerticalOptions="End">
+            <views:HubScannerView BindingContext="{Binding HubScannerViewModel}" />
+
             <Label Text="SmartHeater © Tomáš Milostný 2022"
-                   FontSize="11" />
-        </StackLayout>
+                    FontSize="11"
+                    Margin="0, 30" />
 
-    </StackLayout>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

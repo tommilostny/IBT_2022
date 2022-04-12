@@ -15,7 +15,10 @@ public class SettingsViewModel : BindableObject
         _settingsProvider = settingsProvider;
         _httpClient = httpClient;
         _hubIpAddress = _settingsProvider.HubIpAddress;
+        HubScannerViewModel = new(this, _httpClient, _settingsProvider);
     }
+
+    public HubScannerViewModel HubScannerViewModel { get; }
 
     private string _hubIpAddress;
     public string HubIpAddress
@@ -84,6 +87,21 @@ public class SettingsViewModel : BindableObject
         }
     }
 
+    public IPAddress ParseIP(string ipAddress)
+    {
+        try
+        {
+            return IPAddress.Parse(ipAddress);
+        }
+        catch (FormatException)
+        {
+            ErrorMessage = $"'{ipAddress}' is not valid IP address.";
+            ShowError = true;
+            IsConnected = false;
+            return null;
+        }
+    }
+
     private async void ManualConnect()
     {
         //Start connecting.
@@ -97,19 +115,9 @@ public class SettingsViewModel : BindableObject
         }
 
         //Parse given IP address.
-        IPAddress iPAddress;
-        try
+        if (ParseIP(HubIpAddress) is not null)
         {
-            iPAddress = IPAddress.Parse(HubIpAddress);
+            await CheckAvailabilityAsync();
         }
-        catch (FormatException)
-        {
-            ErrorMessage = $"'{HubIpAddress}' is not valid IP address.";
-            ShowError = true;
-            IsConnected = false;
-            return;
-        }
-
-        await CheckAvailabilityAsync();
     }
 }

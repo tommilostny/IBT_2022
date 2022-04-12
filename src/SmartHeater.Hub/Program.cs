@@ -119,6 +119,6 @@ app.MapGet("/fields",
     async () => await Task.FromResult(DbFields.GetAll())
 );
 
-app.MapGet("/availability-test", () => true);
+app.MapGet("/smartheater-availability-test", () => "SmartHeater");
 
 app.Run();

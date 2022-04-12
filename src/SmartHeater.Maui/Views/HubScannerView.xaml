@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartHeater.Maui.Views.HubScannerView"
+             xmlns:viewmodels="clr-namespace:SmartHeater.Maui.ViewModels"
+             xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers"
+             x:DataType="viewmodels:HubScannerViewModel">
+    <ContentView.Content>
+        <StackLayout>
+            <Label Text="Try automatic subnet scan to discover the IP address of the Hub."
+                   FontSize="12"
+                   Margin="5, 30, 5, 5" />
+            <StackLayout Orientation="Horizontal"
+                         Margin="6">
+
+                <StackLayout>
+                    <Label Text="Network IP address:"/>
+                    <Entry Text="{Binding SubnetAddress}"
+                           Margin="5"
+                           WidthRequest="200" />
+                </StackLayout>
+
+                <StackLayout>
+                    <Label Text="Mask:" />
+                    <Picker SelectedItem="{Binding SubnetMask}"
+                            Margin="5">
+                        <Picker.Items>
+                            <x:String>16</x:String>
+                            <x:String>17</x:String>
+                            <x:String>18</x:String>
+                            <x:String>19</x:String>
+                            <x:String>20</x:String>
+                            <x:String>21</x:String>
+                            <x:String>22</x:String>
+                            <x:String>23</x:String>
+                            <x:String>24</x:String>
+                            <x:String>25</x:String>
+                            <x:String>26</x:String>
+                            <x:String>27</x:String>
+                            <x:String>28</x:String>
+                            <x:String>29</x:String>
+                            <x:String>30</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </StackLayout>
+
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Scan subnet"
+                        Margin="0, 5, 5, 5"
+                        Command="{Binding AutodiscoverCommand}">
+                    <Button.ImageSource>
+                        <FontImageSource Glyph="{x:Static helpers:IconFontHelper.WifiSync}"
+                                         FontFamily="MaterialDesignIcons"
+                                         Size="20" />
+                    </Button.ImageSource>
+                </Button>
+
+                <ActivityIndicator IsVisible="{Binding Scanning}"
+                                   IsRunning="{Binding Scanning}"
+                                   Margin="50, 0" />
+            </StackLayout>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>
