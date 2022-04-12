@@ -62,19 +62,17 @@ public class SettingsViewModel : BindableObject
         }
     }
 
-    public async Task CheckAvailabilityAsync() => await CheckAvailabilityAsync(IPAddress.Parse(HubIpAddress));
-
-    private async Task CheckAvailabilityAsync(IPAddress ipAddress)
+    public async Task CheckAvailabilityAsync()
     {
         try
         {
-            var reply = await _httpClient.GetAsync($"{_settingsProvider.HubUri}/availability-test");
+            var reply = await _httpClient.GetAsync($"http://{HubIpAddress}/availability-test");
 
             if (!reply.IsSuccessStatusCode)
             {
-                throw new Exception($"Could not connect to {ipAddress}.");
+                throw new Exception($"Could not connect to {HubIpAddress}.");
             }
-            _settingsProvider.SetHubAddress(ipAddress.ToString());
+            _settingsProvider.SetHubAddress(HubIpAddress);
             IsConnected = true;
             ShowError = false;
         }
@@ -113,6 +111,6 @@ public class SettingsViewModel : BindableObject
         }
 
         //Check connection using ICMP ping.
-        await CheckAvailabilityAsync(iPAddress);
+        await CheckAvailabilityAsync();
     }
 }

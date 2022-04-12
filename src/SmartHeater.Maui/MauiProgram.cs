@@ -34,7 +34,7 @@ public static class MauiProgram
         builder.Services.AddTransient<HeaterDetailViewModel>();
 
         builder.Services.AddSingleton(sp => SettingsProvider.LoadFromJson());
-        builder.Services.AddSingleton(sp => new HttpClient { Timeout = TimeSpan.FromSeconds(5) });
+        builder.Services.AddSingleton(sp => new HttpClient { Timeout = TimeSpan.FromSeconds(10) });
 
         return builder.Build();
     }
