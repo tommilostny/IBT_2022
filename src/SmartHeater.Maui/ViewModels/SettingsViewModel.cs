@@ -69,9 +69,9 @@ public class SettingsViewModel : BindableObject
     {
         try
         {
-            var reply = await _httpClient.GetAsync($"http://{HubIpAddress}/availability-test");
+            var reply = await _httpClient.GetAsync($"http://{HubIpAddress}/smartheater-availability-test");
 
-            if (!reply.IsSuccessStatusCode)
+            if (!reply.IsSuccessStatusCode || await reply.Content.ReadAsStringAsync() != "SmartHeater")
             {
                 throw new Exception($"Could not connect to {HubIpAddress}.");
             }
