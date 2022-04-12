@@ -23,7 +23,7 @@
                    Margin="0, 0, 0, 10" />
 
             <StackLayout Orientation="Horizontal">
-                <Button Text="Manual connect"
+                <Button Text="Connect"
                         Margin="0, 5, 5, 5"
                         Command="{Binding ManualConnectCommand}">
                     <Button.ImageSource>
@@ -32,6 +32,7 @@
                                          Size="20" />
                     </Button.ImageSource>
                 </Button>
+                <!--
                 <Button Text="Try autodiscover"
                         Margin="5"
                         Command="{Binding AutodiscoverCommand}"
@@ -42,6 +43,7 @@
                                          Size="20" />
                     </Button.ImageSource>
                 </Button>
+                -->
             </StackLayout>
         </StackLayout>
         

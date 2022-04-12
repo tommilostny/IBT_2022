@@ -68,8 +68,8 @@ public class HeatersViewModel : BindableObject
     }
 
     public string LoadErrorMessage => string.IsNullOrWhiteSpace(_settingsProvider.HubIpAddress)
-        ? "To load heaters, please, set up the Hub IP address in settings."
-        : "Unable to load heater data.";
+        ? "To load heaters, set up the Hub IP address in settings."
+        : "Unable to load heater data. Check the Hub IP address setting.";
 
     public async Task UpdateHeatersFromHttpAsync(HttpResponseMessage response)
     {

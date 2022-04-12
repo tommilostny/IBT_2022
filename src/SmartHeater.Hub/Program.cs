@@ -48,11 +48,11 @@ if (app.Environment.IsDevelopment())
 app.UseSwagger();
 app.UseSwaggerUI();
 
-//app.Services.UseScheduler(scheduler =>
-//{
-//    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
-//    scheduler.Schedule<MLInvocable>().EveryMinute();
-//});
+app.Services.UseScheduler(scheduler =>
+{
+    scheduler.Schedule<StatsCollectorInvocable>().EveryTenSeconds();
+    scheduler.Schedule<MLInvocable>().EveryMinute();
+});
 
 app.MapGet("/heaters/{ipAddress}/off",
     async (IHeatersRepositoryService hp, string ipAddress) =>
@@ -118,5 +118,7 @@ app.MapGet("/periods",
 app.MapGet("/fields",
     async () => await Task.FromResult(DbFields.GetAll())
 );
+
+app.MapGet("/availability-test", () => true);
 
 app.Run();

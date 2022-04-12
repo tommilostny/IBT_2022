@@ -16,7 +16,6 @@ public static class MauiProgram
                 fonts.AddFont("materialdesignicons-webfont.ttf", "MaterialDesignIcons");
             });
 
-        builder.Services.AddSingleton<AppShell>();
         builder.Services.AddSingleton<HeatersPage>();
         builder.Services.AddSingleton<WeatherPage>();
         builder.Services.AddSingleton<SettingsPage>();
@@ -35,7 +34,7 @@ public static class MauiProgram
         builder.Services.AddTransient<HeaterDetailViewModel>();
 
         builder.Services.AddSingleton(sp => SettingsProvider.LoadFromJson());
-        builder.Services.AddSingleton<HttpClient>();
+        builder.Services.AddSingleton(sp => new HttpClient { Timeout = TimeSpan.FromSeconds(5) });
 
         return builder.Build();
     }

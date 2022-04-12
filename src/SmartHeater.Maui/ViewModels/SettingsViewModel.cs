@@ -1,6 +1,4 @@
 ﻿using System.Net;
-using System.Net.NetworkInformation;
-using System.Text;
 
 namespace SmartHeater.Maui.ViewModels;
 
@@ -9,20 +7,14 @@ public class SettingsViewModel : BindableObject
     private ICommand _manualConnectCommand;
     public ICommand ManualConnectCommand => _manualConnectCommand ??= new Command(ManualConnect);
 
-    private ICommand _autodiscoverCommand;
-    public ICommand AutodiscoverCommand => _autodiscoverCommand ??= new Command(Autodiscover);
-
     private readonly SettingsProvider _settingsProvider;
+    private readonly HttpClient _httpClient;
 
-    public SettingsViewModel(SettingsProvider settingsProvider)
+    public SettingsViewModel(SettingsProvider settingsProvider, HttpClient httpClient)
     {
         _settingsProvider = settingsProvider;
+        _httpClient = httpClient;
         _hubIpAddress = _settingsProvider.HubIpAddress;
-        try
-        {
-            CheckAvailability(IPAddress.Parse(_hubIpAddress));
-        }
-        catch { }
     }
 
     private string _hubIpAddress;
@@ -70,6 +62,30 @@ public class SettingsViewModel : BindableObject
         }
     }
 
+    public async Task CheckAvailabilityAsync() => await CheckAvailabilityAsync(IPAddress.Parse(HubIpAddress));
+
+    private async Task CheckAvailabilityAsync(IPAddress ipAddress)
+    {
+        try
+        {
+            var reply = await _httpClient.GetAsync($"{_settingsProvider.HubUri}/availability-test");
+
+            if (!reply.IsSuccessStatusCode)
+            {
+                throw new Exception($"Could not connect to {ipAddress}.");
+            }
+            _settingsProvider.SetHubAddress(ipAddress.ToString());
+            IsConnected = true;
+            ShowError = false;
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.Message;
+            ShowError = true;
+            IsConnected = false;
+        }
+    }
+
     private async void ManualConnect()
     {
         //Start connecting.
@@ -97,50 +113,6 @@ public class SettingsViewModel : BindableObject
         }
 
         //Check connection using ICMP ping.
-        await Task.Run(() => CheckAvailability(iPAddress));
-    }
-
-    private void Autodiscover()
-    {
-        IsConnected = null;
-
-        HubIpAddress = "192.168.1.242";
-
-        _settingsProvider.SetHubAddress(HubIpAddress);
-        IsConnected = true;
-        ShowError = false;
-    }
-
-    private void CheckAvailability(IPAddress ipAddress)
-    {
-        var pingSender = new Ping();
-        var options = new PingOptions
-        {
-            // Use the default Ttl value which is 128,
-            // but change the fragmentation behavior.
-            DontFragment = true
-        };
-        // Create a buffer of 32 bytes of data to be transmitted.
-        string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        byte[] buffer = Encoding.ASCII.GetBytes(data);
-        int timeout = 10;
-        try
-        {
-            PingReply reply = pingSender.Send(ipAddress, timeout, buffer, options);
-
-            if (reply.Status != IPStatus.Success)
-            {
-                throw new PingException($"Could not connect to {ipAddress}.");
-            }
-            _settingsProvider.SetHubAddress(ipAddress.ToString());
-            IsConnected = true;
-            ShowError = false;
-        }
-        catch (PingException e)
-        {
-            ErrorMessage = e.Message;
-            ShowError = true;
-            IsConnected = false;
-        }
+        await CheckAvailabilityAsync(iPAddress);
     }
 }
