@@ -48,7 +48,7 @@ public class MLInvocable : IInvocable
         //  Underheating => turn on,
         //  else if upward trend (>0) => turn on,
         //  else if downward trend (<0) => turn off.
-        (var overheating, var underheating, var trend) = GetDecisionMetrics(forecast);
+        GetDecisionMetrics(forecast, out var overheating, out var underheating, out var trend);
 
         if (overheating.Value || (trend.Value < 0 && !underheating.Value))
         {
@@ -70,14 +70,17 @@ public class MLInvocable : IInvocable
         }
     }
 
-    private static (Lazy<bool>, Lazy<bool>, Lazy<float>) GetDecisionMetrics(ModelOutput forecast)
+    private static void GetDecisionMetrics(ModelOutput forecast,
+                                           out Lazy<bool> overheating,
+                                           out Lazy<bool> underheating,
+                                           out Lazy<float> trend)
     {
         //Compute over and under heating booleans.
-        Lazy<bool> overheating  = new(() => forecast.TemperatureDiff.All(x => x > 0) && forecast.TemperatureDiff.Average() > 0.25);
-        Lazy<bool> underheating = new(() => forecast.TemperatureDiff.All(x => x < 0) && forecast.TemperatureDiff.Average() < -0.25);
+        overheating  = new Lazy<bool>(() => forecast.TemperatureDiff.All(x => x > 0));
+        underheating = new Lazy<bool>(() => forecast.TemperatureDiff.All(x => x < 0));
 
         //Compute the trend as the average value of differences between predicted values.
-        Lazy<float> trend = new(() =>
+        trend = new Lazy<float>(() =>
         {
             float sum = .0f;
             int cnt = 0;
@@ -93,8 +96,6 @@ public class MLInvocable : IInvocable
             Console.WriteLine($"Overheating: {overheating.Value}");
             Console.WriteLine($"Underheating: {underheating.Value}");
             Console.WriteLine($"Trend: {trend.Value}");
-        #endif
-        
-        return (overheating, underheating, trend);
+        #endif        
     }
 }
