@@ -10,9 +10,7 @@
 
     <ScrollView>
         <StackLayout Margin="5">
-            <StackLayout Grid.Column="0"
-                         Grid.ColumnSpan="2"
-                         Orientation="Horizontal"
+            <StackLayout Orientation="Horizontal"
                          Margin="0, 5, 0, 10">
 
                 <Button Text="Reload"
@@ -55,14 +53,12 @@
                                IsVisible="{Binding IsLoading}"
                                Color="{DynamicResource PrimaryColor}" />
 
-
             <StackLayout IsVisible="{Binding IsLoaded}"
                          Margin="0, 5, 0, 20">
                 <views:HeaterDetailView BindingContext="{Binding HeaterDetail}" />
             </StackLayout>
 
-            <views:HeaterChartsView BindingContext="{Binding HeaterChartsViewModel}"
-                                    Grid.Column="1"/>
+            <views:HeaterChartsView BindingContext="{Binding HeaterChartsViewModel}" />
         </StackLayout>
     </ScrollView>
 </ContentPage>

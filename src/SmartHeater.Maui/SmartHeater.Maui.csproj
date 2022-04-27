@@ -31,10 +31,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- App Icon 
+		<!-- App Icon -->
 		<MauiIcon Include="Resources\appicon.svg" ForegroundFile="Resources\appiconfg.svg" Color="#7f0000" />
-		-->
+		<!--
 		<MauiIcon Include="Resources\Images\smartheater_icon_small.png" Color="#ffffff" />
+		-->
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Images\smartheater_icon_small.png" Color="#5f0000" />
@@ -46,20 +47,13 @@
 		<MauiFont Include="Resources\Fonts\*" />
 	</ItemGroup>
 
-	<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-		<!-- Required - WinUI does not yet have buildTransitive for everything -->
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.0-preview1" />
-		<PackageReference Include="Microsoft.Graphics.Win2D" Version="1.0.1" />
-	</ItemGroup>
-
 	<ItemGroup>
 	  <None Remove="Resources\Fonts\materialdesignicons-webfont.ttf" />
-	  <None Remove="Resources\Images\vykres.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	  <PackageReference Include="Syncfusion.Maui.Charts" Version="20.1.47-preview" />
+	  <PackageReference Include="Syncfusion.Maui.Charts" Version="20.1.51-preview" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -9,7 +9,11 @@
         <StackLayout>
             <Label Text="Try automatic subnet scan to discover the IP address of the Hub."
                    FontSize="12"
-                   Margin="5, 30, 5, 5" />
+                   Margin="5, 30, 5, 0" />
+            <Label Text="The scan may take a few minutes."
+                   FontSize="12"
+                   Margin="5, 0, 5, 5" />
+
             <StackLayout Orientation="Horizontal"
                          Margin="6">
 
@@ -17,7 +21,8 @@
                     <Label Text="Network IP address:"/>
                     <Entry Text="{Binding SubnetAddress}"
                            Margin="5"
-                           WidthRequest="200" />
+                           WidthRequest="200"
+                           HorizontalOptions="Start"/>
                 </StackLayout>
 
                 <StackLayout>
@@ -61,6 +66,17 @@
                                    IsRunning="{Binding Scanning}"
                                    Margin="50, 0" />
             </StackLayout>
+
+            <Button Command="{Binding CancelCommand}"
+                    Text="Cancel"
+                    HorizontalOptions="Start"
+                    IsVisible="{Binding Scanning}">
+                <Button.ImageSource>
+                    <FontImageSource Glyph="{x:Static helpers:IconFontHelper.Cancel}"
+                                         FontFamily="MaterialDesignIcons"
+                                         Size="20" />
+                </Button.ImageSource>
+            </Button>
         </StackLayout>
     </ContentView.Content>
 </ContentView>

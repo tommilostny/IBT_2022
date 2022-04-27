@@ -22,8 +22,9 @@
             <StackLayout Margin="5">
                 <Label Text="Hub IP address:" />
                 <Entry Text="{Binding HubIpAddress}"
-                        WidthRequest="200"
-                        Margin="5" />
+                       WidthRequest="200"
+                       Margin="5"
+                       HorizontalOptions="Start" />
             </StackLayout>
 
             <StackLayout Orientation="Horizontal">

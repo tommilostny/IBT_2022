@@ -18,6 +18,9 @@ public class HubScannerViewModel : BindableObject
     private ICommand _autodiscoverCommand;
     public ICommand AutodiscoverCommand => _autodiscoverCommand ??= new Command(AutoDiscover);
 
+    private ICommand _cancelCommand;
+    public ICommand CancelCommand => _cancelCommand ??= new Command(Cancel);
+
     private string _subnetAddress = "192.168.1.0";
     public string SubnetAddress
     {
@@ -51,7 +54,7 @@ public class HubScannerViewModel : BindableObject
         }
     }
 
-    private CancellationTokenSource _tokenSource;
+    private CancellationTokenSource _tokenSource = null;
 
     private async void AutoDiscover()
     {
@@ -78,6 +81,7 @@ public class HubScannerViewModel : BindableObject
         }
         Scanning = false;
         _tokenSource.Dispose();
+        _tokenSource = null;
     }
 
     private async ValueTask AvailabilityResultAsync(string ipAddress, CancellationToken cancellationToken)
@@ -96,6 +100,14 @@ public class HubScannerViewModel : BindableObject
         }
         catch
         {
+        }
+    }
+
+    private void Cancel()
+    {
+        if (_tokenSource is not null && !_tokenSource.IsCancellationRequested)
+        {
+            _tokenSource.Cancel(true);
         }
     }
 }
