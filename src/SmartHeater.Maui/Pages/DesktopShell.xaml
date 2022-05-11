@@ -3,9 +3,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        x:Class="SmartHeater.Maui.Pages.DesktopShell"
        xmlns:pages="clr-namespace:SmartHeater.Maui.Pages"
-       xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers"
-       FlyoutBackground="{DynamicResource Primary}"
-       BackgroundColor="{DynamicResource Primary}">
+       xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers">
 
     <Shell.ItemTemplate>
         <DataTemplate>
@@ -18,7 +16,6 @@
                            HeightRequest="20" />
                     <Label Grid.Column="1"
                            Text="{Binding Title}"
-                           TextColor="{DynamicResource SecondaryColor}"
                            VerticalTextAlignment="Center" />
                 </Grid>
             </StackLayout>
@@ -29,7 +26,8 @@
                   Title="Heaters">
         <ShellContent.Icon>
             <FontImageSource Glyph="{x:Static helpers:IconFontHelper.Radiator}"
-                             FontFamily="MaterialDesignIcons" />
+                             FontFamily="MaterialDesignIcons"
+                             Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         </ShellContent.Icon>
     </ShellContent>
 
@@ -37,7 +35,8 @@
                   Title="Weather">
         <ShellContent.Icon>
             <FontImageSource Glyph="{x:Static helpers:IconFontHelper.WeatherPartlyCloudy}"
-                             FontFamily="MaterialDesignIcons" />
+                             FontFamily="MaterialDesignIcons"
+                             Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
         </ShellContent.Icon>
     </ShellContent>
 
@@ -45,7 +44,8 @@
                   Title="Settings">
         <ShellContent.Icon>
             <FontImageSource Glyph="{x:Static helpers:IconFontHelper.CogOutline}"
-                             FontFamily="MaterialDesignIcons" />
+                             FontFamily="MaterialDesignIcons"
+                             Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         </ShellContent.Icon>
     </ShellContent>
 
