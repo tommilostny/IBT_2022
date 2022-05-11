@@ -4,14 +4,14 @@
        x:Class="SmartHeater.Maui.Pages.DesktopShell"
        xmlns:pages="clr-namespace:SmartHeater.Maui.Pages"
        xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers"
-       FlyoutBackground="{DynamicResource PrimaryColor}"
-       BackgroundColor="{DynamicResource PrimaryColor}">
+       FlyoutBackground="{DynamicResource Primary}"
+       BackgroundColor="{DynamicResource Primary}">
 
     <Shell.ItemTemplate>
         <DataTemplate>
             <StackLayout HeightRequest="50"
                          Padding="0, 12, 0, 0">
-                <Grid ColumnDefinitions="0.2*,0.8*"
+                <Grid ColumnDefinitions="0.05*,0.95*"
                       VerticalOptions="Center">
                     <Image Source="{Binding FlyoutIcon}"
                            Margin="0"

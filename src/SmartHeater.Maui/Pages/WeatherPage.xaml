@@ -40,7 +40,7 @@
 
             <ActivityIndicator IsRunning="{Binding IsLoading}"
                                IsVisible="{Binding IsLoading}"
-                               Color="{DynamicResource PrimaryColor}"
+                               Color="{DynamicResource Primary}"
                                Margin="20" />
 
             <chart:SfCartesianChart Margin="5"
@@ -53,7 +53,7 @@
                 <chart:SfCartesianChart.XAxes>
                     <chart:DateTimeAxis ShowMajorGridLines="False">
                         <chart:DateTimeAxis.LabelStyle>
-                            <chart:ChartAxisLabelStyle TextColor="Gray" />
+                            <chart:ChartAxisLabelStyle TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                         </chart:DateTimeAxis.LabelStyle>
                     </chart:DateTimeAxis>
                 </chart:SfCartesianChart.XAxes>
@@ -61,10 +61,11 @@
                 <chart:SfCartesianChart.YAxes>
                     <chart:NumericalAxis ShowMajorGridLines="False">
                         <chart:NumericalAxis.Title>
-                            <chart:ChartAxisTitle Text="Temperature [°C]" TextColor="Gray" />
+                            <chart:ChartAxisTitle Text="Temperature [°C]"
+                                                  TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                         </chart:NumericalAxis.Title>
                         <chart:NumericalAxis.LabelStyle>
-                            <chart:ChartAxisLabelStyle TextColor="Gray" />
+                            <chart:ChartAxisLabelStyle TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                         </chart:NumericalAxis.LabelStyle>
                     </chart:NumericalAxis>
                 </chart:SfCartesianChart.YAxes>

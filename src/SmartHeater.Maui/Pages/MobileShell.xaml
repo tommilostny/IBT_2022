@@ -4,7 +4,7 @@
        x:Class="SmartHeater.Maui.Pages.MobileShell"
        xmlns:pages="clr-namespace:SmartHeater.Maui.Pages"
        xmlns:helpers="clr-namespace:SmartHeater.Maui.Helpers"
-       BackgroundColor="{DynamicResource PrimaryColor}">
+       BackgroundColor="{DynamicResource Primary}">
 
     <TabBar>
         <Tab Title="Heaters">

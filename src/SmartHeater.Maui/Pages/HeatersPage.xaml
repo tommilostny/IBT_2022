@@ -49,7 +49,7 @@
 
             <ActivityIndicator IsRunning="{Binding IsLoading}"
                                IsVisible="{Binding IsLoading}"
-                               Color="{DynamicResource PrimaryColor}"
+                               Color="{DynamicResource Primary}"
                                Margin="20" />
 
             <CollectionView ItemsSource="{Binding Heaters}"

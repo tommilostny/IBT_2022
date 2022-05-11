@@ -9,56 +9,63 @@
              Title="{Binding HeaterDetail.Name}">
 
     <ScrollView>
-        <StackLayout Margin="5">
-            <StackLayout Orientation="Horizontal"
+        <Grid>
+            <Grid.RowDefinitions>
+                <!-- Temporary solution for not working scroll on mobile. -->
+                <RowDefinition Height="1200" />
+            </Grid.RowDefinitions>
+
+            <StackLayout Margin="5">
+                <StackLayout Orientation="Horizontal"
                          Margin="0, 5, 0, 10">
 
-                <Button Text="Reload"
+                    <Button Text="Reload"
                         Command="{Binding ReloadCommand}"
                         Margin="2, 5, 0, 5">
-                    <Button.ImageSource>
-                        <FontImageSource Glyph="{x:Static helpers:IconFontHelper.Reload}"
+                        <Button.ImageSource>
+                            <FontImageSource Glyph="{x:Static helpers:IconFontHelper.Reload}"
                                          FontFamily="MaterialDesignIcons"
                                          Size="20" />
-                    </Button.ImageSource>
-                </Button>
+                        </Button.ImageSource>
+                    </Button>
 
-                <Button Text="Edit"
+                    <Button Text="Edit"
                         Command="{Binding EditCommand}"
                         Margin="5, 5, 0, 5">
-                    <Button.ImageSource>
-                        <FontImageSource Glyph="{x:Static helpers:IconFontHelper.FileEditOutline}"
+                        <Button.ImageSource>
+                            <FontImageSource Glyph="{x:Static helpers:IconFontHelper.FileEditOutline}"
                                          FontFamily="MaterialDesignIcons"
                                          Size="20" />
-                    </Button.ImageSource>
-                </Button>
+                        </Button.ImageSource>
+                    </Button>
 
-                <Button Text="Delete"
+                    <Button Text="Delete"
                         Command="{Binding DeleteCommand}"
                         Margin="5, 5, 0, 5">
-                    <Button.ImageSource>
-                        <FontImageSource Glyph="{x:Static helpers:IconFontHelper.DeleteOutline}"
+                        <Button.ImageSource>
+                            <FontImageSource Glyph="{x:Static helpers:IconFontHelper.DeleteOutline}"
                                          FontFamily="MaterialDesignIcons"
                                          Size="20" />
-                    </Button.ImageSource>
-                </Button>
+                        </Button.ImageSource>
+                    </Button>
 
-            </StackLayout>
-            
-            <Label IsVisible="{Binding LoadingError}"
+                </StackLayout>
+
+                <Label IsVisible="{Binding LoadingError}"
                    Text="Unable to load heater data."
                    TextColor="Red" />
 
-            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
                                IsVisible="{Binding IsLoading}"
                                Color="{DynamicResource PrimaryColor}" />
 
-            <StackLayout IsVisible="{Binding IsLoaded}"
+                <StackLayout IsVisible="{Binding IsLoaded}"
                          Margin="0, 5, 0, 20">
-                <views:HeaterDetailView BindingContext="{Binding HeaterDetail}" />
-            </StackLayout>
+                    <views:HeaterDetailView BindingContext="{Binding HeaterDetail}" />
+                </StackLayout>
 
-            <views:HeaterChartsView BindingContext="{Binding HeaterChartsViewModel}" />
-        </StackLayout>
+                <views:HeaterChartsView BindingContext="{Binding HeaterChartsViewModel}" />
+            </StackLayout>
+        </Grid>
     </ScrollView>
 </ContentPage>

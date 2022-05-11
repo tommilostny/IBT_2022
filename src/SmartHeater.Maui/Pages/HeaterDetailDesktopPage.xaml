@@ -18,7 +18,8 @@
             <StackLayout Margin="20, 10"
                          Grid.Column="0">
 
-                <StackLayout Orientation="Horizontal">
+                <StackLayout Orientation="Horizontal"
+                             Margin="0, 0, 0, 10">
 
                     <Button Text="Reload"
                         Command="{Binding ReloadCommand}"
@@ -58,7 +59,7 @@
 
                 <ActivityIndicator IsRunning="{Binding IsLoading}"
                                    IsVisible="{Binding IsLoading}"
-                                   Color="{DynamicResource PrimaryColor}" />
+                                   Color="{DynamicResource Primary}" />
 
                 <StackLayout IsVisible="{Binding IsLoaded}">
                     <views:HeaterDetailView BindingContext="{Binding HeaterDetail}" />
