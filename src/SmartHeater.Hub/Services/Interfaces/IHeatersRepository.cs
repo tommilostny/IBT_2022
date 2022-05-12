@@ -1,6 +1,6 @@
 ﻿namespace SmartHeater.Hub.Services.Interfaces;
 
-public interface IHeatersRepositoryService
+public interface IHeatersRepository
 {
     Task<HeaterListModel?> GetHeaterAsync(string ipAddress);
     Task<HeaterDetailModel?> GetHeaterDetailAsync(string ipAddress);

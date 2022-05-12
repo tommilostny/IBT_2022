@@ -4,11 +4,11 @@ namespace SmartHeater.Hub.Invocables;
 
 public class StatsCollectorInvocable : IInvocable
 {
-    private readonly IHeatersRepositoryService _heatersRepository;
+    private readonly IHeatersRepository _heatersRepository;
     private readonly IWeatherService _weatherService;
     private readonly IDatabaseService _database;
 
-    public StatsCollectorInvocable(IHeatersRepositoryService heatersRepository, IWeatherService weatherService, IDatabaseService database)
+    public StatsCollectorInvocable(IHeatersRepository heatersRepository, IWeatherService weatherService, IDatabaseService database)
     {
         _heatersRepository = heatersRepository;
         _weatherService = weatherService;

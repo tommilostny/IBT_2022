@@ -23,7 +23,7 @@ builder.Services.AddTransient<StatsCollectorInvocable>();
 builder.Services.AddTransient<MLInvocable>();
 builder.Services.AddScheduler();
 
-builder.Services.AddSingleton<IHeatersRepositoryService, HeatersRepositoryService>();
+builder.Services.AddSingleton<IHeatersRepository, HeatersRepository>();
 builder.Services.AddSingleton<IDatabaseService, InfluxDbService>();
 builder.Services.AddSingleton<IWeatherService, OpenWeatherService>();
 builder.Services.AddSingleton<ICoordinatesService, IpApiService>();
@@ -55,7 +55,7 @@ app.Services.UseScheduler(scheduler =>
 });
 
 app.MapGet("/heaters/{ipAddress}/off",
-    async (IHeatersRepositoryService hp, string ipAddress) =>
+    async (IHeatersRepository hp, string ipAddress) =>
     {
         var service = await hp.GetHeaterServiceAsync(ipAddress);
         if (service is not null)
@@ -66,7 +66,7 @@ app.MapGet("/heaters/{ipAddress}/off",
 );
 
 app.MapGet("/heaters/{ipAddress}/on",
-    async (IHeatersRepositoryService hp, string ipAddress) =>
+    async (IHeatersRepository hp, string ipAddress) =>
     {
         var service = await hp.GetHeaterServiceAsync(ipAddress);
         if (service is not null)
@@ -77,27 +77,27 @@ app.MapGet("/heaters/{ipAddress}/on",
 );
 
 app.MapGet("/heaters",
-    async (IHeatersRepositoryService hp)
+    async (IHeatersRepository hp)
         => await hp.ReadHeatersAsync()
 );
 
 app.MapGet("/heaters/{ipAddress}",
-    async (IHeatersRepositoryService hp, string ipAddress)
+    async (IHeatersRepository hp, string ipAddress)
         => await hp.GetHeaterDetailAsync(ipAddress)
 );
 
 app.MapPost("/heaters",
-    async (IHeatersRepositoryService hp, HeaterListModel heater)
+    async (IHeatersRepository hp, HeaterListModel heater)
         => await hp.InsertAsync(heater)
 );
 
 app.MapPut("/heaters/{ipAddress}",
-    async (IHeatersRepositoryService hp, string ipAddress, HeaterListModel heater)
+    async (IHeatersRepository hp, string ipAddress, HeaterListModel heater)
         => await hp.UpdateAsync(ipAddress, heater)
 );
 
 app.MapDelete("/heaters/{ipAddress}",
-    async (IHeatersRepositoryService hp, string ipAddress)
+    async (IHeatersRepository hp, string ipAddress)
         => await hp.DeleteAsync(ipAddress)
 );
 
@@ -107,7 +107,7 @@ app.MapGet("/weather",
 );
 
 app.MapGet("/heaters/{ipAddress}/history/{period}/{field}",
-    async (IDatabaseService ds, IHeatersRepositoryService hp, string ipAddress, string period, string field)
+    async (IDatabaseService ds, IHeatersRepository hp, string ipAddress, string period, string field)
         => await ds.ReadHistoryAsync(await hp.GetHeaterAsync(ipAddress), period, field)
 );
 

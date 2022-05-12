@@ -1,11 +1,11 @@
 ﻿namespace SmartHeater.Hub.Services;
 
-public class HeatersRepositoryService : IHeatersRepositoryService
+public class HeatersRepository : IHeatersRepository
 {
     private readonly HttpClient _httpClient;
     private const string _heatersJsonFile = "heaters.json";
 
-    public HeatersRepositoryService(HttpClient httpClient)
+    public HeatersRepository(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
