@@ -52,17 +52,17 @@ public class InfluxDbService : IDatabaseService
     
         using var client = CreateDbClient();
         var tables = await client.GetQueryApi().QueryAsync(queryBuilder.ToString(), _organization);
-        var temperatures = new List<DbRecordModel>();
+        var measurements = new List<DbRecordModel>();
 
         foreach (var record in tables.SelectMany(table => table.Records))
         {
-            temperatures.Add(new DbRecordModel
+            measurements.Add(new DbRecordModel
             {
                 Value = Convert.ToSingle(record.GetValue()),
                 MeasurementTime = record.GetTimeInDateTime()
             });
         }
-        return temperatures;
+        return measurements;
     }
 
     private InfluxDBClient CreateDbClient()
