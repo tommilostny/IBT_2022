@@ -37,6 +37,18 @@ public class ShellyRelayService : IHeaterControlService
         }
     }
 
+    private class ShellyRelayStatus
+    {
+        [JsonPropertyName("relays")]
+        public List<Dictionary<string, object>>? Relays { get; set; }
+
+        [JsonPropertyName("ext_temperature")]
+        public Dictionary<string, Dictionary<string, object>>? ExtTemperature { get; set; }
+
+        [JsonPropertyName("meters")]
+        public List<Dictionary<string, object>>? Meters { get; set; }
+    };
+
     public async Task TurnOnAsync() => await SendTurnRequestAsync("on");
 
     public async Task TurnOffAsync() => await SendTurnRequestAsync("off");
@@ -92,16 +104,4 @@ public class ShellyRelayService : IHeaterControlService
             return null;
         }
     }
-
-    private class ShellyRelayStatus
-    {
-        [JsonPropertyName("relays")]
-        public List<Dictionary<string, object>>? Relays { get; set; }
-
-        [JsonPropertyName("ext_temperature")]
-        public Dictionary<string, Dictionary<string, object>>? ExtTemperature { get; set; }
-
-        [JsonPropertyName("meters")]
-        public List<Dictionary<string, object>>? Meters { get; set; }
-    };
 }
