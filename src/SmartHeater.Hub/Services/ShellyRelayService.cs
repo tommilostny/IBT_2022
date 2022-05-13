@@ -41,6 +41,22 @@ public class ShellyRelayService : IHeaterControlService
 
     public async Task TurnOffAsync() => await SendTurnRequestAsync("off");
 
+    private async Task SendTurnRequestAsync(string state)
+    {
+        var data = new[]
+        {
+            new KeyValuePair<string, string>("turn", state)
+        };
+        try
+        {
+            await _httpClient.PostAsync(Relay0Url, new FormUrlEncodedContent(data));
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"{DateTime.Now}: {ex.Message}");
+        }
+    }
+
     private static bool? ReadRelayState(ShellyRelayStatus? relayStatus)
     {
         try
@@ -74,22 +90,6 @@ public class ShellyRelayService : IHeaterControlService
         catch
         {
             return null;
-        }
-    }
-
-    private async Task SendTurnRequestAsync(string state)
-    {
-        var data = new[]
-        {
-            new KeyValuePair<string, string>("turn", state)
-        };
-        try
-        {
-            await _httpClient.PostAsync(Relay0Url, new FormUrlEncodedContent(data));
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"{DateTime.Now}: {ex.Message}");
         }
     }
 
