@@ -1,5 +1,4 @@
-﻿using SmartHeater.Shared.Static;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace SmartHeater.ML;
 

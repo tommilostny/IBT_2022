@@ -10,8 +10,4 @@
     <PackageReference Include="Microsoft.ML.TimeSeries" Version="1.7.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SmartHeater.Shared\SmartHeater.Shared.csproj" />
-  </ItemGroup>
-
 </Project>

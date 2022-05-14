@@ -4,7 +4,6 @@
 
 using Microsoft.ML;
 using Microsoft.ML.Transforms.TimeSeries;
-using SmartHeater.Shared.Static;
 
 namespace SmartHeater.ML;
 

@@ -1,4 +1,4 @@
-﻿namespace SmartHeater.Shared.Static;
+﻿namespace SmartHeater.ML;
 
 internal static class MLContants
 {
