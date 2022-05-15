@@ -1,5 +1,4 @@
 ﻿using SmartHeater.Maui.Helpers;
-using System.Web;
 
 namespace SmartHeater.Maui.ViewModels;
 
@@ -129,10 +128,10 @@ public class AddHeaterViewModel : BindableObject, IQueryAttributable
     {
         if (query.Keys.Count > 0)
         {
-            IpAddress = HttpUtility.UrlDecode(query["IpAddress"].ToString());
-            Name = HttpUtility.UrlDecode(query["Name"].ToString());
-            HeaterType = (HeaterTypes)Convert.ToInt32(query["HeaterType"].ToString());
-            ReferenceTemperature = Convert.ToSingle(query["ReferenceTemperature"].ToString());
+            IpAddress = query["IpAddress"].ToString();
+            Name = query["Name"].ToString();
+            HeaterType = (HeaterTypes)query["HeaterType"];
+            ReferenceTemperature = (float)query["ReferenceTemperature"];
 
             Title = "Edit heater";
             ButtonText = "Save";

@@ -127,12 +127,13 @@ public class HeaterDetailViewModel : BindableObject, IQueryAttributable
 
     private async void GoToEditPage()
     {
-        var uriBuilder = new StringBuilder()
-            .Append($"{nameof(AddHeaterPage)}?IpAddress={HeaterDetail.IpAddress}")
-            .Append($"&Name={HeaterDetail.Name}")
-            .Append($"&HeaterType={(int)HeaterDetail.HeaterType}")
-            .Append($"&ReferenceTemperature={HeaterDetail.ReferenceTemperature}");
-
-        await Shell.Current.GoToAsync(uriBuilder.ToString());
+        var parameters = new Dictionary<string, object>
+        {
+            { "IpAddress", HeaterDetail.IpAddress },
+            { "Name", HeaterDetail.Name },
+            { "HeaterType", HeaterDetail.HeaterType },
+            { "ReferenceTemperature", HeaterDetail.ReferenceTemperature }
+        };
+        await Shell.Current.GoToAsync(nameof(AddHeaterPage), parameters);
     }
 }
