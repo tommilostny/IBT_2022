@@ -86,30 +86,18 @@ public static class SmartHeaterModel
     #region Training
     private static ITransformer TrainPipeline(MLContext context, IDataView trainData)
     {
-        var pipeline = BuildPipeline(context);
+        var pipeline = context.Forecasting
+            .ForecastBySsa(windowSize: 4,
+                           seriesLength: 12,
+                           trainSize: 1051200,
+                           horizon: 10,
+                           confidenceLevel: 0.95f,
+                           outputColumnName: @"temperatureDiff",
+                           inputColumnName: @"temperatureDiff",
+                           confidenceLowerBoundColumn: @"temperatureDiff_LB",
+                           confidenceUpperBoundColumn: @"temperatureDiff_UB");
         var model = pipeline.Fit(trainData);
-
         return model;
-    }
-
-    /// <summary>
-    /// build the pipeline that is used from model builder. Use this function to retrain model.
-    /// </summary>
-    /// <param name="mlContext"></param>
-    /// <returns></returns>
-    private static IEstimator<ITransformer> BuildPipeline(MLContext mlContext)
-    {
-        // Data process configuration with pipeline data transformations
-        var pipeline = mlContext.Forecasting.ForecastBySsa(windowSize: 4,
-                                                           seriesLength: 12,
-                                                           trainSize: 1578240,
-                                                           horizon: 10,
-                                                           confidenceLevel: 0.95f,
-                                                           outputColumnName: @"temperatureDiff",
-                                                           inputColumnName: @"temperatureDiff",
-                                                           confidenceLowerBoundColumn: @"temperatureDiff_LB",
-                                                           confidenceUpperBoundColumn: @"temperatureDiff_UB");
-        return pipeline;
     }
     #endregion
 
