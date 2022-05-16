@@ -32,7 +32,8 @@ public class SettingsProvider
 
     private static string SettingsJsonFilePath()
     {
+        var localDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         var settingsJsonFile = "settings.json";
-        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), settingsJsonFile);
+        return Path.Combine(localDir, settingsJsonFile);
     }
 }
