@@ -72,7 +72,8 @@ public static class SmartHeaterModel
         return result;
     }
 
-    private static TimeSeriesPredictionEngine<ModelInput, ModelOutput> CreatePredictEngine(MLContext mlContext, string modelPath)
+    private static TimeSeriesPredictionEngine<ModelInput, ModelOutput> CreatePredictEngine(MLContext mlContext,
+                                                                                           string modelPath)
     {
         if (!File.Exists(modelPath))
         {
