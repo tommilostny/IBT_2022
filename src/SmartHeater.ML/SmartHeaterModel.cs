@@ -54,9 +54,7 @@ public static class SmartHeaterModel
         #endif
 
         var mlContext = new MLContext();
-        var modelPath = ModelPathFromIP(heaterIpAddress);
-
-        using var predEngine = CreatePredictEngine(mlContext, modelPath);
+        using var predEngine = CreatePredictEngine(mlContext, heaterIpAddress, out var modelPath);
         var result = predEngine.Predict(input!, horizon);
 
         if (saveModelCheckpoint)
@@ -73,8 +71,10 @@ public static class SmartHeaterModel
     }
 
     private static TimeSeriesPredictionEngine<ModelInput, ModelOutput> CreatePredictEngine(MLContext mlContext,
-                                                                                           string modelPath)
+                                                                                           string? ipAddress,
+                                                                                           out string modelPath)
     {
+        modelPath = ModelPathFromIP(ipAddress);
         if (!File.Exists(modelPath))
         {
             File.Copy(MLContants.DefaultModelFilePath, modelPath);
