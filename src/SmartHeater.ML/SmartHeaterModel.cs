@@ -39,12 +39,6 @@ public static class SmartHeaterModel
         //Testing
         var testingData = LoadDataFromCsv(mlContext, MLContants.TestingFileName);
         Evaluate(testingData, model, mlContext);
-
-        var output = predEngine.Predict(MLContants.Horizon);
-        foreach (var item in output.TemperatureDiff)
-        {
-            Console.WriteLine(item);
-        }
     }
 
     #region Consumption
@@ -135,14 +129,14 @@ public static class SmartHeaterModel
         IDataView predictions = model.Transform(testData);
 
         // Actual values
-        IEnumerable<float> actual =
-            mlContext.Data.CreateEnumerable<ModelInput>(testData, true)
-                .Select(observed => observed.TemperatureDiff);
+        var actual = mlContext.Data.CreateEnumerable<ModelInput>(testData, true)
+                .Select(observed => observed.TemperatureDiff)
+                .ToList();
 
         // Predicted values
-        IEnumerable<float> forecast =
-            mlContext.Data.CreateEnumerable<ModelOutput>(predictions, true)
-                .Select(prediction => prediction.TemperatureDiff[0]);
+        var forecast = mlContext.Data.CreateEnumerable<ModelOutput>(predictions, true)
+                .Select(prediction => prediction.TemperatureDiff[0])
+                .ToList();
 
         // Calculate error (actual - forecast)
         var metrics = actual.Zip(forecast, (actualValue, forecastValue) => actualValue - forecastValue);
@@ -156,5 +150,10 @@ public static class SmartHeaterModel
         Console.WriteLine("---------------------");
         Console.WriteLine($"Mean Absolute Error: {MAE:F3}");
         Console.WriteLine($"Root Mean Squared Error: {RMSE:F3}\n");
+
+        for (int i = 0; i < MLContants.Horizon; i++)
+        {
+            Console.WriteLine($"Predicted: {forecast[i]}\tActual: {actual[i]}");
+        }
     }
 }
