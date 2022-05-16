@@ -103,7 +103,9 @@ public static class SmartHeaterModel
 
     private static string ModelPathFromIP(string? ipAddress)
     {
-        return ipAddress is not null ? $"SmartHeaterModel_{ipAddress}.zip" : MLContants.DefaultModelFilePath;
+        return ipAddress is not null
+            ? $"SmartHeaterModel_{ipAddress}.zip"
+            : MLContants.DefaultModelFilePath;
     }
 
     private static IDataView LoadDataFromCsv(MLContext mlContext, string path)
