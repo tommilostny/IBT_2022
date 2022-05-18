@@ -1,5 +1,7 @@
 # **Chytrá domácnost: učící se řízení vytápění** (IBT 2022)
 
+Více informací obsahuje [textová část](https://github.com/tommilostny/IBT_2022_doc).
+
 ---
 
 **Vedoucí**:
@@ -33,7 +35,7 @@ Prezentace ITT: https://vutbr-my.sharepoint.com/:p:/g/personal/xmilos02_vutbr_cz
         * ML.NET (framework pro strojové učení)
         * ASP.NET web API (wrapper pro akce se Shelly API, ML, přístup k DB)
         * MAUI (multiplatformní aplikační uživatelské rozhraní)
-    * SQLite (jednoduchá databáze na lokálním úložišti)
+    * InfluxDB (databáze optimalizovaná pro práci s časovými řadami)
 
 ---
 ## Architektura aplikace
@@ -59,14 +61,6 @@ Jednotlivá Shelly zařízení mají záznamy v databázi rozlišené dle IP adr
 Framework pro strojové učení pro .NET platformu nabízí mnoho nástrojů pro různé [ML úlohy](https://docs.microsoft.com/en-us/dotnet/machine-learning/resources/tasks?WT.mc_id=dotnet-35129-website).
 Pro tuto práci je zazímavá sekce **Forecasting** pro práci s daty v časové sérii.
 Zde je nabízen algoritmus [SSA](https://docs.microsoft.com/en-us/dotnet/api/microsoft.ml.timeseriescatalog.forecastbyssa). Více o forecasting v ML.NET např. [zde](https://docs.microsoft.com/en-us/dotnet/machine-learning/tutorials/time-series-demand-forecasting).
-
-![ML pipeline](img/diagram2.jpg "ML pipeline")
-
-### Atributy modelu
-| Čas měření   | Rozdíl od nastavené referenční teploty v místnosti | Venkovní referenční teplota | **Stav topení**  |
-| :----------: | :--------------: | :-------------------------: | :--------------: |
-
-Vstupem modelu je aktuální datum, čas a naměřená teplota. Na základě vztahu těchto dvou veličin ML model predikuje status topení (vypnuto/zapnuto). Při změně je poslán příkaz na změnu stavu relé přes nastavené Shelly REST API.
 
 Toto bude periodicky provádět **scheduler Coravel** běžící pod webovým API.
 
