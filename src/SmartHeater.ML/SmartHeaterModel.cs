@@ -58,15 +58,15 @@ public static class SmartHeaterModel
         var result = predEngine.Predict(input!, horizon);
 
         if (saveModelCheckpoint)
+        {
             predEngine.CheckPoint(mlContext, modelPath);
-        
+        }
         #if DEBUG
             foreach (var item in result.TemperatureDiff)
             {
                 Console.WriteLine(item);
             }
         #endif
-        
         return result;
     }
 
