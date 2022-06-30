@@ -1,0 +1,14 @@
+[Unit]
+Description="SmartHeater Hub service!"
+
+[Service]
+WorkingDirectory=/home/pi/IBT_2022/src/SmartHeater.Hub/
+ExecStart=/home/pi/.dotnet/dotnet /home/pi/IBT_2022/src/SmartHeater.Hub/bin/Release/net6.0/publish/SmartHeater.Hub.dll
+Restart=always
+# Restart service after 10 seconds if the dotnet service crashes:
+RestartSec=10
+KillSignal=SIGINT
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
